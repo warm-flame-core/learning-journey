@@ -4,6 +4,15 @@
 #include <Windows.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
+
+#define KEY_PRESS(vk)  ((GetAsyncKeyState(vk)&1)?1:0)
+
+#define WALL L'■'
+#define BODY L'●'
+#define FOOD L'★'
+#define POS_X 6
+#define POS_Y 20
 enum DIRECTION
 {
 	UP=1,
@@ -43,3 +52,36 @@ void GameStart(pSnake ps);
 
 //欢迎信息
 void WelcomeToGame();
+
+//初始化地图
+void CreateMap();
+
+//初始化蛇
+void InitSnake(pSnake ps);
+
+//创造食物
+void CreateFood(pSnake ps);
+
+//运行游戏
+void GameRun(pSnake ps);
+
+//蛇走一步
+void SnakeMove(pSnake ps);
+
+//下一步是不是食物
+int NextIsFood(pSnakeNode pnext, pSnake ps);
+
+//吃掉食物
+void EatFood(pSnakeNode pnext, pSnake ps);
+
+//下一步不是食物
+void NotEatFood(pSnakeNode pnext, pSnake ps);
+
+//撞墙了
+void KillByWall(pSnake ps);
+
+//撞到自己了
+void KillBySelf(pSnake ps);
+
+//游戏结束
+void GameOver(pSnake ps);
