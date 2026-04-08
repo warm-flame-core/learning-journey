@@ -334,4 +334,5 @@ void GameOver(pSnake ps)
 		pcur = pcur->next;
 		free(del);
 	}
+	ps->_pSnake = NULL;
 }
