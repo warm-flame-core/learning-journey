@@ -11,8 +11,8 @@ int main()
 	QueuePush(&q1, 4);
 	while (!QueneEmpty(&q1))
 	{
-		printf("%d ", QueneFront(&q1));
-		QuenePop(&q1);
+		printf("%d ", QueueFront(&q1));
+		QueuePop(&q1);
 	}
 	printf("\n");
 	return 0;

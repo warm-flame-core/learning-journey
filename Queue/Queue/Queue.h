@@ -25,9 +25,9 @@ void QueueDestroy(pQueue pq);
 
 void QueuePush(pQueue pq, QDateType x);
 
-void QuenePop(pQueue pq);
+void QueuePop(pQueue pq);
 
-QDateType QueneFront(pQueue pq);
+QDateType QueueFront(pQueue pq);
 
 QDateType QueneBack(pQueue pq);
 

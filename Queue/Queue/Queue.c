@@ -46,7 +46,7 @@ void QueuePush(pQueue pq, QDateType x)
 }
 
 //出队列
-void QuenePop(pQueue pq)
+void QueuePop(pQueue pq)
 {
 	assert(pq);
 	assert(pq->phead);
@@ -67,7 +67,7 @@ void QuenePop(pQueue pq)
 }
 
 //取队头数据
-QDateType QueneFront(pQueue pq)
+QDateType QueueFront(pQueue pq)
 {
 	assert(pq);
 	assert(pq->phead);
