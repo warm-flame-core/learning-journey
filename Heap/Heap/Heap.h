@@ -30,6 +30,14 @@ HPDateType HeapTop(pHp Heap);
 //删除堆顶数据
 void HeapPop(pHp Heap);
 
+//向上调整法
 void AdjustUp(HPDateType* a, int child);
 
-void HeapEmpty(pHp Heap);
+//向下调整法
+void AdjustDown(HPDateType* a, int size, int parent);
+
+//判空
+bool HeapEmpty(pHp Heap);
+
+//堆排序
+void HeapSort(HPDateType* a, int num);
