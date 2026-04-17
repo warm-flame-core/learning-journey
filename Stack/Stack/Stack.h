@@ -7,7 +7,7 @@ typedef int STDateType;
 typedef struct Stack
 {
 	STDateType* a;
-	int top;
+	int top;	//表示栈顶元素的下一个
 	int capacity;
 }Stack,* pStack;
 
