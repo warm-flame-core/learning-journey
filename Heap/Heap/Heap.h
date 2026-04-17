@@ -41,3 +41,6 @@ bool HeapEmpty(pHp Heap);
 
 //¶ÑÅÅÐò
 void HeapSort(HPDateType* a, int num);
+
+//½»»»Êý¾Ý
+void Swap(HPDateType* p1, HPDateType* p2);

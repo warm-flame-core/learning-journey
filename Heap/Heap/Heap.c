@@ -18,6 +18,7 @@ void HeapDestroy(pHp Heap)
 	Heap->capacity = Heap->size = 0;
 }
 
+//交换数据
 void Swap(HPDateType* p1, HPDateType* p2)
 {
 	*p1 = *p1 ^ *p2;
@@ -25,6 +26,7 @@ void Swap(HPDateType* p1, HPDateType* p2)
 	*p1 = *p1 ^ *p2;
 }
 
+//向上调整
 void AdjustUp(HPDateType* a, int child)
 {
 	int parent = (child - 1) / 2;
