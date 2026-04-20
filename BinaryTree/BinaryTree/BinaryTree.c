@@ -134,7 +134,7 @@ int BinaryTreeHeight(BTNode* root)
 	return leftheight > rightheight ? leftheight + 1 : rightheight + 1;
 }
 
-
+//二叉树K层叶子的个数
 int BinaryTreeLeafKSize(BTNode* root, int k)
 {
 	if (root == NULL)
@@ -144,6 +144,18 @@ int BinaryTreeLeafKSize(BTNode* root, int k)
 	return BinaryTreeLeafKSize(root->left, k - 1) + BinaryTreeLeafKSize(root->right, k - 1);
 }
 
+//二叉树查找
+BTNode* BinaryTreeFind(BTNode* root, int k)
+{
+	if (root == NULL)
+		return NULL;
+	if (root->Date == k)
+		return root;
+	BTNode* ret = BinaryTreeFind(root->left, k);
+	if (ret)
+		return ret;
+	return BinaryTreeFind(root->right, k);
+}
 
 int main()
 {
@@ -162,5 +174,10 @@ int main()
 	printf("%d", count);*/
 	printf("the BinaryTree height:%d\n", BinaryTreeHeight(root));
 	printf("the BinarykTree size:%d\n", BinaryTreeLeafKSize(root, 4));
+	BTNode* ret = BinaryTreeFind(root, 10);
+	if (ret)
+		printf("找到了\n");
+	else
+		printf("没找到");
 	return 0;
 }
