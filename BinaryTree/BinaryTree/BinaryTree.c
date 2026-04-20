@@ -137,19 +137,11 @@ int BinaryTreeHeight(BTNode* root)
 
 int BinaryTreeLeafKSize(BTNode* root, int k)
 {
-	k--;
-	if (k != 0)
+	if (root == NULL)
 		return 0;
-	else
-	{
-		if (root == NULL)
-			return 0;
-		if (root->left != NULL)
-			return 1;
-		if (root->right != NULL)
-			return 1;
-	}
-	return BinaryTreeLeafKSize(root->left, k) + BinaryTreeLeafKSize(root->right, k);
+	if (k == 1)
+		return 1;
+	return BinaryTreeLeafKSize(root->left, k - 1) + BinaryTreeLeafKSize(root->right, k - 1);
 }
 
 
@@ -169,6 +161,6 @@ int main()
 	/*BinaryTreeHeight(root, &count);
 	printf("%d", count);*/
 	printf("the BinaryTree height:%d\n", BinaryTreeHeight(root));
-	printf("%d\n", BinaryTreeLeafKSize(root, 3));
+	printf("the BinarykTree size:%d\n", BinaryTreeLeafKSize(root, 4));
 	return 0;
 }
