@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef int BTDateType;
 typedef struct BinaryTree
@@ -40,3 +41,6 @@ BTNode* BinaryTreeFind(BTNode* root, int k);
 
 //二叉树销毁
 void BinaryTreeDestroy(BTNode* root);
+
+//是否是完全二叉树
+bool BinaryTreeComplete(BTNode* root);

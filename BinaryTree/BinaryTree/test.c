@@ -58,5 +58,9 @@ int main()
 		printf("没找到\n");
 	LevelOnder(root);
 	printf("\n");
+	if (BinaryTreeComplete(root))
+		printf("是完全二叉树\n");
+	else
+		printf("不是完全二叉树\n");
 	return 0;
 }

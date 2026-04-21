@@ -131,3 +131,33 @@ void BinaryTreeDestroy(BTNode* root)
 	BinaryTreeDestroy(root->right);
 	free(root);
 }
+
+
+//是否是完全二叉树
+bool BinaryTreeComplete(BTNode* root)
+{
+	Queue q;
+	QueueInit(&q);
+	QueuePush(&q, root);
+	while (!QueneEmpty(&q))
+	{
+		BTNode* node = QueueFront(&q);
+		QueuePop(&q);
+		if (node == NULL)
+			break;
+		QueuePush(&q, node->left);
+		QueuePush(&q, node->right);
+	}
+	while (!QueneEmpty(&q))
+	{
+		BTNode* node = QueueFront(&q);
+		QueuePop(&q);
+		if (node != NULL)
+		{
+			QueueDestroy(&q);
+			return false;
+		}
+	}
+	QueueDestroy(&q);
+	return true;
+}
