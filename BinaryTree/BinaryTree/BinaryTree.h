@@ -20,6 +20,9 @@ void InOrder(BTNode* root);
 //后序遍历
 void PostOrder(BTNode* root);
 
+//层序遍历
+void LevelOnder(BTNode* root);
+
 //二叉树节点个数
 int BinaryTreeSize(BTNode* root);
 
@@ -34,3 +37,6 @@ int BinaryTreeLeafKSize(BTNode* root, int k);
 
 //二叉树查找
 BTNode* BinaryTreeFind(BTNode* root, int k);
+
+//二叉树销毁
+void BinaryTreeDestroy(BTNode* root);

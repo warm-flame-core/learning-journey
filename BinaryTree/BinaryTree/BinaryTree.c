@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include "BinaryTree.h"
+#include "Queue.h"
 
 //前序遍历
 void PrevOrder(BTNode* root)
@@ -41,20 +42,26 @@ void PostOrder(BTNode* root)
 	printf("%d ", root->Date);
 }
 
-//void LevelOnder(BTNode* root)
-//{
-//	if (root == NULL || root->left == NULL || root->right == NULL)
-//	{
-//		printf("N ");
-//		return;
-//	}
-//	
-//	printf("%d ", root->Date);
-//	printf("%d ", root->left->Date);
-//	printf("%d ", root->right->Date);
-//	LevelOnder(root->left);
-//	LevelOnder(root->right);
-//}
+void LevelOnder(BTNode* root)
+{
+	if (root == NULL)
+		return;
+	Queue q;
+	QueueInit(&q);
+	QueuePush(&q, root);
+	while (!QueneEmpty(&q))
+	{
+		BTNode* node = QueueFront(&q);
+		QueuePop(&q);
+		printf("%d ", node->Date);
+		if(node->left)
+			QueuePush(&q, node->left);
+
+		if (node->right)
+			QueuePush(&q, node->right);
+	}
+	QueueDestroy(&q);
+}
 
 //二叉树节点个数
 //函数内置计数器在递归时重复初始化
@@ -114,4 +121,13 @@ BTNode* BinaryTreeFind(BTNode* root, int k)
 	if (ret)
 		return ret;
 	return BinaryTreeFind(root->right, k);
+}
+
+void BinaryTreeDestroy(BTNode* root)
+{
+	if (root == NULL)
+		return;
+	BinaryTreeDestroy(root->left);
+	BinaryTreeDestroy(root->right);
+	free(root);
 }

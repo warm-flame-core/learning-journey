@@ -7,7 +7,7 @@ BTNode* BuyNode(BTDateType x)
 	if (newnode == NULL)
 	{
 		perror("malloc error");
-		return;
+		return NULL;
 	}
 	newnode->Date = x;
 	newnode->right = newnode->left = NULL;
@@ -55,6 +55,8 @@ int main()
 	if (ret)
 		printf("找到了\n");
 	else
-		printf("没找到");
+		printf("没找到\n");
+	LevelOnder(root);
+	printf("\n");
 	return 0;
 }
