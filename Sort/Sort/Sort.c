@@ -128,5 +128,93 @@ void HeapSort(int* a, int n)
 
 void SelectSort(int* a, int n)
 {
+	int begin = 0;
+	int end = n - 1;
+	while (begin < end)
+	{
+		int mid = begin;
+		int max = begin;
+		for (int i = begin + 1; i <= end; i++)
+		{
+			if (a[mid] > a[i])
+			{							// begin
+				mid = i;				// 9 1 2 5 7 4 1 3
+			}							// max  
+			if (a[max] < a[i])			//	 min
+			{
+				max = i;
+			}
+		}
+		Swap(&a[mid], &a[begin]);
+		if (begin == max)
+			max = mid;
+		Swap(&a[max], &a[end]);
+		begin++;
+		end--;
+	}
+}
 
+int Getmid(int* a, int left, int right)
+{
+	int mid = (left + right) / 2;
+	if (a[left] < a[right])
+	{
+		if (a[mid] < a[left])
+			return left;
+		else if (a[left] < a[mid])
+		{
+			if (a[mid] < a[right])
+				return mid;
+			else
+				return right;
+		}
+	}
+	else//a[left] > a[right]
+	{
+		if (a[mid] < a[right])
+			return right;
+		else if (a[right] < a[mid])
+		{
+			if (a[mid] < a[left])
+				return mid;
+			else
+				return left;
+		}
+	}
+	return left;
+}
+
+void QuickSort(int* a, int left, int right)
+{
+	if (left >= right)		//确保边界存在
+		return;
+	if (right - left + 1 < 10)	//小区间不用快排，减少递归
+	{
+		InsertSort(a + left, right - left + 1);
+	}
+	else
+	{
+		int mid = Getmid(a, left, right);	//三数取中，尽可能递归时满足像二叉树的性质
+		Swap(&a[mid], &a[left]);
+		int keyi = left;
+		int begin = left;
+		int end = right;
+		while (begin < end)
+		{
+			while (begin < end && a[end] >= a[keyi])	//基准值在哪边，从基准值的另外一边开始移动
+			{
+				end--;
+			}
+			while (begin < end && a[begin] <= a[keyi])
+			{
+				begin++;
+			}
+			Swap(&a[begin], &a[end]);
+		}
+		Swap(&a[keyi], &a[begin]);
+		keyi = begin;
+		//[left,keyi - 1]	keyi	[keyi+1,right]
+		QuickSort(a, left, keyi - 1);
+		QuickSort(a, keyi + 1, right);
+	}
 }

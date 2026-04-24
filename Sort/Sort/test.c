@@ -22,17 +22,31 @@
 //	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
 //}
 
-void ShellSortTest()
-{
-	int arr1[] = { 5,4,8,9,2,7,6,3,1,0 };
-	ShellSort(arr1, sizeof(arr1) / sizeof(int));
-	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
-}
+//void ShellSortTest()
+//{
+//	int arr1[] = { 5,4,8,9,2,7,6,3,1,0 };
+//	ShellSort(arr1, sizeof(arr1) / sizeof(int));
+//	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
+//}
+
+//void SelectSortTest()
+//{
+//	int arr1[] = { 9,1,2,5,7,4,1,3 };
+//	SelectSort(arr1, sizeof(arr1) / sizeof(int));
+//	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
+//}
+
+//void QuickSortTest()
+//{
+//	int arr1[] = { 9,1,2,5,7,4,1,3 };
+//	QuickSort(arr1, 0, sizeof(arr1) / sizeof(int) - 1);
+//	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
+//}
 
 void TestOP()
 {
 	srand(time(0));
-	const int N = 100000;
+	const int N = 10000000;
 	int* a1 = (int*)malloc(sizeof(int) * N);
 	int* a2 = (int*)malloc(sizeof(int) * N);
 	int* a3 = (int*)malloc(sizeof(int) * N);
@@ -53,11 +67,11 @@ void TestOP()
 	}
 
 	int begin1 = clock();
-	InsertSort(a1, N);
+	//InsertSort(a1, N);
 	int end1 = clock();
 
 	int begin2 = clock();
-	//ShellSort(a2, N);
+	ShellSort(a2, N);
 	int end2 = clock();
 
 	int begin3 = clock();
@@ -69,7 +83,7 @@ void TestOP()
 	int end4 = clock();
 
 	int begin5 = clock();
-	//QuickSort(a5, 0, N - 1);
+	QuickSort(a5, 0, N - 1);
 	int end5 = clock();
 
 	int begin6 = clock();
@@ -77,7 +91,7 @@ void TestOP()
 	int end6 = clock();
 
 	int begin7 = clock();
-	BubbleSort(a7, N);
+	//BubbleSort(a7, N);
 	int end7 = clock();
 
 	printf("InsertSort:%d\n", end1 - begin1);
@@ -103,8 +117,9 @@ int main()
 	InsertSortTest();
 	BubbleSortTest();
 	HeapSortTest();*/
-	//TestOP();
-	ShellSortTest();
-
+	TestOP();
+	//ShellSortTest();
+	//SelectSortTest();
+	//QuickSortTest();
 	return 0;
 }
