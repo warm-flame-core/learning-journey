@@ -36,12 +36,12 @@
 //	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
 //}
 
-//void QuickSortTest()
-//{
-//	int arr1[] = { 9,1,2,5,7,4,1,3 };
-//	QuickSort(arr1, 0, sizeof(arr1) / sizeof(int) - 1);
-//	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
-//}
+void QuickSortTest()
+{
+	int arr1[] = { 9,1,2,5,7,4,1,3 };
+	QuickSort(arr1, 0, sizeof(arr1) / sizeof(int) - 1);
+	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
+}
 
 void TestOP()
 {
@@ -117,9 +117,9 @@ int main()
 	InsertSortTest();
 	BubbleSortTest();
 	HeapSortTest();*/
-	TestOP();
+	//TestOP();
 	//ShellSortTest();
 	//SelectSortTest();
-	//QuickSortTest();
+	QuickSortTest();
 	return 0;
 }

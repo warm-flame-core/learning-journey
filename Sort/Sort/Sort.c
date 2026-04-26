@@ -184,6 +184,42 @@ int Getmid(int* a, int left, int right)
 	return left;
 }
 
+//void QuickSort(int* a, int left, int right)
+//{
+//	if (left >= right)		//确保边界存在
+//		return;
+//	if (right - left + 1 < 10)	//小区间不用快排，减少递归
+//	{
+//		InsertSort(a + left, right - left + 1);
+//	}
+//	else
+//	{
+//		int mid = Getmid(a, left, right);	//三数取中，尽可能递归时满足像二叉树的性质
+//		Swap(&a[mid], &a[left]);
+//		int keyi = left;
+//		int begin = left;
+//		int end = right;
+//		while (begin < end)
+//		{
+//			while (begin < end && a[end] >= a[keyi])	//基准值在哪边，从基准值的另外一边开始移动
+//			{
+//				end--;
+//			}
+//			while (begin < end && a[begin] <= a[keyi])
+//			{
+//				begin++;
+//			}
+//			Swap(&a[begin], &a[end]);
+//		}
+//		Swap(&a[keyi], &a[begin]);
+//		keyi = begin;
+//		//[left,keyi - 1]	keyi	[keyi+1,right]
+//		QuickSort(a, left, keyi - 1);
+//		QuickSort(a, keyi + 1, right);
+//	}
+//}
+
+//挖坑法快排
 void QuickSort(int* a, int left, int right)
 {
 	if (left >= right)		//确保边界存在
@@ -197,6 +233,7 @@ void QuickSort(int* a, int left, int right)
 		int mid = Getmid(a, left, right);	//三数取中，尽可能递归时满足像二叉树的性质
 		Swap(&a[mid], &a[left]);
 		int keyi = left;
+		int pit = left;
 		int begin = left;
 		int end = right;
 		while (begin < end)
@@ -205,11 +242,14 @@ void QuickSort(int* a, int left, int right)
 			{
 				end--;
 			}
+			Swap(&a[pit], &a[end]);
+			pit = end;
 			while (begin < end && a[begin] <= a[keyi])
 			{
 				begin++;
 			}
-			Swap(&a[begin], &a[end]);
+			pit = begin;
+			Swap(&a[pit], &a[begin]);
 		}
 		Swap(&a[keyi], &a[begin]);
 		keyi = begin;
