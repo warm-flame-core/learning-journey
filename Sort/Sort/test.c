@@ -39,7 +39,7 @@
 void QuickSortTest()
 {
 	int arr1[] = { 9,1,2,5,7,4,1,3 };
-	QuickSort(arr1, 0, sizeof(arr1) / sizeof(int) - 1);
+	QuickSortNonR(arr1, 0, sizeof(arr1) / sizeof(int) - 1);
 	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
 }
 
@@ -83,7 +83,7 @@ void TestOP()
 	int end4 = clock();
 
 	int begin5 = clock();
-	QuickSort(a5, 0, N - 1);
+	QuickSortNonR(a5, 0, N - 1);
 	int end5 = clock();
 
 	int begin6 = clock();
@@ -117,9 +117,9 @@ int main()
 	InsertSortTest();
 	BubbleSortTest();
 	HeapSortTest();*/
-	//TestOP();
+	TestOP();
 	//ShellSortTest();
 	//SelectSortTest();
-	QuickSortTest();
+	//QuickSortTest();
 	return 0;
 }
