@@ -92,7 +92,7 @@ void BubbleSort(int* a, int n)
 void AdjustDown(int* a, int n, int parent)
 {
 	int child = parent * 2 + 1;
-	
+
 	while (child < n)
 	{
 		if (child + 1 < n && a[child + 1] > a[child])
@@ -107,7 +107,7 @@ void AdjustDown(int* a, int n, int parent)
 			break;
 	}
 
-	
+
 }
 void HeapSort(int* a, int n)
 {
@@ -288,7 +288,7 @@ void QuickSortNonR(int* a, int left, int right)
 		StackPop(&s1);
 		int end = StackTop(&s1);
 		StackPop(&s1);
-		int keyi = QuickSortPast3(a, begin, end);
+		int keyi = QuickSortPast1(a, begin, end);
 		//[begin, keyi - 1] keyi [ket + 1, end]
 		if (keyi - 1 > begin)
 		{
@@ -302,4 +302,51 @@ void QuickSortNonR(int* a, int left, int right)
 		}
 	}
 	StackDestroy(&s1);
+}
+
+void _MergeSort(int* a, int* tmp, int left, int right)
+{
+	if (left >= right)
+		return;
+	int mid = (left + right) / 2;
+	//[left, mid][mid + 1, right]
+	_MergeSort(a, tmp, left, mid);
+	_MergeSort(a, tmp, mid + 1, right);
+	int begin1 = left, end1 = mid;
+	int begin2 = mid + 1, end2 = right;
+	int win = left;
+	while (begin1 <= end1 && begin2 <= end2)
+	{
+		if (a[begin1] <= a[begin2])
+			tmp[win++] = a[begin1++];
+		else
+			tmp[win++] = a[begin2++];
+	}
+	while (begin1 <= end1)
+		tmp[win++] = a[begin1++];
+	while (begin2 <= end2)
+		tmp[win++] = a[begin2++];
+	memcpy(a + left, tmp + left, sizeof(int) * (right - left + 1));
+}
+
+void MergeSort(int* a, int n)
+{
+	int* tmp = (int*)malloc(sizeof(int) * n);
+	if (tmp == NULL)
+	{
+		perror("malloc fail");
+		return;
+	}
+	_MergeSort(a, tmp, 0, n - 1);
+	free(tmp);
+}
+
+
+void MergeSortNonR(int* a, int n)
+{
+	int gap = 0;
+	for (gap = 2; gap < n; gap *= 2)
+	{
+
+	}
 }

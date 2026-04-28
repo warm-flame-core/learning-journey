@@ -36,10 +36,17 @@
 //	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
 //}
 
-void QuickSortTest()
+//void QuickSortTest()
+//{
+//	int arr1[] = { 9,1,2,5,7,4,1,3 };
+//	QuickSortNonR(arr1, 0, sizeof(arr1) / sizeof(int) - 1);
+//	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
+//}
+
+void MergeSortTest()
 {
 	int arr1[] = { 9,1,2,5,7,4,1,3 };
-	QuickSortNonR(arr1, 0, sizeof(arr1) / sizeof(int) - 1);
+	MergeSort(arr1, sizeof(arr1) / sizeof(int));
 	PrintfSort(arr1, sizeof(arr1) / sizeof(int));
 }
 
@@ -57,7 +64,7 @@ void TestOP()
 
 	for (int i = 0; i < N; ++i)
 	{
-		a1[i] = rand() + i;
+		a1[i] = (rand() + rand()) % INT_MAX;
 		a2[i] = a1[i];
 		a3[i] = a1[i];
 		a4[i] = a1[i];
@@ -87,7 +94,7 @@ void TestOP()
 	int end5 = clock();
 
 	int begin6 = clock();
-	//MergeSort(a6, N);
+	MergeSort(a6, N);
 	int end6 = clock();
 
 	int begin7 = clock();
@@ -121,5 +128,6 @@ int main()
 	//ShellSortTest();
 	//SelectSortTest();
 	//QuickSortTest();
+	//MergeSortTest();
 	return 0;
 }
