@@ -22,7 +22,7 @@ void InsertSort(int* a, int n)
 {
 	for (int i = 0; i < n - 1; i++)
 	{
-		//内层循环，假设[0, emd]都已经是有序的,讲emd+1的值依次与有序的进行比较
+		//内层循环，假设[0, emd]都已经是有序的,将end+1的值依次与有序的进行比较
 		int end = i;
 		int tmp = a[end + 1];
 		while (end >= 0)
@@ -43,7 +43,7 @@ void InsertSort(int* a, int n)
 
 void ShellSort(int* a, int n)
 {
-	int gap = n;
+	int gap = n;	//设置步长，让大树更快的跑到后面
 	while (gap > 1)
 	{
 		gap = gap / 3 + 1;
@@ -97,7 +97,7 @@ void AdjustDown(int* a, int n, int parent)
 	{
 		if (child + 1 < n && a[child + 1] > a[child])
 			child++;
-		if (a[parent] < a[child])
+		if (a[parent] < a[child])	//取取更大的孩子与父亲交换
 		{
 			Swap(&a[child], &a[parent]);
 			parent = child;
@@ -114,7 +114,7 @@ void HeapSort(int* a, int n)
 	//建堆
 	for (int i = (n - 1 - 1) / 2; i >= 0; i--)
 	{
-		AdjustDown(a, n, i);
+		AdjustDown(a, n, i);	//向下调整的前提是确保子树满足性质，干脆从最小的子树开始调整
 	}
 	int end = n - 1;
 	//头和尾巴交换，让从头到尾的前一个进行向下调整，即每次把头已经是最大了，扔到尾巴后面就可以不管
@@ -344,9 +344,76 @@ void MergeSort(int* a, int n)
 
 void MergeSortNonR(int* a, int n)
 {
-	int gap = 0;
-	for (gap = 2; gap < n; gap *= 2)
+	int* tmp = (int*)malloc(sizeof(int) * n);
+	if (tmp == NULL)
 	{
-
+		perror("malloc fail");
+		return;
 	}
+
+	int gap = 1;	//每次两组数据里各有gap个数据
+	while (gap < n)
+	{
+		for (int i = 0; i < n; i += 2 * gap)		//i控制每次归并的起始位置
+		{
+			int begin1 = i, end1 = i + gap - 1;
+			int begin2 = i + gap, end2 = i + 2 * gap - 1;		//每次归并的时候两组数据
+			int win = i;
+			if (begin2 >= n)
+				break;
+			if (end2 >= n)
+				end2 = n - 1;
+			while (begin1 <= end1 && begin2 <= end2)			//[begin1, end1][bigin2, end2]
+			{													//1.end1或者bigin2越界，表明左区间排好了
+				if (a[begin1] <= a[begin2])						//2.end2越界，调整end
+					tmp[win++] = a[begin1++];
+				else
+					tmp[win++] = a[begin2++];					//闭区间相减要加一
+			}
+			while (begin1 <= end1)
+				tmp[win++] = a[begin1++];
+			while (begin2 <= end2)
+				tmp[win++] = a[begin2++];
+			memcpy(a + i, tmp + i, sizeof(int) * (end2 - i + 1));	//每次循环挪动了（末尾 - 首 + 1）
+		}
+		gap *= 2;
+	}
+	free(tmp);
+}
+
+
+void CountSort(int* a, int n)
+{
+	int min = a[0];
+	int max = a[0];
+	for (int i = 1; i < n; i++)
+	{
+		if (min > a[i])
+		{
+			min = a[i];
+		}
+		if (max < a[i])	
+		{
+			max = a[i];
+		}
+	}
+	int* tmp = (int *)calloc((max - min) + 1, sizeof(int));
+	if (tmp == NULL)
+	{
+		perror("calloc fail");
+		return;
+	}
+	for (int i = 0; i < n; i++)
+	{
+		tmp[a[i] - min]++;
+	}
+	int j = 0;
+	for (int i = 0; i < (max - min) + 1; i++)
+	{
+		while (tmp[i]--)
+		{
+			a[j++] = i + min;
+		}
+	}
+	free(tmp);
 }
