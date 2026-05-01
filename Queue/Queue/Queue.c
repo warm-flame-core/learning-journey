@@ -32,6 +32,11 @@ void QueuePush(pQueue pq, QDateType x)
 	}
 	newnode->val = x;
 	newnode->next = NULL;
+
+	/*入队列需要分情况讨论：
+	如果队列为空（phead == NULL），新节点既是头也是尾
+	如果队列不为空，将原队尾的 next 指向新节点，然后更新 ptail 指向新节点*/
+
 	if (pq->phead == NULL)
 	{
 		pq->phead = pq->ptail = newnode;
@@ -51,6 +56,11 @@ void QueuePop(pQueue pq)
 	assert(pq);
 	assert(pq->phead);
 	
+	// 分情况讨论：
+	// 1. 如果队列只有一个节点（phead->next == NULL），
+	//    删除后队列变为空，需要同时置空 phead 和 ptail。
+	// 2. 如果队列有多个节点，保存头节点，移动 phead 指针，然后释放旧头节点。
+
 	if (pq->phead->next == NULL)
 	{
 		free(pq->phead);

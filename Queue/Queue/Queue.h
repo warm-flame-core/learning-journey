@@ -6,13 +6,13 @@
 
 typedef int QDateType;
 
-typedef struct QueueNode
+typedef struct QueueNode	//结构体定义节点
 {
 	QDateType val;
 	struct QueueNode* next;
 }QNode, * pQNode;
 
-typedef struct Queue
+typedef struct Queue	//结构体定义头尾指针和节点个数
 {
 	pQNode ptail;
 	pQNode phead;
