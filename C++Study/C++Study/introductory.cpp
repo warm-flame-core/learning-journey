@@ -27,11 +27,24 @@
 
 //ÊäÈëºÍÊä³ö
 #include <iostream>
-int main()
-{
-	int a = 0;
-	double b = 1.11;
-	char c = 'x';
-	
-	return 0;
-}
+//int main()
+//{
+//	int a = 0;
+//	double b = 1.11;
+//	char c = 'x';
+//	std::cout << a << " " << b << c <<std::endl;
+//	std::cin >> a >> b >> c;
+//	std::cout << a << " " << b << c << std::endl;
+//	return 0;
+//}
+
+
+//int main()
+//{
+//	std::ios_base::sync_with_stdio(false);
+//	std::cin.tie(nullptr);
+//	std::cout.tie(nullptr);
+//	return 0;
+//}
+
+
