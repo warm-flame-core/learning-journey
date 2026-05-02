@@ -48,3 +48,18 @@
 //}
 
 
+//缺省参数、函数重载
+int Add(int a, int b = 10)
+{
+	return a + b;
+}
+
+double Add(double a, double b = 10)
+{
+	return a + b;
+}
+
+int main()
+{
+	std::cout << Add(1) << std::endl;
+}

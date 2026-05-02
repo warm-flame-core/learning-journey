@@ -44,3 +44,5 @@ void BinaryTreeDestroy(BTNode* root);
 
 //是否是完全二叉树
 bool BinaryTreeComplete(BTNode* root);
+
+BTNode* BinaryTreeCreate(BTDateType* a, int n, int* pi);

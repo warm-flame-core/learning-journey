@@ -161,3 +161,23 @@ bool BinaryTreeComplete(BTNode* root)
 	QueueDestroy(&q);
 	return true;
 }
+
+// 通过前序遍历的数组"ABD##E#H##CF##G##"构建二叉树
+BTNode* BinaryTreeCreate(BTDateType* a, int* pi)
+{
+	if (a[(*pi)] == '#')
+	{
+		(*pi)++;
+		return NULL;
+	}
+	BTNode* root = (BTNode*)malloc(sizeof(BTNode));
+	if (root == NULL)
+	{
+		perror("malloc fail");
+		exit(1);
+	}
+	root->Date = a[(*pi)++];
+	root->left = BinaryTreeCreate(a, pi);
+	root->right = BinaryTreeCreate(a, pi);
+	return root;
+}
