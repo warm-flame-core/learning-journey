@@ -49,17 +49,37 @@
 
 
 //缺省参数、函数重载
-int Add(int a, int b = 10)
-{
-	return a + b;
-}
+//int Add(int a, int b = 10)
+//{
+//	return a + b;
+//}
+//
+//double Add(double a, double b = 10)
+//{
+//	return a + b;
+//}
+//
+//int main()
+//{
+//	std::cout << Add(1) << std::endl;
+//}
 
-double Add(double a, double b = 10)
-{
-	return a + b;
-}
 
+//引用
+using namespace std;
+void Swap(int& ra, int& rb)
+{
+	int tmp = ra;
+	ra = rb;
+	rb = tmp;
+}
 int main()
 {
-	std::cout << Add(1) << std::endl;
+	int a = 10;
+	int b = 20;
+	int& d = a;
+	/*d = b;*/	//引用不可以改变指向
+	Swap(a, b);
+	cout << a << b << endl;
+	return 0;
 }
