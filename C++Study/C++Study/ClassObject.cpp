@@ -245,3 +245,38 @@
 //	d2.Print();
 //	return 0;
 //}
+
+
+#include "Date.h"
+void DateTest01()
+{
+	Date d1(2026, 5, 14);
+	
+	
+	/*d1 += 10000;
+	Date d2 = d1;
+	d2 = d1 + 1;*/
+
+	d1 -= 10000;
+	Date d2 = d1 - 1;
+	
+	d1.print();
+	d2.print();
+}
+void DateTest02()
+{
+	Date d1(2026, 5, 14);
+	Date d2 = d1 + 1;
+	cout << d2 - d1 << endl;
+}
+void DateTest03()
+{
+	Date d1, d2;
+	cin >> d1 >> d2;
+	cout << d1 << d2 << endl;
+}
+int main()
+{
+	DateTest03();
+	return 0;
+}
