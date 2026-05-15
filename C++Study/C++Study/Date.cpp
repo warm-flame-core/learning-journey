@@ -29,7 +29,7 @@ bool Date::CheckDate()
 		return true;
 	}
 }
-bool Date::operator<(const Date& d)
+bool Date::operator<(const Date& d) const
 {
 	if (_year < d._year)
 	{
@@ -46,25 +46,25 @@ bool Date::operator<(const Date& d)
 	}
 	return false;
 }
-bool Date::operator<=(const Date& d)
+bool Date::operator<=(const Date& d) const
 {
 	return *this < d || *this == d;
 }
-bool Date::operator>(const Date& d)
+bool Date::operator>(const Date& d) const
 {
 	return !(*this <= d);
 }
-bool Date::operator>=(const Date& d)
+bool Date::operator>=(const Date& d) const
 {
 	return !(*this < d);
 }
-bool Date::operator==(const Date& d)
+bool Date::operator==(const Date& d) const
 {
 	return _year == d._year
 		&& _mouth == d._mouth
 		&& _day == d._day;
 }
-bool Date::operator!=(const Date& d)
+bool Date::operator!=(const Date& d) const
 {
 	return !(*this == d);
 }
@@ -73,7 +73,7 @@ bool Date::operator!=(const Date& d)
 // 传值返回，因为需要带出tmp，tmp是局部变量出作用域会销毁，需要拷贝构造
 
 //+喜欢克隆，其他运算符重载如果调用+很容易出现局部变量出作用域销毁，尽量少用+去复用其他运算符
-Date Date::operator+(int day)
+Date Date::operator+(int day) const
 {
 	Date tmp = *this;	// 调用拷贝构造
 	return tmp += day;
@@ -135,14 +135,14 @@ Date& Date::operator-=(int day)
 	}
 	return *this;
 }
-Date Date::operator-(int day)
+Date Date::operator-(int day) const
 {
 	Date tmp = *this;
 	tmp -= day;
 	return tmp;
 }
 
-int Date::operator-(const Date& d)
+int Date::operator-(const Date& d) const
 {
 	// 假设法，如果假设正确是大-小，那么返回整数，如果假设错误，返回差值的负数
 	int flag = 1;

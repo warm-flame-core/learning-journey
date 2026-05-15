@@ -18,22 +18,22 @@ public:
         return arr[mouth];
     }
     bool CheckDate();
-    bool operator<(const Date& d);
-    bool operator<=(const Date& d);
-    bool operator>(const Date& d);
-    bool operator>=(const Date& d);
-    bool operator==(const Date& d);
-    bool operator!=(const Date& d);
+    bool operator<(const Date& d) const;
+    bool operator<=(const Date& d) const;
+    bool operator>(const Date& d) const;
+    bool operator>=(const Date& d) const;
+    bool operator==(const Date& d) const;
+    bool operator!=(const Date& d) const;
     // d1 += 天数
 
     Date& operator+=(int day);
-    Date operator+(int day);
+    Date operator+(int day) const;
     // d1 -= 天数
 
     Date& operator-=(int day);
-    Date operator-(int day);
+    Date operator-(int day) const;
     // d1 - d2
-    int operator-(const Date& d);
+    int operator-(const Date& d) const;
     // ++d1 -> d1.operator++()
     Date& operator++();
     // d1++ -> d1.operator++(0)

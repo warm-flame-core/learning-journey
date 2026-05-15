@@ -247,36 +247,72 @@
 //}
 
 
-#include "Date.h"
-void DateTest01()
-{
-	Date d1(2026, 5, 14);
-	
-	
-	/*d1 += 10000;
-	Date d2 = d1;
-	d2 = d1 + 1;*/
+//#include "Date.h"
+//void DateTest01()
+//{
+//	Date d1(2026, 5, 14);
+//	
+//	
+//	/*d1 += 10000;
+//	Date d2 = d1;
+//	d2 = d1 + 1;*/
+//
+//	d1 -= 10000;
+//	Date d2 = d1 - 1;
+//	
+//	d1.print();
+//	d2.print();
+//}
+//void DateTest02()
+//{
+//	Date d1(2026, 5, 14);
+//	Date d2 = d1 + 1;
+//	cout << d2 - d1 << endl;
+//}
+//void DateTest03()
+//{
+//	Date d1, d2;
+//	cin >> d1 >> d2;
+//	cout << d1 << d2 << endl;
+//}
+//int main()
+//{
+//	DateTest03();
+//	return 0;
+//}
 
-	d1 -= 10000;
-	Date d2 = d1 - 1;
-	
-	d1.print();
-	d2.print();
-}
-void DateTest02()
+#include <iostream>
+using namespace std;
+class Date
 {
-	Date d1(2026, 5, 14);
-	Date d2 = d1 + 1;
-	cout << d2 - d1 << endl;
-}
-void DateTest03()
-{
-	Date d1, d2;
-	cin >> d1 >> d2;
-	cout << d1 << d2 << endl;
-}
+public:
+	Date(int year = 1, int month = 1, int day = 1)
+		//成员初始化，const引用的成员、没有默认构造的类类型成员、引用必须使用初始化列表
+		:_year(year)
+		, _mouth(month)
+		, _day(day)
+	{
+		_year = 45;
+	}
+	Date(const Date& d)
+	{
+		_year = d._year;
+		_mouth = d._mouth;
+		_day = d._day;
+	}
+	void Print()
+	{
+		cout << _year << " " << _mouth << " " << _day << endl;
+	}
+//定义
+private:
+	int _year = 2;
+	int _mouth = 2;
+	int _day = 3;
+};
+//类类型成员最先看初始化列表，如果默认构造函数有赋值操作，那么函数体内部的操作会覆盖初始化列表
 int main()
 {
-	DateTest03();
-	return 0;
+	Date d1;
+	d1.Print();
 }
