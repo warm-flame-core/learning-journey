@@ -281,38 +281,140 @@
 //	return 0;
 //}
 
+
+//初始化列表
 #include <iostream>
 using namespace std;
-class Date
+//class Date
+//{
+//public:
+//	Date(int year = 1, int month = 1, int day = 9789)
+//		//成员初始化，const引用的成员、没有默认构造的类类型成员、引用必须使用初始化列表
+//		:_year(year)
+//		, _mouth(month)
+//		, _day(day)
+//		//初始化顺序只和声明顺序有关
+//	{}
+//	Date(const Date& d)
+//	{
+//		_year = d._year;
+//		_mouth = d._mouth;
+//		_day = d._day;
+//	}
+//	void Print()
+//	{
+//		cout << _year << " " << _mouth << " " << _day << endl;
+//	}
+////定义
+//private:
+//	int _year = 2;
+//	int _mouth = 0;
+//	int _day = 867;
+//};
+////类类型成员最先看初始化列表，如果默认构造函数有赋值操作，那么函数体内部的操作会覆盖初始化列表
+//int main()
+//{
+//	Date d1(1,8,5);
+//	d1.Print();
+//}
+
+
+//类类型隐式类型转换
+//class A
+//{
+//public:
+//	A(int a = 0)
+//	{
+//		_a1 = a;
+//	}
+//	/*A(int a1 = 0, int a2 = 0)
+//	{
+//		_a1 = a1;
+//		_a2 = a2;
+//	}*/
+//	void Print()
+//	{
+//		cout << _a1 << endl;
+//	}
+//private:
+//	int _a1;
+//	int _a2;
+//};
+//class Stack
+//{
+//public:
+//	void Push(const A& aa)
+//	{
+//		//...
+//	}
+//private:
+//	A _arr[10];
+//	int _top;
+//};
+//
+//int main()
+//{
+//	A aa1(1);
+//	aa1.Print();
+//
+//	// 隐式类型转换
+//	// 2构造一个A的临时对象，再用这个临时对象拷贝构造aa2
+//	// 编译器遇到连续构造+拷贝构造->优化为直接构造
+//	A aa2 = 2;
+//	aa2.Print();
+//
+//	A& raa1 = aa2;
+//	const A& raa2 = 2;
+//
+//	int i = 1;
+//	double d = i;
+//	const double& rd = i;
+//
+//	Stack st;
+//
+//	A aa3(3);
+//	st.Push(aa3);
+//
+//	st.Push(3);
+//
+//	// C++11
+//	/*A aa5 = { 1, 1 };
+//	const A& raa6 = { 2,2 };
+//	st.Push(aa5);
+//	st.Push({ 2,2 });*/
+//
+//	return 0;
+//}
+
+
+//static 成员修饰
+class A
 {
 public:
-	Date(int year = 1, int month = 1, int day = 1)
-		//成员初始化，const引用的成员、没有默认构造的类类型成员、引用必须使用初始化列表
-		:_year(year)
-		, _mouth(month)
-		, _day(day)
+	A()
 	{
-		_year = 45;
+		++_a;
 	}
-	Date(const Date& d)
+	~A()
 	{
-		_year = d._year;
-		_mouth = d._mouth;
-		_day = d._day;
+		--_a;
 	}
-	void Print()
+	static int Get()
 	{
-		cout << _year << " " << _mouth << " " << _day << endl;
+		return _a;
 	}
-//定义
 private:
-	int _year = 2;
-	int _mouth = 2;
-	int _day = 3;
+	static int _a;
 };
-//类类型成员最先看初始化列表，如果默认构造函数有赋值操作，那么函数体内部的操作会覆盖初始化列表
+
+int A::_a = 0;
+
 int main()
 {
-	Date d1;
-	d1.Print();
+	A q1;
+	cout << A::Get() << endl;
+	A q2;
+	
+	cout << A::Get() << endl;
+	return 0;
 }
