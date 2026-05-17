@@ -388,33 +388,114 @@ using namespace std;
 
 
 //static ≥…‘±–ﬁ Œ
+//class A
+//{
+//public:
+//	A()
+//	{
+//		++_a;
+//	}
+//	~A()
+//	{
+//		--_a;
+//	}
+//	static int Get()
+//	{
+//		return _a;
+//	}
+//private:
+//	static int _a;
+//};
+//
+//int A::_a = 0;
+//
+//int main()
+//{
+//	A q1;
+//	cout << A::Get() << endl;
+//	A q2;
+//	
+//	cout << A::Get() << endl;
+//	return 0;
+//}
+
+//class A
+//{
+//public:
+//	void print()
+//	{
+//		cout << _a << endl;
+//	}
+//	void free();
+//	int Get()
+//	{
+//		return _a;
+//	}
+//private:
+//	int _a;
+//};
+//
+//void A::free()
+//{
+//	_a = 0;
+//}
+//
+//int main()
+//{
+//	A a1;
+//	a1.free();
+//	return 0;
+//}
+
+
+//#include<iostream>
+//using namespace std;
+//class Date
+//{
+//public:
+//	// void Init(Date* const this, int year, int month, int day)
+//	void Init(int year, int month, int day)
+//	{
+//			_year = year;
+//		this->_month = month;
+//		this->_day = day;
+//	}
+//	void Print()
+//	{
+//		cout << _year << "/" << _month << "/" << _day << endl;
+//	}
+//private:
+//	int _year;
+//	int _month;
+//	int _day;
+//};
+//int main()
+//{
+//	Date d1;
+//	Date d2;
+//	d1.Init(2024, 3, 31);
+//	d1.Print();
+//	d2.Init(2024, 7, 5);
+//	d2.Print();
+//	return 0;
+//}
+
+
+#include<iostream>
+using namespace std;
 class A
 {
 public:
-	A()
+	void Print()
 	{
-		++_a;
-	}
-	~A()
-	{
-		--_a;
-	}
-	static int Get()
-	{
-		return _a;
+		cout << "A::Print()" << endl;
 	}
 private:
-	static int _a;
+	int _a;
 };
-
-int A::_a = 0;
-
 int main()
 {
-	A q1;
-	cout << A::Get() << endl;
-	A q2;
-	
-	cout << A::Get() << endl;
+	A* p = nullptr;
+	p->Print();
 	return 0;
 }
