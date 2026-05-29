@@ -95,6 +95,7 @@ void StringTest03()
 //迭代器,循环内修改会影响原来字符串
 void StringTest04()
 {
+	// begin类比下标0，end类比\0的下标，rbegin类比最后一个下标，rend类比与下标-1
 	string s1("Hello World");
 	//正向迭代器
 	//string::iterator it = s1.begin();
@@ -128,8 +129,8 @@ void StringTest04()
 
 	const string s2 = s1;
 	//const正向迭代器
-	//string::const_iterator cit = s2.begin();
-	auto cit = s2.begin();
+	string::const_iterator cit = s2.begin();
+	//auto cit = s2.begin();
 	while (cit != s2.end())
 	{
 		cout << *cit << " ";
@@ -173,6 +174,57 @@ void TestPushBack()
 }
 
 
+//string的各种容量
+void StringTest05()
+{
+	string s1("Hello World");
+	cout << s1.size() << endl;		// 有效字符个数
+	cout << s1.length() << endl;	// 有效字符个数
+	cout << s1.capacity() << endl;	// 字符串有效空间
+	cout << s1.empty() << endl;		// 字符串判空
+	s1.reserve(15);					// 字符串扩容，但是vs对于小于16的字符串用的是buffer，开辟在栈区
+	s1.resize(3);					// 字符串调整，小于有效字符个数会删除字符，可能会缩容，大于有效字符个数用\0填充
+	cout << s1 << endl;
+}
+
+//string的常见函数
+void StringTest06()
+{
+	string s1("Hello World");
+	s1.append(" Hello Myself");	// 拼接字符串
+	cout << s1 << endl;
+	
+	string s2("Hello World");	// 尾插字符
+	s2.push_back('y');
+	cout << s2 << endl;
+
+	string s3("Hello World");
+	s3 += ' ';					// 重载运算符拼接
+	s3 += "hello world";
+	cout << s3 << endl;
+
+	string s4("Hello World");
+	s4.insert(0, "1111");		// 在索引0的位置之前插入
+	cout << s4 << endl;
+	char ch = 't';
+	s4.insert(0, 4, ch);
+	cout << s4 << endl;
+	s4.insert(s4.begin(), ch);	// 去迭代器开始位置插入一个t
+	cout << s4 << endl;
+
+	string s5("Hello World");	// 字符串分配新的字符
+	s5.assign(4, 'c');
+	cout << s5 << endl;
+
+	string s6("Hello World");
+	s6.erase(5, 1);				// 下标5的地方开始删除一个字符
+	cout << s6 << endl;			// 尽量尾删除，头删效率低下
+	s6.erase(s6.begin());		// 取迭代器删除
+	cout << s6 << endl;
+
+	string s6("Hello World");
+}
+
 int main()
 {
 	
@@ -181,5 +233,7 @@ int main()
 	//StringTest03();
 	//StringTest04();
 	//TestPushBack();
+	//StringTest05();
+	StringTest06();
 	return 0;
 }
