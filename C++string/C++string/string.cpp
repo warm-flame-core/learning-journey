@@ -1,5 +1,8 @@
+#define _CRT_SECURE_NO_WARNINGS 1
 #include <iostream>
 #include <string>
+#include <cctype>
+#include <stdlib.h>
 using namespace std;
 
 // auto可以用于返回值但是不可以用于参数
@@ -222,7 +225,119 @@ void StringTest06()
 	s6.erase(s6.begin());		// 取迭代器删除
 	cout << s6 << endl;
 
-	string s6("Hello World");
+	string sss("hello                 world hello bit");
+	size_t pos = sss.find(' ');
+	// 这样查找字符效率低下
+	/*while (pos != string::npos)
+	{
+		sss.replace(pos, 1, "%%");
+		cout << sss << endl;
+
+		pos = sss.find(' ', pos+2);
+	}
+	cout << sss << endl;*/
+	
+	// 用空间换时间，提前开一些空间出来
+	string tmp;
+	tmp.reserve(sss.size());
+	for (auto ch : sss)
+	{
+		if (ch == ' ')
+			tmp += "%%";
+		else
+			tmp += ch;
+	}
+	sss.swap(tmp);
+	cout << sss << endl;
+
+	// find:查找一个文件的文件名
+	string s7("test.txt");
+	int pos3 = s7.find('.');
+	string filename;
+	if (pos3 != string::npos) {
+		// substr(0, pos) 表示从下标 0 开始，截取 pos 个长度（不包含 pos 位置的点）
+		filename = s7.substr(0, pos3);
+	}
+	cout << filename << endl;
+	
+	// rfind:查找一个文件的扩展名
+	string s8("test.txt.zip");
+	size_t pos1 = s8.rfind('.');
+	string suffix = s8.substr(pos1);
+	cout << suffix << endl;
+
+	// 将字符串中所有不是abcdef的字符换成*
+	std::string str("Please, replace the vowels in this sentence by asterisks.");
+	std::cout << str << '\n';
+	std::size_t found = str.find_first_not_of("abcdef");
+	while (found != std::string::npos)
+	{
+		str[found] = '*';
+		found = str.find_first_not_of("abcdef", found + 1);
+	}
+
+	// c_str()：兼容C语言返回指针
+	string file;
+	cin >> file;
+	FILE* fout = fopen(file.c_str(), "r");
+	char ch1 = fgetc(fout);
+	while (ch1 != EOF)
+	{
+		cout << ch;
+		ch1 = fgetc(fout);
+	}
+	fclose(fout);
+}
+
+void SplitFilename(const std::string& str)
+{
+	std::cout << "Splitting: " << str << '\n';
+	std::size_t found = str.find_last_of("/\\");
+
+	std::cout << " path: " << str.substr(0, found) << '\n';
+	std::cout << " file: " << str.substr(found + 1) << '\n';
+}
+
+void StringTest07()
+{
+	std::string str1("/usr/bin/man");
+	std::string str2("E:\\Code\\113-issues\\24年-07月20日--string");
+
+	SplitFilename(str1);
+	SplitFilename(str2);
+}
+
+// 反转两边的字母
+string reverseOnlyLetters(string s) {
+	int begin = 0, end = s.size() - 1;
+	while (begin < end)
+	{
+		while (begin < end && !isalpha(s[begin]))	// 找到左边的字母
+		{
+			begin++;
+		}
+		while (begin < end && !isalpha(s[end]))		// 找到右边的字母
+		{
+			end--;
+		}
+		swap(s[begin++], s[end--]);
+	}
+	return s;
+}
+
+// 返回字符串中的第一个唯一字符的索引
+int firstUniqChar(string s) {
+	int arr[26] = { 0 };
+	for (auto ch : s)
+	{
+		arr[ch - 'a']++;
+	}
+	for (int i = 0; i < s.size(); i++)
+	{
+		if (arr[s[i] - 'a'] == 1)
+			return i;
+	}
+	return -1;
 }
 
 int main()
