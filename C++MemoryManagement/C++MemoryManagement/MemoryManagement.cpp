@@ -22,10 +22,10 @@ private:
 class B
 {
 public:
-	/*~B()
+	~B()
 	{
 		cout << "~B()" << endl;
-	}*/
+	}
 private:
 	int _b1 = 2;
 	int _b2 = 2;
