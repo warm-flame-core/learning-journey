@@ -8,6 +8,7 @@ namespace xjw
 	class string
 	{
 	public:
+		// 迭代器命名
 		typedef char* iterator;
 		typedef const char* const_iterator;
 
@@ -69,6 +70,7 @@ namespace xjw
 
 		string(const char* str = "")
 		{
+			// 不传递0和空指针，可能会解引用
 			_size = strlen(str);
 			_capacity = _size;	// capacity不包括\0
 			_str = new char[_capacity + 1];
@@ -85,10 +87,13 @@ namespace xjw
 		{
 			return _str;
 		}
-		void reserve(size_t n);
-		string& operator+=(char ch);
-		void push_back(char ch);
-		//string& operator+=(const char* str);
+		void reserve(size_t n);					// 调整大小
+		void push_back(char ch);				// 尾插一个字符
+		string& operator+=(char ch);			// 重载运算符+=
+		string& operator+=(const char* str);	
+		void append(const char* str);			// 追加一个字符串
+		void insert(size_t pos, char ch);		// 前下标pos之前插入一个字符
+		void insert(size_t pos,const char* str);// 前下标pos之前插入一个字符串
 
 	private:
 		char* _str;

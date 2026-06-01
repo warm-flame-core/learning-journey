@@ -399,13 +399,31 @@ namespace xjw
 		cout << s1[0] << endl;
 		s1.push_back('x');
 		cout << s1.c_str() << endl;
+		s1 += 'h';
+		cout << s1.c_str() << endl;
+	}
+
+	void My_StringTest03()
+	{
+		string s1("hello world");
+		s1.append(" hello world");
+		cout << s1.c_str() << endl;
+
+		string s2("hello world");
+		s2.insert(0, 'x');
+		cout << s2.c_str() << endl;
+
+		string s3("hello world");
+		s3.insert(5, " hello world");
+		cout << s3.c_str() << endl;
 	}
 }
 
 int main()
 {
 	//xjw::My_StringTest01();
-	xjw::My_StringTest02();
+	//xjw::My_StringTest02();
+	xjw::My_StringTest03();
 
 
 	return 0;
