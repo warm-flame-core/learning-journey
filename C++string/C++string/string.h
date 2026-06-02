@@ -2,6 +2,7 @@
 #include <iostream>
 #include <assert.h>
 #include <stdlib.h>
+using namespace std;
 
 namespace xjw
 {
@@ -22,12 +23,12 @@ namespace xjw
 			return _str + _size;
 		}
 
-		iterator rbegin() const
+		const_iterator begin() const
 		{
 			return _str;
 		}
 
-		iterator rend() const
+		const_iterator end() const
 		{
 			return _str + _size;
 		}
@@ -40,6 +41,19 @@ namespace xjw
 		size_t capacity() const
 		{
 			return _capacity;
+		}
+
+		string& operator=(const string& str)
+		{
+			if (this != &str)	// 考虑自己等于自己，不能把自己删除了
+			{
+				delete[] _str;	// 要赋值的字符串可能是已经有字符的字符串，需要先清除
+				_str = new char[str._capacity + 1];
+				strcpy(_str, str._str);
+				_size = str._size;
+				_capacity = str._capacity;
+				return *this;
+			}
 		}
 
 		// 重载方括号
@@ -77,10 +91,43 @@ namespace xjw
 			strcpy(_str, str);
 		}
 
+		// 赋值拷贝构造
+		// 传统写法
+		/*string(const string& str)
+		{
+			_str = new char[str._capacity + 1];
+			strcpy(_str, str._str);
+			_size = str._size;
+			_capacity = str._capacity;
+		}*/
+		// 现代写法
+		// 深拷贝str的字符串，其他都用缺省值的tmp，与
+		string(const string& str)
+		{
+			string tmp(str._str);
+			swap(tmp);
+		}
+
 		~string()
 		{
 			delete[] _str;
+			_str = nullptr;
 			_size = _capacity = 0;
+		}
+
+		//s1.swap(str)
+		void swap(string& str)
+		{
+			_str = new char[str.capacity() + 1];
+			std::swap(_str, str._str);
+			std::swap(_size, str._size);
+			std::swap(_capacity, str._capacity);
+		}
+
+		void clear()
+		{
+			_str[0] = '\0';
+			_size = 0;
 		}
 
 		char* c_str()	const
@@ -94,10 +141,29 @@ namespace xjw
 		void append(const char* str);			// 追加一个字符串
 		void insert(size_t pos, char ch);		// 前下标pos之前插入一个字符
 		void insert(size_t pos,const char* str);// 前下标pos之前插入一个字符串
+		size_t find(char ch, size_t pos = 0);
+		size_t find(const char* str, size_t pos = 0);
+		string substr(size_t pos = 0, size_t len = npos);
 
 	private:
-		char* _str;
-		size_t _size;
-		size_t _capacity;
+		// 给缺省值方便用现代写法
+		char* _str = nullptr;
+		size_t _size = 0;
+		size_t _capacity = 0;
+
+		// 静态的整形最特殊，可以直接给初始值，但是还是建议类外面写默认值
+		/*static const size_t npos = -1;
+		static const int n = -1;*/
+
+		static const size_t npos;
 	};
+	bool operator<(const string& s1, const string& s2);
+	bool operator<=(const string& s1, const string& s2);
+	bool operator>(const string& s1, const string& s2);
+	bool operator>=(const string& s1, const string& s2);
+	bool operator==(const string& s1, const string& s2);
+	bool operator!=(const string& s1, const string& s2);
+
+	ostream& operator<<(ostream& out, const string& s);
+	istream& operator>>(istream& in, string& s);
 }
