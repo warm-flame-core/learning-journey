@@ -43,18 +43,38 @@ namespace xjw
 			return _capacity;
 		}
 
-		string& operator=(const string& str)
+		// 传统写法
+		//string& operator=(const string& str)
+		//{
+		//	if (this != &str)	// 考虑自己等于自己，不能把自己删除了
+		//	{
+		//		delete[] _str;	// 要赋值的字符串可能是已经有字符的字符串，需要先清除
+		//		_str = new char[str._capacity + 1];
+		//		strcpy(_str, str._str);
+		//		_size = str._size;
+		//		_capacity = str._capacity;
+		//		return *this;
+		//	}
+		//}
+		
+		// 现代写法
+		// 用临时变量构造一个str，然后交换
+		//string& operator=(const string& str)
+		//{
+		//	if (this != &str)	// 考虑自己等于自己，不能把自己删除了
+		//	{
+		//		string tmp(str._str);
+		//		swap(tmp);
+		//	}
+		//	return *this;
+		//}
+		// 直接用传值调用传拷贝的字符串直接交换，可以不用判断自己和自己交换
+		string& operator=(string tmp)
 		{
-			if (this != &str)	// 考虑自己等于自己，不能把自己删除了
-			{
-				delete[] _str;	// 要赋值的字符串可能是已经有字符的字符串，需要先清除
-				_str = new char[str._capacity + 1];
-				strcpy(_str, str._str);
-				_size = str._size;
-				_capacity = str._capacity;
-				return *this;
-			}
+			swap(tmp);
+			return *this;
 		}
+
 
 		// 重载方括号
 		char& operator[](size_t pos)
@@ -101,7 +121,7 @@ namespace xjw
 			_capacity = str._capacity;
 		}*/
 		// 现代写法
-		// 深拷贝str的字符串，其他都用缺省值的tmp，与
+		// 深拷贝str的字符串的tmp，与全部是缺省值的this进行替换，用别的函数完成业务
 		string(const string& str)
 		{
 			string tmp(str._str);

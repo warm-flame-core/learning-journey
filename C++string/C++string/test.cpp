@@ -24,7 +24,7 @@ void StringTest01()
 //范围for,不引用是一种拷贝，不影响原来的值
 void StringTest02()
 {
-	int arr[5] = { 1,2,3,4,5 };
+	char arr[] = "hello world";
 	for (auto ch : arr)
 	{
 		ch++;
@@ -37,6 +37,8 @@ void StringTest02()
 		ch+=2;
 		cout << ch << " ";
 	}
+	cout << endl;
+	cout << arr << endl;
 
 
 	cout << endl;
@@ -215,7 +217,7 @@ void StringTest06()
 	s4.insert(s4.begin(), ch);	// 去迭代器开始位置插入一个t
 	cout << s4 << endl;
 
-	string s5("Hello World");	// 字符串分配新的字符
+	string s5("xxxxxxxxx");	// 字符串分配新的字符
 	s5.assign(4, 'c');
 	cout << s5 << endl;
 
@@ -225,7 +227,7 @@ void StringTest06()
 	s6.erase(s6.begin());		// 取迭代器删除
 	cout << s6 << endl;
 
-	string sss("hello                 world hello bit");
+	string sss("hello          world hello xjw");
 	size_t pos = sss.find(' ');
 	// 这样查找字符效率低下
 	/*while (pos != string::npos)
@@ -436,6 +438,9 @@ namespace xjw
 		string s1("hello world");
 		string s2(s1);
 		cout << s2 << endl;
+		string s3;
+		s3 = s1;
+		cout << s3 << endl;
 	}
 }
 
@@ -445,8 +450,8 @@ int main()
 	//xjw::My_StringTest02();
 	//xjw::My_StringTest03();
 	//xjw::My_StringTest04();
-	xjw::My_StringTest05();
-
+	//xjw::My_StringTest05();
+	StringTest06();
 
 	return 0;
 }
