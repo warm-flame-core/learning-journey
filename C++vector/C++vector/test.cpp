@@ -73,6 +73,7 @@ void test_vector3()
 	cout << v.size() << endl;
 	cout << v.capacity() << endl;
 
+	//resize¹ý¶Ì»á½Ø¶Ï
 	v.resize(15, 2);
 	cout << v.size() << endl;
 	cout << v.capacity() << endl;
