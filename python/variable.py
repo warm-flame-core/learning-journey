@@ -65,8 +65,28 @@
 # print(2 ** 0.5)
 
 
-# 有特色的运算符
-a = 'hello'
-b = 'world'
-print(a == b)
-print(a != b)
+# 有特色的运算符，在py中可以直接比较字符串
+# a = 'hello'
+# b = 'world'
+# print(a == b)
+# print(a != b)
+
+# 逻辑运算符，且可以连续比较
+# a = 10
+# b = 20
+# c = 30
+# print(a < b and b < c)
+# print(not (a < b and b < c))
+# print(not (a < b < c))
+
+# py也有短路特性
+# print(10 > 20 and 10 / 0 == 1)
+# print(10 < 20 or 10 / 0 == 1)
+
+# 多元赋值
+# a, b = 10, 20
+# print(a)
+# print(b)
+# a, b = b, a
+# print(a)
+# print(b)
