@@ -34,8 +34,50 @@
 # 	print("hello")
 
 # while循环
-num = 1
-while num < 11:
-	print(num)
-	num += 1
+# num = 1
+# while num < 11:
+# 	print(num)
+# 	num += 1
 
+# num = 1
+# sum = 0
+# while num <= 100:
+# 	sum += num
+# 	num += 1
+# print(sum)
+
+# for循环
+# range函数生成迭代，左闭右开
+# for i in range(1, 11):
+# 	print(i)
+# 可以规定步长
+# for i in range(0, 11, 2):
+# 	print(i)
+# 步长可以是负数
+# for i in range(10, 0, -1):
+# 	print(i)
+
+#continue跳过循环
+# for i in range(1, 7):
+# 	if i == 3:
+# 		continue
+# 	print(f'吃了第{i}个包子')
+#
+# break终止循环
+# for i in range(1, 7):
+# 	if i == 3:
+# 		print('不好吃')
+# 		break
+# 	print(f'吃了第{i}个包子')
+
+#  输入若干个数字, 求平均值. 使用 "分号" 作为结尾.
+# sum = 0
+# count = 0
+# while True:
+# 	num = input('请输入数字')
+# 	if num == ';':
+# 		break
+# 	num = float(num)
+# 	sum += num
+# 	count += 1
+# print(sum / count)
