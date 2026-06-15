@@ -81,3 +81,9 @@
 # 	sum += num
 # 	count += 1
 # print(sum / count)
+
+# 三元表达式
+x = 4
+y = 5
+small = x if x < y else y
+print(small)
