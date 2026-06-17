@@ -2,27 +2,28 @@
 #include <iostream>
 #include <assert.h>
 #include <stdlib.h>
+#include <vector>
 namespace xjw
 {
 	template<class T>
 	class vector
 	{
 	public:
-		typedef T* iterotar;
-		typedef const T* const_iterotar;
-		iterotar begin()
+		typedef T* iterator;
+		typedef const T* const_iterator;
+		iterator begin()
 		{
 			return _start;
 		}
-		iterotar end()
+		iterator end()
 		{
 			return _finish;
 		}
-		const_iterotar begin() const
+		const_iterator begin() const
 		{
 			return _start;
 		}
-		const_iterotar end() const
+		const_iterator end() const
 		{
 			return _finish;
 		}
@@ -72,30 +73,59 @@ namespace xjw
 			*_finish = x;
 			_finish++;
 		}
-		void pop_pack()
+		void pop_back()
 		{
 			assert(!empty());
 			_finish--;
 		}
-		void insert(iterator pos, const T& x)
+		iterator insert(iterator pos, const T& x)
 		{
 			if (_finish == _end_of_storage)
 			{
+				// 比如先算相对位置，因为扩容之后pos变成了野指针
+				// 迭代器失效的一种类型
+				size_t len = pos - begin();
 				reserve(capacity() == 0 ? 4 : capacity() * 2);
+				pos = begin() + len;
 			}
 			iterator end = _finish - 1;
 			while (end > pos - 1)
 			{
 				*(end + 1) = *end;
-				end--
+				end--;
 			}
+			*pos = x;
+			++_finish;
+
+			// 但是使用后的pos失效了，不能再次使用，需要重新获取，迭代器失效的一种类型
+			// 需要返回迭代器
+			return pos;
 		}
 	private:
-		iterotar _start = nullptr;
-		iterotar _finish = nullptr;
-		iterotar _end_of_storage = nullptr;
+		iterator _start = nullptr;
+		iterator _finish = nullptr;
+		iterator _end_of_storage = nullptr;
 	};
 
+
+	template<class T>
+	void vector_print(const vector<T>& v)
+	{
+		// 从未实例化的模板取类型需要明确是类型还是成员变量
+		//vector<T>::const_iterator it = v.begin();
+		//typename vector<T>::const_iterator it = v.begin();
+		auto it = v.begin();
+		while (it != v.end())
+		{
+			cout << *it << ' ';
+		}
+		cout << endl;
+		for (auto e : v)
+		{
+			cout << e << ' ';
+		}
+		cout << endl;
+	}
 
 
 
@@ -108,12 +138,15 @@ namespace xjw
 		v1.push_back(2);
 		v1.push_back(3);
 		v1.push_back(4);
-		v1.push_back(5);
-		v1.pop_pack();
-		for (auto e : v1)
-		{
-			cout << e << ' ';
-		}
-		cout << endl;
+		//v1.push_back(5);
+		v1.pop_back();
+		int x;
+		cin >> x;
+		auto p = find(v1.begin(), v1.end(), x);
+		v1.insert(p, 15);
+		// 如果扩容，这个p的指针可能会变成野指针，会对别的地方进行修改，也是失效
+		// 
+		*(p + 1) *= 100;
+		//vector_print(v1);
 	}
 }
