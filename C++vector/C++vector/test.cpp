@@ -120,5 +120,6 @@ void test_vector4()
 #include "vector.h"
 int main()
 {
-	xjw::my_vector_test01();
+	//xjw::my_vector_test01();
+	xjw::my_vector_test03();
 }

@@ -11,30 +11,60 @@ namespace xjw
 	public:
 		typedef T* iterator;
 		typedef const T* const_iterator;
+		
+		// C++11新支持的默认构造函数写法
+		vector() = default;
+
+		// 析构函数
+		~vector()
+		{
+			if (_start)
+			{
+				delete[] _start;
+				_start = _finsh = _end_of_storage = nullptr;
+			}
+		}
+
+		// 拷贝构造函数
+		vector(const vector<T>& v)
+		{
+			reserve(v.size());
+			for (auto e : v)
+			{
+				push_back(e);
+			}
+		}
+
 		iterator begin()
 		{
 			return _start;
 		}
+
 		iterator end()
 		{
 			return _finish;
 		}
+
 		const_iterator begin() const
 		{
 			return _start;
 		}
+
 		const_iterator end() const
 		{
 			return _finish;
 		}
+
 		size_t size() const
 		{
 			return _finish - _start;
 		}
+
 		size_t capacity() const
 		{
 			return _end_of_storage - _start;
 		}
+
 		T& operator[](size_t i)
 		{
 			assert(i < size());
@@ -47,7 +77,7 @@ namespace xjw
 			return _start[i];
 		}
 
-		void reserve(size_t n)
+		void reserve(size_t n)		// 扩容
 		{
 			if (n > capacity())
 			{
@@ -60,11 +90,13 @@ namespace xjw
 				_end_of_storage = tmp + n;
 			}
 		}
-		bool empty()
+
+		bool empty()		// 判空
 		{
 			return _start == _finish;
 		}
-		void push_back(const T& x)
+
+		void push_back(const T& x)		// 尾插
 		{
 			if (_finish == _end_of_storage)
 			{
@@ -73,12 +105,14 @@ namespace xjw
 			*_finish = x;
 			_finish++;
 		}
+
 		void pop_back()
 		{
 			assert(!empty());
 			_finish--;
 		}
-		iterator insert(iterator pos, const T& x)
+
+		iterator insert(iterator pos, const T& x)		// pos位置之前插入
 		{
 			if (_finish == _end_of_storage)
 			{
@@ -101,6 +135,37 @@ namespace xjw
 			// 需要返回迭代器
 			return pos;
 		}
+
+		//删除之后可能会迭代器失效，需要更新
+		iterator erase(iterator pos)		// 删除数据
+		{
+			assert(pos >= _start);
+			assert(pos < _finish);
+			iterator it = pos + 1;
+			while (it != end())
+			{
+				*(it - 1) = *(it);
+				++it;
+			}
+			--_finish;
+			return pos;
+		}
+
+		void resize(int n, T val = T())		// 调整数据容量
+		{
+			if (n < size())
+				_finish = _start + n;
+			else
+			{
+				reserve(n);
+				while (_finish < _start + n)
+				{
+					*(_finish) = val;
+					++_finish;
+				}
+			}
+		}
+
 	private:
 		iterator _start = nullptr;
 		iterator _finish = nullptr;
@@ -127,6 +192,16 @@ namespace xjw
 		cout << endl;
 	}
 
+	template<class Container>
+	void container_print(Container& v)
+	{
+		for (auto e : v)
+		{
+			cout << e << ' ';
+		}
+		cout << endl;
+	}
+
 
 
 
@@ -143,10 +218,39 @@ namespace xjw
 		int x;
 		cin >> x;
 		auto p = find(v1.begin(), v1.end(), x);
-		v1.insert(p, 15);
+		p = v1.insert(p, 15);
 		// 如果扩容，这个p的指针可能会变成野指针，会对别的地方进行修改，也是失效
-		// 
+		// 要更新指针
 		*(p + 1) *= 100;
 		//vector_print(v1);
+	}
+
+	void my_vector_test02()
+	{
+		vector<int> v1;
+		v1.push_back(1);
+		v1.push_back(2);
+		v1.push_back(3);
+		v1.push_back(4);
+		vector<int>::iterator it = v1.begin();
+		while (it != v1.end())
+		{
+			if (*it % 2 == 0)
+				it = v1.erase(it);
+			else
+				++it;
+		}
+		container_print(v1);
+	}
+
+	void my_vector_test03()
+	{
+		vector<int> v1;
+		v1.resize(10, 1);
+		container_print(v1);
+		v1.resize(15, 2);
+		container_print(v1);
+		v1.resize(5, 3);
+		container_print(v1);
 	}
 }
