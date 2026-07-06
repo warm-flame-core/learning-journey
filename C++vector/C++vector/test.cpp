@@ -121,5 +121,5 @@ void test_vector4()
 int main()
 {
 	//xjw::my_vector_test01();
-	xjw::my_vector_test03();
+	xjw::my_vector_test06();
 }

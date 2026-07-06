@@ -3,6 +3,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <vector>
+#include <list>
+#include <string>
 namespace xjw
 {
 	template<class T>
@@ -15,13 +17,44 @@ namespace xjw
 		// C++11新支持的默认构造函数写法
 		vector() = default;
 
+		// 类模板里面的成员函数，依旧可以是函数模板，而且用任意迭代器区间构造
+		template <class InputIterator>
+		vector(InputIterator first, InputIterator last)
+		{
+			// 不是所有的迭代器都有大小于号的比较，需要用不等于
+			while (first != last)
+			{
+				push_back(*first);
+				++first;
+			}
+		}
+
+		vector(int n, T val = T())
+		{
+			reserve(n);
+			for (int i = 0; i < n; i++)
+			{
+				push_back(val);
+			}
+		}
+
+		// 这个构造会与迭代器构造起冲突，需要提供int的n的构造
+		vector(size_t n, T val = T())
+		{
+			reserve(n);
+			for (size_t i = 0; i < n; i++)
+			{
+				push_back(val);
+			}
+		}
+
 		// 析构函数
 		~vector()
 		{
 			if (_start)
 			{
 				delete[] _start;
-				_start = _finsh = _end_of_storage = nullptr;
+				_start = _finish = _end_of_storage = nullptr;
 			}
 		}
 
@@ -29,7 +62,7 @@ namespace xjw
 		vector(const vector<T>& v)
 		{
 			reserve(v.size());
-			for (auto e : v)
+			for (auto& e : v)
 			{
 				push_back(e);
 			}
@@ -77,13 +110,55 @@ namespace xjw
 			return _start[i];
 		}
 
+		//普通写法
+		/*vector<T>& operator=(const vector<T>& v)
+		{
+			if (*this != v)
+			{
+				clear();
+				reserve(v.size());
+				for (auto e : v)
+				{
+					push_back(e);
+				}
+			}
+			return *this;
+		}*/
+
+		//现代写法
+		//参数不引用，构造一个临时对象交换，临时对象出作用域就销毁了
+		//类模板的成员函数可以省略参数
+		//vector& operator=(const vector v)
+		vector<T>& operator=(vector<T> v)
+		{
+			swap(v);
+			return *this;
+		}
+
+		void swap(vector<T>& v)
+		{
+			std::swap(_start, v._start);
+			std::swap(_finish, v._finish);
+			std::swap(_end_of_storage, v._end_of_storage);
+		}
+
+		void clear()
+		{
+			_finish = _start;
+		}
+
 		void reserve(size_t n)		// 扩容
 		{
 			if (n > capacity())
 			{
 				size_t old_size = size();
 				T* tmp = new T[n];
-				memcpy(tmp, _start, sizeof(T) * size());
+				// 不能使用memcpy，如果对象是自定义的类型会造成浅拷贝，释放旧空间变成野指针
+				//memcpy(tmp, _start, sizeof(T) * old_size);
+				for (size_t i = 0; i < old_size; i++)
+				{
+					tmp[i] = _start[i];
+				}
 				delete[] _start;
 				_start = tmp;
 				_finish = tmp + old_size;
@@ -251,6 +326,50 @@ namespace xjw
 		v1.resize(15, 2);
 		container_print(v1);
 		v1.resize(5, 3);
+		container_print(v1);
+	}
+
+	void my_vector_test04()
+	{
+		vector<int> v1;
+		v1.push_back(1);
+		v1.push_back(2);
+		v1.push_back(3);
+		v1.push_back(4);
+		vector<int> v2;
+		v2 = v1;
+		container_print(v1);
+		container_print(v2);
+	}
+
+	void my_vector_test05()
+	{
+		vector<int> v1;
+		v1.push_back(1);
+		v1.push_back(2);
+		v1.push_back(3);
+		v1.push_back(4);
+		vector<int> v2(v1.begin(), v1.end());
+		container_print(v1);
+		container_print(v2);
+
+
+		// 这个构造在n个数值和迭代器区间构造中选择，需要注意
+		vector<int> v3(10, 1);
+		container_print(v3);
+
+	}
+
+	void my_vector_test06()
+	{
+		// 对象是自定义类型时mamcpy指挥单纯的移动数据，会造成野指针
+		vector<string> v1;
+		v1.push_back("111111111111111");
+		v1.push_back("111111111111111");
+		v1.push_back("111111111111111");
+		v1.push_back("111111111111111");
+		container_print(v1);
+		v1.push_back("111111111111111");
 		container_print(v1);
 	}
 }
