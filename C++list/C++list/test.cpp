@@ -254,9 +254,12 @@ void test_op2()
 	printf("list sort:%d\n", end2 - begin2);
 }
 
+#include "list.h"
+
 int main()
 {
 	//test_list5();
-	test_op2();
+	//test_op2();
+	xjw::my_list_test1();
 	return 0;
 }
