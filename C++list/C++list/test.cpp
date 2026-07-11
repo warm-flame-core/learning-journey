@@ -29,7 +29,7 @@ void list_test01()
 	}
 	cout << endl;
 }
-// listæ˜¯åŒå‘è¿­ä»£å™¨ï¼Œåªæœ‰++å’Œ--
+// listÊÇË«Ïòµü´úÆ÷£¬Ö»ÓĞ++ºÍ--
 struct A
 {
 public:
@@ -73,7 +73,7 @@ void test_list2()
 	lt1.emplace_back(aa1);
 	lt1.emplace_back(A(2, 2));
 	cout << endl;
-	// æ”¯æŒç›´æ¥ä¼ æ„é€ Aå¯¹è±¡çš„å‚æ•°emplace_back,ç”¨åŒ¿åå¯¹è±¡
+	// Ö§³ÖÖ±½Ó´«¹¹ÔìA¶ÔÏóµÄ²ÎÊıemplace_back,ÓÃÄäÃû¶ÔÏó
 	lt1.emplace_back(3, 3);
 }
 
@@ -127,7 +127,7 @@ void test_list4()
 	lt.push_back(5);
 	lt.push_back(6);
 	lt.push_back(7);
-	// ç”¨ä»¿å‡½æ•°å’ŒåŒ¿åå¯¹è±¡å®ç°é™åº
+	// ÓÃ·Âº¯ÊıºÍÄäÃû¶ÔÏóÊµÏÖ½µĞò
 	lt.sort(greater<int>());
 	for (auto e : lt)
 	{
@@ -170,7 +170,7 @@ void test_list5()
 
 void test_list6()
 {
-	// ä¸€ä¸ªé“¾è¡¨èŠ‚ç‚¹è½¬ç§»ç»™å¦ä¸€ä¸ªé“¾è¡¨
+	// Ò»¸öÁ´±í½Úµã×ªÒÆ¸øÁíÒ»¸öÁ´±í
 	std::list<int> mylist1, mylist2;
 	std::list<int>::iterator it;
 
@@ -189,7 +189,7 @@ void test_list6()
 	// "it" still points to 2 (the 5th element
 
 
-// è°ƒæ•´å½“å‰é“¾è¡¨èŠ‚ç‚¹çš„é¡ºåº
+// µ÷Õûµ±Ç°Á´±í½ÚµãµÄË³Ğò
 	list<int> lt;
 	lt.push_back(1);
 	lt.push_back(2);
@@ -235,13 +235,13 @@ void test_op2()
 	}
 
 	int begin1 = clock();
-	// æ‹·è´vector
+	// ¿½±´vector
 	vector<int> v(lt2.begin(), lt2.end());
 
-	// æ’åº
+	// ÅÅĞò
 	sort(v.begin(), v.end());
 
-	// æ‹·è´å›lt2
+	// ¿½±´»Ølt2
 	lt2.assign(v.begin(), v.end());
 
 	int end1 = clock();
@@ -260,6 +260,6 @@ int main()
 {
 	//test_list5();
 	//test_op2();
-	xjw::my_list_test1();
+	xjw::my_list_test2();
 	return 0;
 }
