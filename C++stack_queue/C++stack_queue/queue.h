@@ -1,13 +1,10 @@
 #pragma once
 #include <vector>
 #include <deque>
-// 仿函数
-
 namespace xjw
 {
-	// 容器适配器Container，复用已经实现好的类型
 	template<class T, class Container = deque<T>>
-	class stack
+	class queue
 	{
 	public:
 		bool empty()
@@ -20,7 +17,7 @@ namespace xjw
 		}
 		const T& top() const
 		{
-			return _con.back();
+			return _con.front();
 		}
 		void push(const T& x)
 		{
@@ -28,7 +25,7 @@ namespace xjw
 		}
 		void pop()
 		{
-			_con.pop_back();
+			_con.pop_front();
 		}
 	private:
 		Container _con;
