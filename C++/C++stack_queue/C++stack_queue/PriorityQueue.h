@@ -2,17 +2,40 @@
 #include <vector>
 namespace xjw
 {
-	template<class T, class Container = vector<T>>
+	// 本质是一个类，重载operator()
+	//小于用less，大于用greater
+	template<class T>
+	struct Less
+	{
+		bool operator()(const T& x, const T& y)
+		{
+			return x < y;
+		}
+	};
+
+	template<class T>
+	struct Greater
+	{
+		bool operator()(const T& x, const T& y)
+		{
+			return x > y;
+		}
+	};
+
+	//默认是大堆，因为堆排序后小于号应该是升序
+	template<class T, class Container = vector<T>, class compare = Less<T>>
 	class priority_queue
 	{
 	public:
 		// 入堆需要向上调整
 		void adjustup(int child)
 		{
+			compare com;
 			int parent = (child - 1) / 2;
 			while (child > 0)
 			{
-				if (_con[parent] < _con[child])
+				// if (_con[parent] < _con[child])
+				if (com(_con[parent] , _con[child]))
 				{
 					swap(_con[parent], _con[child]);
 					child = parent;
@@ -33,15 +56,17 @@ namespace xjw
 		// 向下调整法
 		void adjustdown(int parent)
 		{
+			compare com;
 			// 假设法，先假设左边孩子更大
-			size_t child = parent * 2 + 1;
+			int child = parent * 2 + 1;
 			// 孩子序号小于个数说明已经是叶子节点了
 			while (child < _con.size())
 			{
 				// 有可能右边孩子更大
-				if (child + 1 < _con.size() && _con[child] < _con[child + 1])
+				if (child + 1 < _con.size() && com(_con[child], _con[child + 1]))
 					++child;
-				if (_con[parent] < _con[child])
+				//if (_con[parent] < _con[child])
+				if (com(_con[parent], _con[child]))
 				{
 					swap(_con[parent], _con[child]);
 					child = parent;
@@ -56,7 +81,7 @@ namespace xjw
 		void pop()
 		{
 			swap(_con[0], _con[_con.size() - 1]);
-			_con.pop.back();
+			_con.pop_back();
 			adjustdown(0);
 		}
 		const T& top()

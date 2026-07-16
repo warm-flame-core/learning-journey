@@ -49,12 +49,27 @@ void testPriorityQueue1()
 		q1.push(e);
 	}
 	// 如果要小堆需要greater
-	priority_queue<int, vector<int>, greater<int>> q2(v.begin(), v.end());
 }
 
 int main()
 {
 	//stack_test2();
-	testPriorityQueue1();
+	/*testPriorityQueue1();
+	return 0;*/
+
+	xjw::priority_queue<int, vector<int>, xjw::Greater<int>> pq;
+	//bit::priority_queue<int> pq;
+	pq.push(4);
+	pq.push(1);
+	pq.push(5);
+	pq.push(7);
+	pq.push(9);
+	while (!pq.empty())
+	{
+		cout << pq.top() << " ";
+		pq.pop();
+	}
+	cout << endl;
+
 	return 0;
 }
