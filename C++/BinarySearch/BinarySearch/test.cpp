@@ -11,5 +11,8 @@ int main()
 	int x;
 	cin >> x;
 	cout << BST1.Find(x) << endl;
+	cout << BST1.Earse(x) << endl;
+	BST1.Inorder();
+
 	return 0;
 }
