@@ -88,6 +88,7 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, 0);
+  //HAL_GPIO_WritePin();
   /* USER CODE END 2 */
 
   /* Infinite loop */
