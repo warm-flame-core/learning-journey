@@ -87,7 +87,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, 0);
+	//HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, 0);
   //HAL_GPIO_WritePin();
   /* USER CODE END 2 */
 
@@ -95,6 +95,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_8);  //反转输出
+    HAL_Delay(200);
+    // HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET); // 点亮LED
+    // HAL_Delay(200);
+    // HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET); // 熄灭LED
+    // HAL_Delay(200);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
