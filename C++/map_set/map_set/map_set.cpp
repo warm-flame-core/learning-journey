@@ -118,35 +118,76 @@ using namespace std;
 //}
 
 // lower_bound 和upper_bound找区间左闭右开
-int main()
-{
-	std::set<int> myset;
-	for (int i = 1; i < 10; i++)
-		myset.insert(i * 10); // 10 20 30 40 50 60 70 80 90
-	for (auto e : myset)
-	{
-		cout << e << " ";
-	}
-	cout << endl;
+//int main()
+//{
+//	std::set<int> myset;
+//	for (int i = 1; i < 10; i++)
+//		myset.insert(i * 10); // 10 20 30 40 50 60 70 80 90
+//	for (auto e : myset)
+//	{
+//		cout << e << " ";
+//	}
+//	cout << endl;
+//
+//	// [30, 50]值
+//	// [25, 55]值
+//	 
+//	//// 返回 >= 30
+//	//auto itlow = myset.lower_bound(30);
+//	//// 返回 > 50
+//	//auto itup = myset.upper_bound(50);
+//
+//	// 返回 >= 25
+//	auto itlow = myset.lower_bound(25);
+//	// 返回 > 55
+//	auto itup = myset.upper_bound(55);
+//
+//	// 删除这段区间的值
+//	myset.erase(itlow, itup);
+//	for (auto e : myset)
+//	{
+//		cout << e << " ";
+//	}
+//	cout << endl;
+//}
 
-	// [30, 50]值
-	// [25, 55]值
-	 
-	//// 返回 >= 30
-	//auto itlow = myset.lower_bound(30);
-	//// 返回 > 50
-	//auto itup = myset.upper_bound(50);
 
-	// 返回 >= 25
-	auto itlow = myset.lower_bound(25);
-	// 返回 > 55
-	auto itup = myset.upper_bound(55);
-
-	// 删除这段区间的值
-	myset.erase(itlow, itup);
-	for (auto e : myset)
-	{
-		cout << e << " ";
-	}
-	cout << endl;
-}
+//#include<map>
+//
+//int main()
+//{
+//	//map<string, string> dict;
+//	map<string, string> dict = { {"left", "左边"}, {"right", "右边"}, {"insert", "插入"},{ "string", "字符串" } };
+//
+//	//pair<string, string> kv1("first", "第一个");
+//	//map<string, string> dict = {kv1, pair<string, string>("second", "第二个")};
+//
+//	pair<string, string> kv1("first", "第一个");
+//	dict.insert(kv1);
+//
+//	dict.insert(pair<string, string>("second", "第二个"));
+//
+//	dict.insert(make_pair("sort", "排序"));
+//
+//	// C++11
+//	dict.insert({ "auto", "自动的" });
+//
+//	// 插入时只看key，value不相等不会更新
+//	dict.insert({ "auto", "自动的xxxx" });
+//
+//	map<string, string>::iterator it = dict.begin();
+//	while (it != dict.end())
+//	{
+//		// 可以修改value，不支持修改key
+//		//it->first += 'x';
+//		it->second += 'x';
+//
+//		//cout << (*it).first <<":"<< (*it).second<< endl;
+//		cout << it->first << ":" << it->second << endl;
+//		//cout << it.operator->()->first << ":" << it.operator->()->second << endl;
+//		++it;
+//	}
+//	cout << endl;
+//
+//	return 0;
+//}
