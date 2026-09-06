@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36,16 +36,14 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-#define INBUFFER_NUM 64
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-uint8_t recv_byte = 0;
-uint32_t cnt = 0; // 灯的反转
-uint8_t inbuffer[INBUFFER_NUM];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -53,7 +51,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
-uint8_t ReadLine(UART_HandleTypeDef *huart);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -99,21 +97,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    uint8_t num = ReadLine(&huart1); // 读取一行
-    HAL_UART_Transmit(&huart1, inbuffer, num, HAL_MAX_DELAY);
+    printf("hello world stm32");
     HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_8);
-
-    // version1
-    // if (HAL_OK == HAL_UART_Receive(&huart1, &recv_byte, 1, HAL_MAX_DELAY)) // 阻塞方式读取一个字节
-    // {
-    //   HAL_UART_Transmit(&huart1, &recv_byte, 1, 0);
-    // }
-    // cnt++;
-    // if (cnt >= 10)
-    // {
-    //   cnt = 0;
-    //   HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_8);
-    // }
+    HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -208,7 +194,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
 
   /*Configure GPIO pin : PF8 */
   GPIO_InitStruct.Pin = GPIO_PIN_8;
@@ -223,34 +209,15 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-uint8_t ReadLine(UART_HandleTypeDef *huart)
+int fputc(int ch, FILE *fp)
 {
-  uint8_t ch;
-  uint8_t total = 0;
-  while (1)
+  UNUSED(fp); // 用于消除警告的宏
+  if (HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, HAL_MAX_DELAY) == HAL_OK)
   {
-    HAL_UART_Receive(huart, &ch, 1, HAL_MAX_DELAY);
-    if (ch == '\n')
-    {
-      inbuffer[total] = '\0';
-      return total;
-    }
-
-    if (ch == '\r')
-    {
-      HAL_UART_Receive(huart, &ch, 1, HAL_MAX_DELAY);
-      inbuffer[total] = '\0';
-      return total;
-    }
-    if (total >= INBUFFER_NUM)
-    {
-      // 报错处理
-      return 0;
-    }
-    inbuffer[total++] = ch;
+    return ch;
   }
+  return EOF;
 }
-
 /* USER CODE END 4 */
 
 /**
