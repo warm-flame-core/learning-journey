@@ -21,7 +21,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <string.h>
 #include <stdio.h>
+#include "BSP_Usart_Redir.h"
+#include "BSP_LED.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36,14 +40,15 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+#define LED_ORDER_SIZE 32
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-
+char LED_ORDER[LED_ORDER_SIZE];
+char inbuffer[32];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -51,7 +56,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
-
+void Uasrt_Ctl_LED();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -90,16 +95,46 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  BSP_Usart_Init(&huart1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    printf("hello world stm32");
-    HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_8);
+    // version4
+    BSP_LED_On(LED1);
     HAL_Delay(1000);
+    BSP_LED_On(LED2);
+    HAL_Delay(1000);
+    BSP_LED_On(LED3);
+    HAL_Delay(1000);
+    BSP_LED_On(LED4);
+    HAL_Delay(1000);
+    
+
+    //Uasrt_Ctl_LED();
+
+
+
+
+  
+    // version3
+    // fgets(inbuffer, 31, stdin);
+    // int a = 0;
+    // scanf("%d", &a);
+    // printf("echo -> %d\n", a);
+    // HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_8);
+
+    // version2
+    // fgets(inbuffer, 31, stdin);
+    // printf("echo -> %s", inbuffer);
+    // HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_8);
+
+    // version1
+    // printf("hello world stm32");
+    // HAL_GPIO_TogglePin(GPIOF, GPIO_PIN_8);
+    // HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -209,15 +244,63 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int fputc(int ch, FILE *fp)
+
+void Uasrt_Ctl_LED()
 {
-  UNUSED(fp); // 用于消除警告的宏
-  if (HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, HAL_MAX_DELAY) == HAL_OK)
+  fgets(LED_ORDER,LED_ORDER_SIZE-1,stdin);
+  if(strncasecmp("LED1",LED_ORDER,strlen("LED1")) == 0)
   {
-    return ch;
+    LED_Blink(LED1);
   }
-  return EOF;
+  if(strncasecmp("LED2",LED_ORDER,strlen("LED2")) == 0)
+  {
+    LED_Blink(LED2);
+  }
+  if(strncasecmp("LED3",LED_ORDER,strlen("LED3")) == 0)
+  {
+    LED_Blink(LED3);
+  }
+  if(strncasecmp("LED4",LED_ORDER,strlen("LED4")) == 0)
+  {
+    LED_Blink(LED4);
+  }
+  if(strncasecmp("ALL",LED_ORDER,strlen("ALL")) == 0)
+  {
+    LED_Blink(ALL);
+  }
 }
+
+
+// 不分文件写法
+// 我们可以重写fputc函数，向串口发送字符
+// int fputc(int ch, FILE *fp)
+// {
+//   UNUSED(fp); // 用于消除警告的宏
+//   if (HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, HAL_MAX_DELAY) == HAL_OK)
+//   {
+//     return ch;
+//   }
+//   return EOF;
+// }
+
+// int fgetc(FILE *fp)
+// {
+//   UNUSED(fp); // 消除警告的宏
+//   uint8_t ch = 0;
+//   while (1)
+//   {
+//     if (HAL_UART_Receive(&huart1, &ch, 1, HAL_MAX_DELAY) != HAL_OK)
+//     {
+//       return EOF;
+//     }
+//     // 到这就一定读取成功了
+//     if (ch != '\r')
+//     {
+//       return (int)ch;
+//     }
+//   }
+// }
+
 /* USER CODE END 4 */
 
 /**
