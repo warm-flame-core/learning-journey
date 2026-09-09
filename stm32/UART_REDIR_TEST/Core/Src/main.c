@@ -96,6 +96,7 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   BSP_Usart_Init(&huart1);
+  printf("重定向开始测试\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,22 +104,17 @@ int main(void)
   while (1)
   {
     // version4
-    BSP_LED_On(LED1);
-    HAL_Delay(1000);
-    BSP_LED_On(LED2);
-    HAL_Delay(1000);
-    BSP_LED_On(LED3);
-    HAL_Delay(1000);
-    BSP_LED_On(LED4);
-    HAL_Delay(1000);
-    
+    // BSP_LED_On(LED1);
+    // HAL_Delay(1000);
+    // BSP_LED_On(LED2);
+    // HAL_Delay(1000);
+    // BSP_LED_On(LED3);
+    // HAL_Delay(1000);
+    // BSP_LED_On(LED4);
+    // HAL_Delay(1000);
 
-    //Uasrt_Ctl_LED();
+    Uasrt_Ctl_LED();
 
-
-
-
-  
     // version3
     // fgets(inbuffer, 31, stdin);
     // int a = 0;
@@ -229,10 +225,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11, GPIO_PIN_SET);
 
-  /*Configure GPIO pin : PF8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
+  /*Configure GPIO pins : PF8 PF9 PF10 PF11 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -247,29 +243,28 @@ static void MX_GPIO_Init(void)
 
 void Uasrt_Ctl_LED()
 {
-  fgets(LED_ORDER,LED_ORDER_SIZE-1,stdin);
-  if(strncasecmp("LED1",LED_ORDER,strlen("LED1")) == 0)
+  fgets(LED_ORDER, LED_ORDER_SIZE - 1, stdin);
+  if (strncasecmp("LED1", LED_ORDER, strlen("LED1")) == 0)
   {
     LED_Blink(LED1);
   }
-  if(strncasecmp("LED2",LED_ORDER,strlen("LED2")) == 0)
+  if (strncasecmp("LED2", LED_ORDER, strlen("LED2")) == 0)
   {
     LED_Blink(LED2);
   }
-  if(strncasecmp("LED3",LED_ORDER,strlen("LED3")) == 0)
+  if (strncasecmp("LED3", LED_ORDER, strlen("LED3")) == 0)
   {
     LED_Blink(LED3);
   }
-  if(strncasecmp("LED4",LED_ORDER,strlen("LED4")) == 0)
+  if (strncasecmp("LED4", LED_ORDER, strlen("LED4")) == 0)
   {
     LED_Blink(LED4);
   }
-  if(strncasecmp("ALL",LED_ORDER,strlen("ALL")) == 0)
+  if (strncasecmp("ALL", LED_ORDER, strlen("ALL")) == 0)
   {
     LED_Blink(ALL);
   }
 }
-
 
 // 不分文件写法
 // 我们可以重写fputc函数，向串口发送字符

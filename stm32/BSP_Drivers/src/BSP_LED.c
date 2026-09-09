@@ -69,13 +69,15 @@ void LED_Blink(LED_t LED)
       for (int i = 0; i < led_num; i++)
       {
         BSP_LED_On(LEDs[i]);
-        HAL_Delay(500);
       }
+      HAL_Delay(500);
+
       for (int i = 0; i < led_num; i++)
       {
         BSP_LED_Off(LEDs[i]);
-        HAL_Delay(500);
       }
+      HAL_Delay(500);
+
     } while (cnt--);
   }
   else
