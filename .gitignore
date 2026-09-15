@@ -307,3 +307,15 @@ stm32/**/.settings/
 # 允许 BSP_Drivers 目录及其下所有文件（覆盖前面的忽略规则）
 !stm32/BSP_Drivers/
 !stm32/BSP_Drivers/**
+
+# ==========================================
+# ★★★ 新增：强制放行 I2C_EEPROM_TEST 的 App 目录 ★★★
+# ==========================================
+# 1. 逐级放行父级目录（让 Git 能够进入这些文件夹）
+!learning-journey/
+!learning-journey/stm32/
+!learning-journey/stm32/I2C_EEPROM_TEST/
+
+# 2. 放行目标 App 目录及其内部的所有内容
+!learning-journey/stm32/I2C_EEPROM_TEST/App/
+!learning-journey/stm32/I2C_EEPROM_TEST/App/**
