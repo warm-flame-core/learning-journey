@@ -92,3 +92,39 @@ void LED_Blink(LED_t LED)
     }
   }
 }
+
+void LED_Blink_Version2(uint8_t LED, uint8_t cnt, uint16_t delay)
+{
+  if (LED == 0)
+  {
+    LED_t LEDs[4] = {LED1, LED2, LED3, LED4};
+    int led_num = sizeof(LEDs) / sizeof(LEDs[0]);
+    int ccnt = cnt;
+    do
+    {
+      for (int i = 0; i < led_num; i++)
+      {
+        BSP_LED_On(LEDs[i]);
+      }
+      HAL_Delay(delay);
+
+      for (int i = 0; i < led_num; i++)
+      {
+        BSP_LED_Off(LEDs[i]);
+      }
+      HAL_Delay(delay);
+
+    } while (ccnt--);
+  }
+  else
+  {
+    for (int i = 0; i < cnt; i++)
+    {
+      BSP_LED_On((LED_t)LED);
+      HAL_Delay(delay);
+
+      BSP_LED_Off((LED_t)LED);
+      HAL_Delay(delay);
+    }
+  }
+}

@@ -29,6 +29,7 @@ extern "C"
   void BSP_LED_On(LED_t LED);
   void BSP_LED_Off(LED_t LED);
   void LED_Blink(LED_t LED);
+  void LED_Blink_Version2(uint8_t LED, uint8_t cnt, uint16_t delay);
 
 #ifdef __cplusplus
 }
