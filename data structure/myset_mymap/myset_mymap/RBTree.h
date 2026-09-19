@@ -22,10 +22,11 @@ struct RBTreeNode
 		, _left(nullptr)
 		, _right(nullptr)
 		, _parent(nullptr)
-	{}
+	{
+	}
 };
 
-template<class T,class Ref,class Ptr>
+template<class T, class Ref, class Ptr>
 struct RBTreeIterator
 {
 	typedef RBTreeNode<T> Node;
@@ -36,10 +37,11 @@ struct RBTreeIterator
 	// 增加一个_root。前置减的时候不会空指针解引用
 	Node* _root;
 
-	RBTreeIterator(Node* node,Node* root)
+	RBTreeIterator(Node* node, Node* root)
 		:_node(node)
-		,_root(root)
-	{}
+		, _root(root)
+	{
+	}
 
 	Self& operator++()
 	{
@@ -83,7 +85,7 @@ struct RBTreeIterator
 		// 外面传递参数的时候明确根节点，
 		// 从end减下一个节点就是树的最有节点
 		if (_node == nullptr)
-		// 走到这里说明次数是end，下一个是树的最右节点
+			// 走到这里说明次数是end，下一个是树的最右节点
 		{
 			Node* Mostright = _root;
 			while (Mostright && Mostright->_right)
@@ -141,7 +143,7 @@ struct RBTreeIterator
 // 封装的时候不知道红黑树是K的还是kv的，所以需要仿函数控制比较逻辑
 // 对于map，比较的时候需要pair的first
 // 对于set，比较需要K
-template<class K, class T,class KeyOfT>
+template<class K, class T, class KeyOfT>
 class RBTree
 {
 	typedef RBTreeNode<T> Node;
@@ -156,12 +158,12 @@ public:
 		{
 			cur = cur->_left;
 		}
-		return Iterator(cur,_root);
+		return Iterator(cur, _root);
 	}
 
 	Iterator End()
 	{
-		return Iterator(nullptr,_root);
+		return Iterator(nullptr, _root);
 	}
 
 
@@ -180,9 +182,34 @@ public:
 		return Const_Iterator(nullptr, _root);
 	}
 
+
+	// 调用递归拷贝
+	RBTree(const RBTree& Tree)
+	{
+		_root = Copy(Tree._root);
+	}
+
+
+	// 不用引用，临时变量交换，交换后临时变量为空，出作用域销毁
+	Node* operator=(RBTree Tree)
+	{
+		swap(_root, Tree._root);
+		return *this;
+	}
+
+	RBTree() = default;
+
+	~RBTree()
+	{
+		Destory(_root);
+		_root = nullptr;
+	}
+
+
+
 	// stl库里面插入的返回值是
 	//bool Insert(const T& data)
-	pair<Iterator,bool> Insert(const T& data)
+	pair<Iterator, bool> Insert(const T& data)
 	{
 		// 仿函数可以认为是类型，需要先创建对象才能使用
 		KeyOfT kot;
@@ -326,7 +353,24 @@ public:
 		return { Iterator(newnode, _root), true };
 	}
 
-	void RotateR(Node * parent)
+	Node* Find(const K& key)
+	{
+		KeyOfT kot;
+		Node* cur = _root;
+		while (cur)
+		{
+			if (kot(cur->_data) < key)
+				cur = cur->_right;
+			else if (kot(cur->_data) > key)
+				cur = cur->_left;
+			else
+				return cur;
+		}
+		return nullptr;
+	}
+
+private:
+	void RotateR(Node* parent)
 	{
 		Node* subL = parent->_left;
 		Node* subLR = subL->_right;
@@ -360,7 +404,7 @@ public:
 		}
 	}
 
-	void RotateL(Node * parent)
+	void RotateL(Node* parent)
 	{
 		Node* subR = parent->_right;
 		Node* subRL = subR->_left;
@@ -390,20 +434,37 @@ public:
 		}
 	}
 
-	Node* Find(const K& key)
+	void Destory(Node* root)
 	{
-		KeyOfT kot;
-		Node* cur = _root;
-		while (cur)
-		{
-			if (kot(cur->_data) < key)
-				cur = cur->_right;
-			else if (kot(cur->_data) > key)
-				cur = cur->_left;
-			else
-				return cur;
-		}
-		return nullptr;
+		if (root == nullptr)
+			return;
+
+		Destory(root->_left);
+		Destory(root->_right);
+		delete root;
+
+	}
+
+	Node* Copy(Node* root)
+	{
+		if (root == nullptr)
+			return nullptr;
+
+		// 因为节点只有用data构造的函数，所以不能new整个节点
+		//Node* newroot = Copy(root);
+		Node* newroot = new Node(root->_data);
+		// 而且需要手动调整颜色
+		newroot->_col = root->_col;
+		newroot->_left = Copy(root->_left);
+		newroot->_right = Copy(root->_right);
+
+		// 递归只能处理左右子树的连接，不能处理父子连接，需要手动处理
+		if (newroot->_left)
+			newroot->_left->_parent = newroot;
+		if (newroot->_right)
+			newroot->_right->_parent = newroot;
+
+		return newroot;
 	}
 
 private:
