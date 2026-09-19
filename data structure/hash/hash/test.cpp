@@ -95,9 +95,20 @@ void test_set2()
 	cout << "unordered_set erase:" << end6 - begin6 << endl << endl;
 }
 
+#include "Hash.h"
+
 int main()
 {
 	//test_set1();
-	test_set2();
+	//test_set2();
+
+	int a[] = { 19,30,5,36,13,20,21,12 };
+	HashTable<int, int> ht;
+	for (auto e : a)
+	{
+		ht.Insert({ e, e });
+	}
+
+	ht.Insert({ 15,15 });
 	return 0;
 }
