@@ -1,5 +1,6 @@
 #pragma once
-
+#include <iostream>
+using namespace std;
 enum Colour
 {
 	RED,
@@ -10,8 +11,8 @@ template<class T>
 struct RBTreeNode
 {
 	// 这里更新控制平衡也要加入parent指针
-	T _kv;
-	RBTreeNode<T>* _data;
+	T _data;
+	RBTreeNode<T>* _left;
 	RBTreeNode<T>* _right;
 	RBTreeNode<T>* _parent;
 	Colour _col;
@@ -24,44 +25,207 @@ struct RBTreeNode
 	{}
 };
 
-template<class K, class T>
+template<class T,class Ref,class Ptr>
+struct RBTreeIterator
+{
+	typedef RBTreeNode<T> Node;
+	typedef RBTreeIterator<T, Ref, Ptr> Self;
+
+
+	Node* _node;
+	// 增加一个_root。前置减的时候不会空指针解引用
+	Node* _root;
+
+	RBTreeIterator(Node* node,Node* root)
+		:_node(node)
+		,_root(root)
+	{}
+
+	Self& operator++()
+	{
+		// 如果所在节点右边不为空，下一次要访问的节点就是右子树的最左节点
+		if (_node->_right)
+		{
+			Node* min = _node->_right;
+			while (min->_left)
+			{
+				min = min->_left;
+			}
+			_node = min;
+		}
+		// 如果所在节点右边为空，说明所在节点所属的子树已经访问完了
+		// 1.如果所在节点是其父亲的左，说明下一个节点就是父节点
+		// 2.如果所在节点是其父亲的右，说明父节点也访问完了需要继续往上
+		// 3.知道节点是祖先的左，则下一个就要访问那个祖先
+		else
+		{
+			Node* pcur = _node;
+			Node* parent = _node->_parent;
+			// 如果父亲为空，说明父亲已经到了最右边的节点的下一个
+			// 用父亲不能为空保证迭代器区间的右边可以是空指针
+			// 即End
+			while (parent && pcur == parent->_right)
+			{
+				pcur = parent;
+				parent = pcur->_parent;
+			}
+			_node = parent;
+		}
+
+		return *this;
+	}
+
+
+	Self& operator--()
+	{
+		// 如果是从End开始减，空指针减不了
+		// 可以迭代器新增一个成员_root，
+		// 外面传递参数的时候明确根节点，
+		// 从end减下一个节点就是树的最有节点
+		if (_node == nullptr)
+		// 走到这里说明次数是end，下一个是树的最右节点
+		{
+			Node* Mostright = _root;
+			while (Mostright && Mostright->_right)
+			{
+				Mostright = Mostright->_right;
+			}
+			_node = Mostright;
+		}
+		// 如果所在节点左边不为空，下一次要访问的节点就是左子树的最右节点
+		else if (_node->_left)
+		{
+			Node* rightMost = _node->_left;
+			while (rightMost->_right)
+			{
+				rightMost = rightMost->_right;
+			}
+			_node = rightMost;
+		}
+		else
+		{
+			Node* cur = _node;
+			Node* parent = cur->_parent;
+			while (parent && cur == parent->_left)
+			{
+				cur = parent;
+				parent = cur->_parent;
+			}
+			_node = parent;
+		}
+		return *this;
+	}
+
+	Ref operator*()
+	{
+		return _node->_data;
+	}
+
+	Ptr operator->()
+	{
+		return &(_node->_data);
+	}
+
+	bool operator!=(const Self& Iterator)
+	{
+		return _node != Iterator._node;
+	}
+
+	bool operator==(const Self& Iterator)
+	{
+		return _node == Iterator._node;
+	}
+};
+
+
+// 封装的时候不知道红黑树是K的还是kv的，所以需要仿函数控制比较逻辑
+// 对于map，比较的时候需要pair的first
+// 对于set，比较需要K
+template<class K, class T,class KeyOfT>
 class RBTree
 {
 	typedef RBTreeNode<T> Node;
 public:
-	bool Insert(const T& data)
+	typedef RBTreeIterator<T, T&, T*> Iterator;
+	typedef RBTreeIterator<T, const T&, const T*> Const_Iterator;
+
+	Iterator Begin()
 	{
+		Node* cur = _root;
+		while (cur && cur->_left)
+		{
+			cur = cur->_left;
+		}
+		return Iterator(cur,_root);
+	}
+
+	Iterator End()
+	{
+		return Iterator(nullptr,_root);
+	}
+
+
+	Const_Iterator Begin() const
+	{
+		Node* cur = _root;
+		while (cur && cur->_left)
+		{
+			cur = cur->_left;
+		}
+		return Const_Iterator(cur, _root);
+	}
+
+	Const_Iterator End() const
+	{
+		return Const_Iterator(nullptr, _root);
+	}
+
+	// stl库里面插入的返回值是
+	//bool Insert(const T& data)
+	pair<Iterator,bool> Insert(const T& data)
+	{
+		// 仿函数可以认为是类型，需要先创建对象才能使用
+		KeyOfT kot;
 		if (_root == nullptr)
 		{
 			_root = new Node(data);
 			_root->_col = BLACK;
 
-			return true;
+			// 单参数可以走隐式类型，C++1之后可以多参数隐式类型转换
+			//return pair<Iterator, bool>(Iterator(_root, _root), true);
+			return { Iterator(_root, _root), true };
 		}
 
 		Node* parent = nullptr;
 		Node* cur = _root;
 		while (cur)
 		{
-			if (cur->_kv.first < kv.first)
+			if (kot(cur->_data) < kot(data))
 			{
 				parent = cur;
 				cur = cur->_right;
 			}
-			else if (cur->_kv.first > kv.first)
+			else if (kot(cur->_data) > kot(data))
 			{
 				parent = cur;
 				cur = cur->_left;
 			}
 			else
 			{
-				return false;
+				/*return false;*/
+				return { Iterator(cur, _root), false };
 			}
 		}
 
-		cur = new Node(kv);
+		cur = new Node(data);
+
+		// 如果要支持返回pair类型，就不能是cur
+		// 因为这样cur到后面因为旋转可能会动，所以要记录一下
+		Node* newnode = cur;
+
+
 		cur->_col = RED;
-		if (parent->_kv.first < kv.first)
+		if (kot(parent->_data) < kot(data))
 		{
 			parent->_right = cur;
 		}
@@ -159,7 +323,7 @@ public:
 
 		_root->_col = BLACK;
 
-		return true;
+		return { Iterator(newnode, _root), true };
 	}
 
 	void RotateR(Node * parent)
@@ -228,102 +392,18 @@ public:
 
 	Node* Find(const K& key)
 	{
+		KeyOfT kot;
 		Node* cur = _root;
 		while (cur)
 		{
-			if (cur->_kv.first < key)
-			{
+			if (kot(cur->_data) < key)
 				cur = cur->_right;
-			}
-			else if (cur->_kv.first > key)
-			{
+			else if (kot(cur->_data) > key)
 				cur = cur->_left;
-			}
 			else
-			{
 				return cur;
-			}
 		}
-
 		return nullptr;
-	}
-
-	void InOrder()
-	{
-		_InOrder(_root);
-		cout << endl;
-	}
-
-	int Height()
-	{
-		return _Height(_root);
-	}
-
-	int Size()
-	{
-		return _Size(_root);
-	}
-
-
-private:
-
-	bool Check(Node* root, int blackNum, const int refNum)
-	{
-		if (root == nullptr)
-		{
-			// 前序遍历走到空时，意味着一条路径走完了
-			//cout << blackNum << endl;
-			if (refNum != blackNum)
-			{
-				cout << "存在黑色结点的数量不相等的路径" << endl;
-				return false;
-			}
-			return true;
-		}
-
-		// 检查孩子不太方便，因为孩子有两个，且不一定存在，反过来检查父亲就方便多了
-		if (root->_col == RED && root->_parent->_col == RED)
-		{
-			cout << root->_kv.first << "存在连续的红色结点" << endl;
-			return false;
-		}
-
-		if (root->_col == BLACK)
-		{
-			blackNum++;
-		}
-
-		return Check(root->_left, blackNum, refNum)
-			&& Check(root->_right, blackNum, refNum);
-	}
-
-	void _InOrder(Node* root)
-	{
-		if (root == nullptr)
-		{
-			return;
-		}
-
-		_InOrder(root->_left);
-		cout << root->_kv.first << ":" << root->_kv.second << endl;
-		_InOrder(root->_right);
-	}
-
-	int _Height(Node* root)
-	{
-		if (root == nullptr)
-			return 0;
-		int leftHeight = _Height(root->_left);
-		int rightHeight = _Height(root->_right);
-		return leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
-	}
-
-	int _Size(Node* root)
-	{
-		if (root == nullptr)
-			return 0;
-
-		return _Size(root->_left) + _Size(root->_right) + 1;
 	}
 
 private:
