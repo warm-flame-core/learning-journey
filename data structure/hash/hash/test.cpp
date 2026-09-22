@@ -95,8 +95,10 @@ void test_set2()
 	cout << "unordered_set erase:" << end6 - begin6 << endl << endl;
 }
 
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
 #include "Hash.h"
-
+#include <string>
 void test_hash1()
 {
 	int a[] = { 19,30,5,36,13,20,21,12 };
@@ -125,7 +127,113 @@ void test_hash2()
 	ht2.Insert({ "right",2 });
 	ht2.Insert({ "sort",6 });
 	ht2.Insert({ "stop",8 });
+	cout << ht2.Erase("left") << endl;
 
+}
+
+
+// AI生成的测试函数
+void TestHashBucket()
+{
+	hash_bucket::HashTable<string, int> ht;
+
+	// 1. 测试 Insert
+	cout << "===== 测试 Insert =====" << endl;
+	cout << ht.Insert({ "apple", 1 }) << endl;    // 1
+	cout << ht.Insert({ "banana", 2 }) << endl;   // 1
+	cout << ht.Insert({ "cherry", 3 }) << endl;   // 1
+	cout << ht.Insert({ "apple", 10 }) << endl;   // 0，重复插入
+	cout << ht.Insert({ "dog", 4 }) << endl;      // 1
+	cout << ht.Insert({ "elephant", 5 }) << endl; // 1
+
+	// 2. 测试 Find
+	cout << "===== 测试 Find =====" << endl;
+	auto ret1 = ht.Find("apple");
+	if (ret1)
+		cout << "apple: " << ret1->_kv.second << endl;  // 1
+	else
+		cout << "apple not found" << endl;
+
+	auto ret2 = ht.Find("banana");
+	if (ret2)
+		cout << "banana: " << ret2->_kv.second << endl;  // 2
+	else
+		cout << "banana not found" << endl;
+
+	auto ret3 = ht.Find("xxx");
+	if (ret3)
+		cout << "xxx: " << ret3->_kv.second << endl;
+	else
+		cout << "xxx not found" << endl;  // 走这里
+
+	// 3. 测试 Erase
+	cout << "===== 测试 Erase =====" << endl;
+	cout << "erase apple: " << ht.Erase("apple") << endl;    // 1
+	cout << "erase apple: " << ht.Erase("apple") << endl;    // 0，已删除
+	cout << "erase xxx: " << ht.Erase("xxx") << endl;        // 0，不存在
+
+	auto ret4 = ht.Find("apple");
+	if (ret4)
+		cout << "apple still exists" << endl;
+	else
+		cout << "apple deleted" << endl;  // 走这里
+
+	// 4. 测试扩容（插入大量数据触发）
+	cout << "===== 测试扩容 =====" << endl;
+	for (int i = 0; i < 100; i++)
+	{
+		ht.Insert({ to_string(i), i });
+	}
+	// 验证部分数据
+	for (int i = 0; i < 100; i++)
+	{
+		auto ret = ht.Find(to_string(i));
+		if (!ret || ret->_kv.second != i)
+		{
+			cout << "扩容后数据错误: " << i << endl;
+			return;
+		}
+	}
+	cout << "扩容测试通过" << endl;
+
+	// 5. 测试拷贝构造函数
+	cout << "===== 测试拷贝构造 =====" << endl;
+	hash_bucket::HashTable<string, int> ht2(ht);
+	auto ret5 = ht2.Find("banana");
+	if (ret5)
+		cout << "ht2 banana: " << ret5->_kv.second << endl;  // 2
+	else
+		cout << "ht2 banana not found" << endl;
+
+	// 深拷贝验证：修改 ht 不影响 ht2
+	ht.Erase("banana");
+	auto ret6 = ht2.Find("banana");
+	if (ret6)
+		cout << "深拷贝验证通过：ht2 不受 ht 影响" << endl;
+	else
+		cout << "深拷贝验证失败" << endl;
+
+	// 6. 测试拷贝赋值运算符
+	cout << "===== 测试拷贝赋值 =====" << endl;
+	hash_bucket::HashTable<string, int> ht3;
+	ht3.Insert({ "temp", 999 });
+	ht3 = ht2;  // 调用 operator=
+	auto ret7 = ht3.Find("dog");
+	if (ret7)
+		cout << "ht3 dog: " << ret7->_kv.second << endl;  // 4
+	else
+		cout << "ht3 dog not found" << endl;
+
+	// 7. 测试自赋值
+	cout << "===== 测试自赋值 =====" << endl;
+	ht3 = ht3;
+	auto ret8 = ht3.Find("dog");
+	if (ret8)
+		cout << "自赋值后 dog: " << ret8->_kv.second << endl;  // 4
+	else
+		cout << "自赋值后 dog not found" << endl;
+
+	cout << "===== 所有测试完成 =====" << endl;
 }
 
 
@@ -134,7 +242,9 @@ int main()
 	//test_set1();
 	//test_set2();
 
-	test_hash2();
-	
+	//test_hash2();
+	TestHashBucket();
+
+	_CrtDumpMemoryLeaks();
 	return 0;
 }

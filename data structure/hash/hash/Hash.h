@@ -223,8 +223,55 @@ namespace hash_bucket
 			, _n(0)
 		{
 		}
+
+		~HashTable()
+		{
+			for (int i = 0;i < _tables.size();i++)
+			{
+				Node* cur = _tables[i];
+				Node* next = nullptr;
+				while (cur)
+				{
+					next = cur->_next;
+					delete cur;
+					cur = next;
+				}
+				_tables[i] = nullptr;
+			}
+			_n = 0;
+		}
+
+		HashTable(const HashTable<K, V, Hash>& ht)
+			:_tables(ht._tables.size())
+			,_n(ht._n)
+		{
+			for (int i = 0;i < ht._tables.size();i++)
+			{
+				Node* cur = ht._tables[i];
+				while (cur)
+				{
+					Insert(cur->_kv);
+					cur = cur->_next;
+				}
+			}
+		}
+
+		HashTable<K, V, Hash>& operator=(HashTable<K, V, Hash> ht)
+		{
+			swap(_tables, ht._tables);
+			swap(_n, ht._n);
+			return *this;
+		}
+
+
 		bool Insert(const pair<K, V>& kv)
 		{
+			// 不允许冗余
+			if (Find(kv.first))
+				return false;
+
+
+
 			Hash hash;
 			// 扩容，链地址法大于1扩容
 			if (_n > _tables.size())
@@ -249,6 +296,9 @@ namespace hash_bucket
 
 				//直接把节点拿下来会更好
 				//vector<Node*> newTables((_tables.size() * 2));	//测试的时候换2倍很好测试
+
+				
+				
 				vector<Node*> newTables(__stl_next_prime(_tables.size() + 1));
 				for (int i = 0;i < _tables.size();i++)
 				{
@@ -260,6 +310,7 @@ namespace hash_bucket
 						// 头插
 						cur->_next = newTables[hashi];
 						newTables[hashi] = cur;
+						cur = next;
 					}
 					_tables[i] = nullptr;
 				}
@@ -275,6 +326,55 @@ namespace hash_bucket
 			_tables[hashi] = newnode;
 			++_n;
 			return true;
+		}
+
+
+		Node* Find(const K& key)
+		{
+			Hash hash;
+			size_t hashi = hash(key) % _tables.size();
+			Node* cur = _tables[hashi];
+			while (cur)
+			{
+				if (cur->_kv.first == key)
+					return cur;
+				cur = cur->_next;
+			}
+			return nullptr;
+		}
+
+
+		bool Erase(const K& key)
+		{
+			Hash hash;
+			size_t hashi = hash(key) % _tables.size();
+			Node* prev = nullptr;
+			Node* cur = _tables[hashi];
+			while (cur)
+			{
+				if (cur->_kv.first == key)
+				{
+					// 头节点
+					if (_tables[hashi] == cur)
+					{
+						_tables[hashi] = cur->_next;
+					}
+					// 中间节点
+					else
+					{
+						prev->_next = cur->_next;
+					}
+					delete cur;
+					--_n;
+					return true;
+				}
+
+				//继续往下找
+				prev = cur;
+				cur = cur->_next;
+
+			}
+			return false;
 		}
 
 	private:
