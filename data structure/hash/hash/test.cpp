@@ -97,18 +97,44 @@ void test_set2()
 
 #include "Hash.h"
 
-int main()
+void test_hash1()
 {
-	//test_set1();
-	//test_set2();
-
 	int a[] = { 19,30,5,36,13,20,21,12 };
-	HashTable<int, int> ht;
+	open_address::HashTable<int, int> ht;
 	for (auto e : a)
 	{
 		ht.Insert({ e, e });
 	}
 
 	ht.Insert({ 15,15 });
+}
+
+void test_hash2()
+{
+	int a[] = { 19,30,5,36,13,20,21,12 };
+	hash_bucket::HashTable<int, int> ht;
+	for (auto e : a)
+	{
+		ht.Insert({ e, e });
+	}
+
+	ht.Insert({ 15,15 });
+
+	hash_bucket::HashTable<string, int> ht2;
+	ht2.Insert({ "left",1 });
+	ht2.Insert({ "right",2 });
+	ht2.Insert({ "sort",6 });
+	ht2.Insert({ "stop",8 });
+
+}
+
+
+int main()
+{
+	//test_set1();
+	//test_set2();
+
+	test_hash2();
+	
 	return 0;
 }
