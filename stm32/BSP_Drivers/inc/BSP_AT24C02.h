@@ -13,6 +13,9 @@ extern "C"
 #define PAGE_SIZE (8)         // EEPROM页大小
 #define SCAN_RETYIES (2)      // 请求次数
 #define SCAN_TIME_MS (5)      // 请求间隔毫秒
+#define DEV_TOTAL_SIZE (256)    // EEPROM的块大小
+#define READ_TIMEOUT_MS (50)    // 读取的时候的阻塞时间
+#define WRITE_TIMEOUT_MS (50)   // 写入的时候的阻塞时间
 
 typedef struct 
 {
@@ -24,8 +27,8 @@ typedef struct
 
 
 bool BSP_AT24C02_Init(I2C_HandleTypeDef * i2c);
-bool AT24C02_Read_Page_Data(void *date_out, uint8_t date_len);
-bool AT24C02_Write_Page_Data(void *date_in, uint8_t date_len);
+bool BSP_AT24C02_Read_Page(uint16_t start_address, void *data_out, uint8_t data_len);
+bool BSP_AT24C02_Write_Page(void *data_in, uint8_t data_len);
     
 #ifdef __cpluscplus
 }
