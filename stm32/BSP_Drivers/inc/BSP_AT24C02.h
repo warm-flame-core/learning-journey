@@ -16,6 +16,8 @@ extern "C"
 #define DEV_TOTAL_SIZE (256)    // EEPROM的块大小
 #define READ_TIMEOUT_MS (50)    // 读取的时候的阻塞时间
 #define WRITE_TIMEOUT_MS (50)   // 写入的时候的阻塞时间
+#define POLL_RETYIES (10)
+#define POLL_TIME_MS (2)
 
 typedef struct 
 {
