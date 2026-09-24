@@ -54,25 +54,61 @@ struct HashFunc<string>
 
 
 
-namespace xjw
+namespace hash_bucket
 {
-	template<class K, class V>
+	template<class T>
 	struct HashNode
 	{
-		pair<K, V> _kv;
-		HashNode<K, V>* _next;
+		T _data;
+		HashNode<T>* _next;
 
-		HashNode(const pair<K, V>& kv)
-			:_kv(kv)
+		HashNode(const T& data)
+			:_data(data)
 			, _next(nullptr)
-		{
-		}
+		{}
 	};
 
-	template<class K, class V, class Hash = HashFunc<K>>
+	template<class K, class T, class Ref,class Ptr,class KeyOfT, class Hash = HashFunc<K>>
+	class HTIterator
+	{
+		typedef HashNode<T> Node;
+		typedef HashTable<K, T, KeyOfT, Hash> HT;
+		typedef HTIterator<K, T, Ref, Ptr, KeyOfT, Hash> Self;
+
+		HTIterator(Node* node, HT* ht)
+			:_node(node)
+			,_ht(ht)
+		{}
+
+		Ref operator*()
+		{
+			return _node->_data;
+		}
+		Ptr operator->()
+		{
+			return &_node->_data;
+		}
+
+		bool operator!=(const Self& s)
+		{
+			return _node != s._node;
+		}
+
+		Self& operator++()
+		{
+			// 节点下一个不为空,++到下一个节点
+			if (_node->_next)
+				_node = _node->_next;
+		}
+
+		Node* _node;
+		HT* _ht;
+	};
+
+	template<class K, class T,class KeyOfT ,class Hash = HashFunc<K>>
 	class HashTable
 	{
-		typedef HashNode<K, V> Node;
+		typedef HashNode<T> Node;
 	public:
 		HashTable()
 			:_tables(__stl_next_prime(0))
@@ -98,7 +134,7 @@ namespace xjw
 			_n = 0;
 		}
 
-		HashTable(const HashTable<K, V, Hash>& ht)
+		HashTable(const HashTable<K, T,KeyOfT, Hash>& ht)
 			:_tables(ht._tables.size())
 			,_n(ht._n)
 		{
@@ -113,7 +149,7 @@ namespace xjw
 			}
 		}
 
-		HashTable<K, V, Hash>& operator=(HashTable<K, V, Hash> ht)
+		HashTable<K, T, KeyOfT,Hash>& operator=(HashTable<K, T,KeyOfT, Hash> ht)
 		{
 			swap(_tables, ht._tables);
 			swap(_n, ht._n);
@@ -121,15 +157,17 @@ namespace xjw
 		}
 
 
-		bool Insert(const pair<K, V>& kv)
+		bool Insert(const T& data)
 		{
+			Hash hash;
+			KeyOfT kot;
 			// 不允许冗余
-			if (Find(kv.first))
+			if (Find(kot(data)))
 				return false;
 
 
 
-			Hash hash;
+			
 			// 扩容，链地址法大于1扩容
 			if (_n > _tables.size())
 			{
@@ -163,7 +201,7 @@ namespace xjw
 					while (cur)
 					{
 						Node* next = cur->_next;
-						size_t hashi = hash(cur->_kv.first) % newTables.size();
+						size_t hashi = hash(kot(cur->_data)) % newTables.size();
 						// 头插
 						cur->_next = newTables[hashi];
 						newTables[hashi] = cur;
@@ -176,9 +214,9 @@ namespace xjw
 
 
 
-			size_t hashi = hash(kv.first) % _tables.size();
+			size_t hashi = hash(kot(data)) % _tables.size();
 			// 头插
-			Node* newnode = new Node(kv);
+			Node* newnode = new Node(data);
 			newnode->_next = _tables[hashi];
 			_tables[hashi] = newnode;
 			++_n;
@@ -189,11 +227,12 @@ namespace xjw
 		Node* Find(const K& key)
 		{
 			Hash hash;
+			KeyOfT kot;
 			size_t hashi = hash(key) % _tables.size();
 			Node* cur = _tables[hashi];
 			while (cur)
 			{
-				if (cur->_kv.first == key)
+				if (kot(cur->_data) == key)
 					return cur;
 				cur = cur->_next;
 			}
@@ -203,13 +242,14 @@ namespace xjw
 
 		bool Erase(const K& key)
 		{
+			KeyOfT kot;
 			Hash hash;
 			size_t hashi = hash(key) % _tables.size();
 			Node* prev = nullptr;
 			Node* cur = _tables[hashi];
 			while (cur)
 			{
-				if (cur->_kv.first == key)
+				if (kot(cur->_data) == key)
 				{
 					// 头节点
 					if (_tables[hashi] == cur)
