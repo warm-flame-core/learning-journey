@@ -82,7 +82,7 @@ namespace hash_bucket
 		typedef HashTable<K, T, KeyOfT, Hash> HT;
 		typedef HTIterator<K, T, Ref, Ptr, KeyOfT, Hash> Self;
 
-		HTIterator(Node* node, HT* ht)
+		HTIterator(Node* node,const HT* ht)
 			:_node(node)
 			, _ht(ht)
 		{
@@ -133,10 +133,10 @@ namespace hash_bucket
 		}
 
 		Node* _node;
-		HT* _ht;
+		const HT* _ht;
 	};
 
-	template<class K, class T, class KeyOfT, class Hash = HashFunc<K>>
+	template<class K, class T, class KeyOfT, class Hash>
 	class HashTable
 	{
 		// 模板的友元需要带上模板参数，因为迭代器和捅相互依赖
@@ -168,7 +168,7 @@ namespace hash_bucket
 			return { nullptr,this };
 		}
 
-		Iterator Begin() const
+		ConstIterator Begin() const
 		{
 			// 桶时空的就不要遍历了
 			if (_n == 0)
@@ -184,7 +184,7 @@ namespace hash_bucket
 			return End();
 		}
 
-		Iterator End() const
+		ConstIterator End() const
 		{
 			return { nullptr,this };
 		}
@@ -222,7 +222,7 @@ namespace hash_bucket
 				Node* cur = ht._tables[i];
 				while (cur)
 				{
-					Insert(cur->_kv);
+					Insert(cur->_data);
 					cur = cur->_next;
 				}
 			}
@@ -236,13 +236,14 @@ namespace hash_bucket
 		}
 
 
-		bool Insert(const T& data)
+		pair<Iterator,bool> Insert(const T& data)
 		{
 			Hash hash;
 			KeyOfT kot;
 			// 不允许冗余
-			if (Find(kot(data)))
-				return false;
+			Iterator it = Find(kot(data));
+			if (it != End())
+				return { it,false };
 
 
 
@@ -299,11 +300,11 @@ namespace hash_bucket
 			newnode->_next = _tables[hashi];
 			_tables[hashi] = newnode;
 			++_n;
-			return true;
+			return { {newnode,this},false };
 		}
 
 
-		Node* Find(const K& key)
+		Iterator Find(const K& key)
 		{
 			Hash hash;
 			KeyOfT kot;
@@ -312,10 +313,10 @@ namespace hash_bucket
 			while (cur)
 			{
 				if (kot(cur->_data) == key)
-					return cur;
+					return { cur,this };
 				cur = cur->_next;
 			}
-			return nullptr;
+			return End();
 		}
 
 

@@ -4,7 +4,7 @@ using namespace std;
 #include "my_unordered_map.h"
 int main()
 {
-	xjw::unordered_set<int> s1;
+	/*xjw::unordered_set<int> s1;
 	s1.insert(1);
 	s1.insert(3);
 	s1.insert(6);
@@ -19,10 +19,11 @@ int main()
 	cout << endl;
 
 
-
-
-
 	xjw::unordered_map<int, int> ht1;
 	ht1.insert({ 1,1 });
-	return 0;
+	return 0;*/
+
+
+	xjw::test_map1();
+	xjw::test_set1;
 }
