@@ -13,6 +13,19 @@ namespace xjw
 				return key;
 			}
 		};
+
+		typedef typename hash_bucket::HashTable<K, K, SetKeyOfT>::Iterator iterator;
+
+
+		iterator begin()
+		{
+			return _ht.Begin();
+		}
+		iterator end()
+		{
+			return _ht.End();
+		}
+
 		bool insert(const K& key)
 		{
 			return _ht.Insert(key);

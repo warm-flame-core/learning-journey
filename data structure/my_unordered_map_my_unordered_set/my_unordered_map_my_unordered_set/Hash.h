@@ -2,7 +2,9 @@
 #include <vector>
 #include <utility>
 #include <string>
-using namespace std;
+
+
+
 
 // 仿照stl库设置素数表
 inline unsigned long __stl_next_prime(unsigned long n)
@@ -56,6 +58,10 @@ struct HashFunc<string>
 
 namespace hash_bucket
 {
+	// 一些声明
+	template<class K, class T, class KeyOfT, class Hash>
+	class HashTable;
+
 	template<class T>
 	struct HashNode
 	{
@@ -65,11 +71,12 @@ namespace hash_bucket
 		HashNode(const T& data)
 			:_data(data)
 			, _next(nullptr)
-		{}
+		{
+		}
 	};
 
-	template<class K, class T, class Ref,class Ptr,class KeyOfT, class Hash = HashFunc<K>>
-	class HTIterator
+	template<class K, class T, class Ref, class Ptr, class KeyOfT, class Hash = HashFunc<K>>
+	struct HTIterator
 	{
 		typedef HashNode<T> Node;
 		typedef HashTable<K, T, KeyOfT, Hash> HT;
@@ -77,8 +84,9 @@ namespace hash_bucket
 
 		HTIterator(Node* node, HT* ht)
 			:_node(node)
-			,_ht(ht)
-		{}
+			, _ht(ht)
+		{
+		}
 
 		Ref operator*()
 		{
@@ -104,16 +112,18 @@ namespace hash_bucket
 			{
 				KeyOfT kot;
 				Hash hash;
-				size_t hashi = hash(kot(_node->_data)) % _ht._tables.size();
+				size_t hashi = hash(kot(_node->_data)) % _ht->_tables.size();
 				++hashi;
-				while (hashi < _ht._tables.size())
+				while (hashi < _ht->_tables.size())
 				{
-					_node = _ht._tables[hashi];
+					_node = _ht->_tables[hashi];
 					if (_node)
 						break;
+					else
+						++hashi;
 				}
 				// 所有桶走完了，返回空
-				if (hashi == _ht._tables.size())
+				if (hashi == _ht->_tables.size())
 				{
 					_node = nullptr;
 				}
@@ -126,9 +136,13 @@ namespace hash_bucket
 		HT* _ht;
 	};
 
-	template<class K, class T,class KeyOfT ,class Hash = HashFunc<K>>
+	template<class K, class T, class KeyOfT, class Hash = HashFunc<K>>
 	class HashTable
 	{
+		// 模板的友元需要带上模板参数，因为迭代器和捅相互依赖
+		template<class K, class T, class Ref, class Ptr, class KeyOfT, class Hash>
+		friend struct HTIterator;
+
 		typedef HashNode<T> Node;
 	public:
 		typedef HTIterator<K, T, T&, T*, KeyOfT, Hash> Iterator;
@@ -153,7 +167,7 @@ namespace hash_bucket
 		{
 			return { nullptr,this };
 		}
-		
+
 		Iterator Begin() const
 		{
 			// 桶时空的就不要遍历了
@@ -174,12 +188,13 @@ namespace hash_bucket
 		{
 			return { nullptr,this };
 		}
-		
+
 		HashTable()
 			:_tables(__stl_next_prime(0))
 			//:_tables(11)
 			, _n(0)
-		{}
+		{
+		}
 
 		~HashTable()
 		{
@@ -198,9 +213,9 @@ namespace hash_bucket
 			_n = 0;
 		}
 
-		HashTable(const HashTable<K, T,KeyOfT, Hash>& ht)
+		HashTable(const HashTable<K, T, KeyOfT, Hash>& ht)
 			:_tables(ht._tables.size())
-			,_n(ht._n)
+			, _n(ht._n)
 		{
 			for (int i = 0;i < ht._tables.size();i++)
 			{
@@ -213,7 +228,7 @@ namespace hash_bucket
 			}
 		}
 
-		HashTable<K, T, KeyOfT,Hash>& operator=(HashTable<K, T,KeyOfT, Hash> ht)
+		HashTable<K, T, KeyOfT, Hash>& operator=(HashTable<K, T, KeyOfT, Hash> ht)
 		{
 			swap(_tables, ht._tables);
 			swap(_n, ht._n);
@@ -231,7 +246,7 @@ namespace hash_bucket
 
 
 
-			
+
 			// 扩容，链地址法大于1扩容
 			if (_n > _tables.size())
 			{
@@ -256,8 +271,8 @@ namespace hash_bucket
 				//直接把节点拿下来会更好
 				//vector<Node*> newTables((_tables.size() * 2));	//测试的时候换2倍很好测试
 
-				
-				
+
+
 				vector<Node*> newTables(__stl_next_prime(_tables.size() + 1));
 				for (int i = 0;i < _tables.size();i++)
 				{
