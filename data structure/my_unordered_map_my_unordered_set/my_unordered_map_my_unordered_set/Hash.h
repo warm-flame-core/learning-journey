@@ -99,6 +99,27 @@ namespace hash_bucket
 			// 节点下一个不为空,++到下一个节点
 			if (_node->_next)
 				_node = _node->_next;
+			// 当前捅走完，找下一个非空桶
+			else
+			{
+				KeyOfT kot;
+				Hash hash;
+				size_t hashi = hash(kot(_node->_data)) % _ht._tables.size();
+				++hashi;
+				while (hashi < _ht._tables.size())
+				{
+					_node = _ht._tables[hashi];
+					if (_node)
+						break;
+				}
+				// 所有桶走完了，返回空
+				if (hashi == _ht._tables.size())
+				{
+					_node = nullptr;
+				}
+			}
+			// return { _node,this };
+			return *this;
 		}
 
 		Node* _node;
@@ -110,12 +131,55 @@ namespace hash_bucket
 	{
 		typedef HashNode<T> Node;
 	public:
+		typedef HTIterator<K, T, T&, T*, KeyOfT, Hash> Iterator;
+		typedef HTIterator<K, T, const T&, const T*, KeyOfT, Hash> ConstIterator;
+		Iterator Begin()
+		{
+			// 桶时空的就不要遍历了
+			if (_n == 0)
+				return End();
+
+			// 找第一个非空桶
+			for (size_t i = 0;i < _tables.size();i++)
+			{
+				Node* cur = _tables[i];
+				if (cur)
+					return { cur,this };
+			}
+			return End();
+		}
+
+		Iterator End()
+		{
+			return { nullptr,this };
+		}
+		
+		Iterator Begin() const
+		{
+			// 桶时空的就不要遍历了
+			if (_n == 0)
+				return End();
+
+			// 找第一个非空桶
+			for (size_t i = 0;i < _tables.size();i++)
+			{
+				Node* cur = _tables[i];
+				if (cur)
+					return { cur,this };
+			}
+			return End();
+		}
+
+		Iterator End() const
+		{
+			return { nullptr,this };
+		}
+		
 		HashTable()
 			:_tables(__stl_next_prime(0))
 			//:_tables(11)
 			, _n(0)
-		{
-		}
+		{}
 
 		~HashTable()
 		{

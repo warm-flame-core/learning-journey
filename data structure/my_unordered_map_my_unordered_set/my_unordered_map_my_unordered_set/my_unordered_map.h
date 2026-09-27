@@ -13,6 +13,18 @@ namespace xjw
 				return kv.first;
 			}
 		};
+		typedef typename hash_bucket::HashTable<K, pair<K, V>, MapKeyOfT>::Iterator iterator;
+
+
+		iterator begin()
+		{
+			return _ht.Begin();
+		}
+		iterator end()
+		{
+			return _ht.End();
+		}
+		
 		bool insert(const pair<K, V>& kv)
 		{
 			return _ht.Insert(kv);
