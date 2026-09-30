@@ -17,9 +17,9 @@ bool BSP_AT24C02_Init(I2C_HandleTypeDef *i2c)
 
 static bool BSP_AT24C02_Ready()
 {
-    if(!at24c02.is_init)
+    if (!at24c02.is_init)
         return false;
-    return HAL_OK == HAL_I2C_IsDeviceReady(at24c02.pi2c,at24c02.dev_address,POLL_RETYIES,POLL_TIME_MS);
+    return HAL_OK == HAL_I2C_IsDeviceReady(at24c02.pi2c, at24c02.dev_address, POLL_RETYIES, POLL_TIME_MS);
 }
 
 bool BSP_AT24C02_Read_Page(uint16_t start_address, void *data_out, uint8_t data_len)
@@ -48,11 +48,45 @@ static bool BSP_AT24C02_Write_Page(uint16_t start_address, void *data_in, uint8_
     if (state != HAL_OK)
         return false;
 
-    
     return BSP_AT24C02_Ready();
 }
 
 // 任意页写入
-bool BSP_AT24C02_Write()
+bool BSP_AT24C02_Write(uint16_t start_address, void *data_in, uint8_t data_len)
 {
+    if (!at24c02.is_init || !data_in || data_len == 0)
+        return false;
+    if (start_address + data_len > DEV_TOTAL_SIZE)
+        return false;
+
+    uint16_t bytes_written = 0; // 已经写入的字节
+    while (bytes_written < data_len)
+    {
+        // 还有多少数据没发送
+        uint16_t data_left = data_len - bytes_written;
+
+        // 新的写的起始地址
+        uint16_t new_start_address = start_address + bytes_written;
+
+        // 定位当前页和偏移位置
+        uint16_t page_num = new_start_address / at24c02.page_size;
+        uint16_t page_offset = new_start_address % at24c02.page_size;
+
+        // 当前页剩余空间
+        uint16_t page_space = at24c02.page_size - page_offset;
+
+        // 如果本次写入量超过剩余页，需要分次数，只需要判断超过一页时的条件，没超过字节调用
+        uint16_t write_bytes = data_left;
+        if (write_bytes > page_space)
+            write_bytes = page_space;
+
+        // 单页发送
+        if (!BSP_AT24C02_Write_Page(new_start_address, (uint8_t)data_in + bytes_written, write_bytes))
+            ;
+        return false;
+
+        // 更新每次发送的数据
+        bytes_written += write_bytes;
+    }
+    return true;
 }
