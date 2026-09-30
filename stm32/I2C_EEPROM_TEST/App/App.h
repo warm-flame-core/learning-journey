@@ -14,17 +14,20 @@ extern "C"
 #define APP_MAGIC 0x35
 #define APP_VERSION 0x01
 
-typedef struct _config_t
-{
-    uint8_t magic;          // 魔数，参考不同类型的文件分辨方法
-    uint8_t version;        // 配置文件版本
-    uint8_t LED;            // 闪哪个灯
-    uint8_t repact_cnt;     // 闪灯次数
-    uint16_t delay_ms;      // 闪灯中间停止多久，单位：ms
-    uint16_t start_ms       // 开始闪灯的时间，单位：ms
-}config_t;
+    typedef struct _config_t
+    {
+        uint8_t magic;      // 魔数，参考不同类型的文件分辨方法
+        uint8_t version;    // 配置文件版本
+        uint8_t LED;        // 闪哪个灯
+        uint8_t repact_cnt; // 闪灯次数
+        uint16_t delay_ms;  // 闪灯中间停止多久，单位：ms
+        uint16_t start_ms   // 开始闪灯的时间，单位：ms
+    } config_t;
 
+#define CONFIG_ADDRESS 0x0
 
+#define SAVE_CONFIG(conf_add, conf_len) BSP_AT24C02_Write(CONFIG_ADDRESS, conf_add, conf_len)
+#define LOAD_CONFIG(conf_add, conf_len) BSP_AT24C02_Read(CONFIG_ADDRESS, conf_add, conf_len)
 
     void App_Init();
     void App_Run();

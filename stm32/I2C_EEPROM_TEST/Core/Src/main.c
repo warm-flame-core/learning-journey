@@ -94,14 +94,15 @@ int main(void)
   MX_I2C2_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  BSP_AT24C02_Init(&hi2c2);
   BSP_Usart_Init(&huart1);
-  App_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    App_Init();
     App_Run();
     /* USER CODE END WHILE */
     

@@ -43,12 +43,14 @@ void App_Init()
         Config_Daley();
 
         // 写入到EEPROM
-        AT24C02_Write_Page_Data(&gconfig, sizeof(gconfig));
+        SAVE_CONFIG(&gconfig, sizeof(gconfig));
+        printf(">> write config done <<\n");
     }
     else if (chioce == 2)
     {
         // 读取EEPROM
-        AT24C02_Read_Page_Data(&gconfig, sizeof(gconfig));
+        LOAD_CONFIG(&gconfig, sizeof(gconfig));
+        printf(">> load config done <<\n");
     }
     else
     {

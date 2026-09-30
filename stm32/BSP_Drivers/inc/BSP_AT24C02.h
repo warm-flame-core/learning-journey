@@ -28,7 +28,7 @@ extern "C"
     } eeprom_t;
 
     bool BSP_AT24C02_Init(I2C_HandleTypeDef *i2c);
-    bool BSP_AT24C02_Read_Page(uint16_t start_address, void *data_out, uint8_t data_len);
+    bool BSP_AT24C02_Read(uint16_t start_address, void *data_out, uint8_t data_len);
     bool BSP_AT24C02_Write(uint16_t start_address, void *data_in, uint8_t data_len);
 
 #ifdef __cpluscplus
