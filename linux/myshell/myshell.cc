@@ -12,14 +12,28 @@
 #define MAXARGV 128
 char *g_argv[MAXARGV];
 int g_argc = 0;
-
+char cwd[1024];
+char cwdenv[1024];
+int lastcode = 0;
 const char *GetUserName() {
     const char *name = getenv("USER");
     return name == NULL ? "None" : name;
 }
 const char *GetPwd() {
-    const char *pwd = getenv("PWD");
+    //const char *pwd = getenv("PWD");
+    const char *pwd = getcwd(cwd, sizeof(cwd));
+    if(pwd != NULL)
+    {
+        snprintf(cwdenv, sizeof(cwdenv), "PWD=%s", cwd);
+        putenv(cwdenv);
+    }
     return pwd == NULL ? "None" : pwd;
+}
+
+const char *GetHome()
+{
+    const char *home = getenv("HOME");
+    return home == NULL ? "" : home;
 }
 
 void MakeCommandLine(char cmd_prompt[], int size) {
@@ -49,7 +63,7 @@ bool CommandParse(char *commandline) {
     g_argv[g_argc++] = strtok(commandline, SEP);
     while (g_argv[g_argc++] = strtok(nullptr, SEP));
     g_argc--;
-    return true;
+    return g_argc > 0 ? true : false;
 }
 
 int Execute() {
@@ -58,11 +72,33 @@ int Execute() {
         execvp(g_argv[0], g_argv);
         exit(1);
     }
-    pid_t rid = waitpid(id, nullptr, 0);
+    int status = 0;
+    pid_t rid = waitpid(id, &status, 0);
     (void)rid;
     return 0;
 }
 
+bool CheckAndExecBuiltin()
+{
+    std::string cmd = g_argv[0];
+    if(cmd == "cd")
+    {
+
+        if(g_argc == 1)
+        {
+            std::string home = GetHome();
+            if(home.empty()) return true;
+            chdir(home.c_str());
+        }
+        else
+        {
+            std::string where = g_argv[1];
+            chdir(where.c_str());
+        }
+        return true;
+    }
+    return false;
+}
 int main() {
     while (1) {
         // 输出命令行提示符
@@ -76,7 +112,15 @@ int main() {
         }
 
         // 拆字符串
-        CommandParse(commandline);
+        if(!CommandParse(commandline))
+        {
+            continue;
+        }
+        // 检查内建命令
+        if(CheckAndExecBuiltin())
+        {
+            continue;
+        }
         // 执行命令
         Execute();
     }
