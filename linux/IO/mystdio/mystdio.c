@@ -39,7 +39,12 @@ MY_FIFE* Myfopen(const char* pathname, const char * mode)
     }
     return BuyFile(fd, flag);
 }
-void Myfclose(MY_FIFE *stream);
+void Myfclose(MY_FIFE *stream)
+{
+    if(stream->fileno <= 0) return;
+    Myfflash(stream);
+    close()
+}
 int Mywrite(MY_FIFE* stream, void* str, int size)
 {
     memcpy(stream->outbuffer + stream->bufferlen, str, size);
@@ -55,5 +60,6 @@ void Myfflash(MY_FIFE* stream)
 {
     int n = write(stream->fileno, stream->outbuffer, stream->bufferlen);
     (void) n;
+    fsync(stream->fileno);
     stream->bufferlen = 0;
 }
