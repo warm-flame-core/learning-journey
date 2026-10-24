@@ -1,12 +1,15 @@
-// Ë«Ö¸Õë
-#include "head.h"
+/*
+ * @lc app=leetcode.cn id=283 lang=cpp
+ *
+ * [283] ç§»åŠ¨é›¶
+ */
 
-// Á¦¿Û283
-// ¸ø¶¨Ò»¸öÊı×é nums£¬±àĞ´Ò»¸öº¯Êı½«ËùÓĞ 0 ÒÆ¶¯µ½Êı×éµÄÄ©Î²£¬Í¬Ê±±£³Ö·ÇÁãÔªËØµÄÏà¶ÔË³Ğò¡£
-// Çë×¢Òâ £¬±ØĞëÔÚ²»¸´ÖÆÊı×éµÄÇé¿öÏÂÔ­µØ¶ÔÊı×é½øĞĞ²Ù×÷¡£
-class Solution {
-public:
-    void moveZeroes(vector<int>& nums) {
+// @lc code=start
+class Solution
+{
+  public:
+    void moveZeroes(vector<int> &nums)
+    {
         int dst = -1;
         int cur = 0;
         while (cur < nums.size())
@@ -21,3 +24,4 @@ public:
         }
     }
 };
+// @lc code=end
