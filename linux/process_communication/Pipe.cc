@@ -54,10 +54,12 @@ int main()
         ChildWrite(fds[1]);
         exit(0);
     }
-    waitpid(id, nullptr, 0);
+
     // 关闭读写通道
     // 父进程读，子进程写
     close(fds[1]);
     FatherRead(fds[0]);
+    waitpid(id, nullptr, 0);
+
     return 0;
 }
