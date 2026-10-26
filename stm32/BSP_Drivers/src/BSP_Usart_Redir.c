@@ -1,18 +1,18 @@
 #include "BSP_Usart_Redir.h"
 
-UART_HandleTypeDef *ghuart = NULL;
+UART_HandleTypeDef* ghuart = NULL;
 
-void BSP_Usart_Init(UART_HandleTypeDef *huart)
+void BSP_Usart_Init(UART_HandleTypeDef* huart)
 {
     ghuart = huart;
 }
 
-int fputc(int ch, FILE *fp)
+int fputc(int ch, FILE* fp)
 {
     UNUSED(fp); // 用于消除警告的宏
     if (NULL != ghuart)
     {
-        if (HAL_UART_Transmit(ghuart, (uint8_t *)&ch, 1, HAL_MAX_DELAY) == HAL_OK)
+        if (HAL_UART_Transmit(ghuart, (uint8_t*)&ch, 1, HAL_MAX_DELAY) == HAL_OK)
         {
             return ch;
         }
@@ -24,7 +24,7 @@ int fputc(int ch, FILE *fp)
     }
 }
 
-int fgetc(FILE *fp)
+int fgetc(FILE* fp)
 {
     UNUSED(fp); // 消除警告的宏
     if (NULL != ghuart)

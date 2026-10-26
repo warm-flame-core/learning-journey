@@ -27,7 +27,6 @@
 //	return 0;
 //}
 
-
 //class Date
 //{
 //public:
@@ -65,7 +64,6 @@
 //	d1.Print();
 //	return 0;
 //}
-
 
 //typedef int STDataType;
 //class Stack
@@ -141,10 +139,9 @@
 //int main()
 //{
 //	MyQueue m;
-//	
+//
 //	return 0;
 //}
-
 
 //拷贝构造函数
 //class Date
@@ -218,7 +215,7 @@
 //	{
 //		return !(*this == d2);
 //	}
-//	
+//
 //	void Print()
 //	{
 //		cout << _year << "-" << _mouth << "-" << _day << endl;
@@ -246,20 +243,19 @@
 //	return 0;
 //}
 
-
 //#include "Date.h"
 //void DateTest01()
 //{
 //	Date d1(2026, 5, 14);
-//	
-//	
+//
+//
 //	/*d1 += 10000;
 //	Date d2 = d1;
 //	d2 = d1 + 1;*/
 //
 //	d1 -= 10000;
 //	Date d2 = d1 - 1;
-//	
+//
 //	d1.print();
 //	d2.print();
 //}
@@ -280,7 +276,6 @@
 //	DateTest03();
 //	return 0;
 //}
-
 
 //初始化列表
 #include <iostream>
@@ -317,7 +312,6 @@ using namespace std;
 //	Date d1(1,8,5);
 //	d1.Print();
 //}
-
 
 //类类型隐式类型转换
 //class A
@@ -386,7 +380,6 @@ using namespace std;
 //	return 0;
 //}
 
-
 //static 成员修饰
 //class A
 //{
@@ -414,7 +407,7 @@ using namespace std;
 //	A q1;
 //	cout << A::Get() << endl;
 //	A q2;
-//	
+//
 //	cout << A::Get() << endl;
 //	return 0;
 //}
@@ -446,7 +439,6 @@ using namespace std;
 //	a1.free();
 //	return 0;
 //}
-
 
 //#include<iostream>
 //using namespace std;
@@ -480,22 +472,22 @@ using namespace std;
 //	return 0;
 //}
 
-
-#include<iostream>
+#include <iostream>
 using namespace std;
 class A
 {
 public:
-	void Print()
-	{
-		cout << "A::Print()" << endl;
-	}
+    void Print()
+    {
+        cout << "A::Print()" << endl;
+    }
+
 private:
-	int _a;
+    int _a;
 };
 int main()
 {
-	A* p = nullptr;
-	p->Print();
-	return 0;
+    A* p = nullptr;
+    p->Print();
+    return 0;
 }

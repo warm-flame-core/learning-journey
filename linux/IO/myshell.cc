@@ -1,13 +1,14 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
+#include <ctype.h>
+#include <fcntl.h>
 #include <sched.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <ctype.h>
-#include <fcntl.h>
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
 #define COMMAND_SIZE 1024
 #define FORMAT "%s@VM-0-2-ubuntu:%s# "
 #define MAXARGV 128
@@ -19,19 +20,21 @@
 int redir = NONE_REDIR;
 std::string filename;
 
-char *g_argv[MAXARGV];
+char* g_argv[MAXARGV];
 int g_argc = 0;
 char cwd[1024];
 char cwdenv[1024];
 int lastcode = 0;
-const char *GetUserName() {
-    const char *name = getenv("USER");
+const char* GetUserName()
+{
+    const char* name = getenv("USER");
     return name == NULL ? "None" : name;
 }
-const char *GetPwd() {
+const char* GetPwd()
+{
     //const char *pwd = getenv("PWD");
-    const char *pwd = getcwd(cwd, sizeof(cwd));
-    if(pwd != NULL)
+    const char* pwd = getcwd(cwd, sizeof(cwd));
+    if (pwd != NULL)
     {
         snprintf(cwdenv, sizeof(cwdenv), "PWD=%s", cwd);
         putenv(cwdenv);
@@ -39,25 +42,28 @@ const char *GetPwd() {
     return pwd == NULL ? "None" : pwd;
 }
 
-const char *GetHome()
+const char* GetHome()
 {
-    const char *home = getenv("HOME");
+    const char* home = getenv("HOME");
     return home == NULL ? "" : home;
 }
 
-void MakeCommandLine(char cmd_prompt[], int size) {
+void MakeCommandLine(char cmd_prompt[], int size)
+{
     snprintf(cmd_prompt, size, FORMAT, GetUserName(), GetPwd());
 }
 
-void PrintCommandPrompt() {
+void PrintCommandPrompt()
+{
     char prompt[COMMAND_SIZE];
     MakeCommandLine(prompt, sizeof(prompt));
     printf("%s", prompt);
     fflush(stdout);
 }
 
-bool GetCommandLine(char *out, int size) {
-    char *c = fgets(out, size, stdin);
+bool GetCommandLine(char* out, int size)
+{
+    char* c = fgets(out, size, stdin);
     if (c == NULL)
         return false;
     out[strlen(out) - 1] = 0;
@@ -66,43 +72,51 @@ bool GetCommandLine(char *out, int size) {
     return true;
 }
 
-bool CommandParse(char *commandline) {
+bool CommandParse(char* commandline)
+{
 #define SEP " "
     g_argc = 0;
     g_argv[g_argc++] = strtok(commandline, SEP);
-    while (g_argv[g_argc++] = strtok(nullptr, SEP));
+    while (g_argv[g_argc++] = strtok(nullptr, SEP))
+        ;
     g_argc--;
     return g_argc > 0 ? true : false;
 }
 
-int Execute() {
+int Execute()
+{
     pid_t id = fork();
-    if (id == 0) {
+    if (id == 0)
+    {
         int fd = -1;
         // 子进程检测重定向情况
-        if(redir == INPUT_REDIR)
+        if (redir == INPUT_REDIR)
         {
             fd = open(filename.c_str(), O_RDONLY);
-            if(fd < 0) exit(1);
-            dup2(fd,0);
+            if (fd < 0)
+                exit(1);
+            dup2(fd, 0);
             close(fd);
         }
-        else if(redir == OUTPUT_REDIR)
+        else if (redir == OUTPUT_REDIR)
         {
             fd = open(filename.c_str(), O_CREAT | O_WRONLY | O_TRUNC, 0666);
-            if(fd < 0) exit(2);
+            if (fd < 0)
+                exit(2);
             dup2(fd, 1);
             close(fd);
         }
-        else if(redir == APPEND_REDIR)
+        else if (redir == APPEND_REDIR)
         {
             fd = open(filename.c_str(), O_CREAT | O_WRONLY | O_APPEND, 0666);
-            if(fd < 0) exit(2);
+            if (fd < 0)
+                exit(2);
             dup2(fd, 1);
             close(fd);
         }
         else
-        {}
+        {
+        }
         execvp(g_argv[0], g_argv);
         exit(1);
     }
@@ -115,13 +129,14 @@ int Execute() {
 bool CheckAndExecBuiltin()
 {
     std::string cmd = g_argv[0];
-    if(cmd == "cd")
+    if (cmd == "cd")
     {
 
-        if(g_argc == 1)
+        if (g_argc == 1)
         {
             std::string home = GetHome();
-            if(home.empty()) return true;
+            if (home.empty())
+                return true;
             chdir(home.c_str());
         }
         else
@@ -135,35 +150,35 @@ bool CheckAndExecBuiltin()
 }
 void Trimspace(char cmd[], int& end)
 {
-    while(isspace(cmd[end]))
+    while (isspace(cmd[end]))
     {
         end++;
     }
 }
 void RedirCheck(char cmd[])
 {
-        
+
     redir = NONE_REDIR;
     filename.clear();
     int start = 0;
     int end = strlen(cmd);
-    while(end > start)
+    while (end > start)
     {
-        if(cmd[end] == '<')
+        if (cmd[end] == '<')
         {
             cmd[end++] = 0;
             redir = INPUT_REDIR;
             Trimspace(cmd, end);
-            filename = cmd+end;
+            filename = cmd + end;
             break;
         }
-        else if(cmd[end] == '>')
+        else if (cmd[end] == '>')
         {
-            if(cmd[end - 1] == '>')
+            if (cmd[end - 1] == '>')
             {
                 cmd[end - 1] = 0;
                 cmd[end++] = 0;
-                redir = APPEND_REDIR; 
+                redir = APPEND_REDIR;
             }
             else
             {
@@ -171,7 +186,7 @@ void RedirCheck(char cmd[])
                 redir = INPUT_REDIR;
             }
             Trimspace(cmd, end);
-            filename = cmd+end;
+            filename = cmd + end;
             break;
         }
         else
@@ -180,8 +195,10 @@ void RedirCheck(char cmd[])
         }
     }
 }
-int main() {
-    while (1) {
+int main()
+{
+    while (1)
+    {
 
         // 输出命令行提示符
         PrintCommandPrompt();
@@ -189,20 +206,21 @@ int main() {
         // 获取用户输入
 
         char commandline[COMMAND_SIZE];
-        if (!GetCommandLine(commandline, sizeof(commandline))) {
+        if (!GetCommandLine(commandline, sizeof(commandline)))
+        {
             continue;
         }
-        
+
         //命令好分析
         RedirCheck(commandline);
 
         // 拆字符串
-        if(!CommandParse(commandline))
+        if (!CommandParse(commandline))
         {
             continue;
         }
         // 检查内建命令
-        if(CheckAndExecBuiltin())
+        if (CheckAndExecBuiltin())
         {
             continue;
         }

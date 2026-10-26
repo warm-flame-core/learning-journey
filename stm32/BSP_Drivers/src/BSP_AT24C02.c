@@ -2,7 +2,7 @@
 
 eeprom_t at24c02;
 
-bool BSP_AT24C02_Init(I2C_HandleTypeDef *i2c)
+bool BSP_AT24C02_Init(I2C_HandleTypeDef* i2c)
 {
     if (!i2c)
         return false;
@@ -22,7 +22,7 @@ static bool BSP_AT24C02_Ready()
     return HAL_OK == HAL_I2C_IsDeviceReady(at24c02.pi2c, at24c02.dev_address, POLL_RETYIES, POLL_TIME_MS);
 }
 
-bool BSP_AT24C02_Read(uint16_t start_address, void *data_out, uint8_t data_len)
+bool BSP_AT24C02_Read(uint16_t start_address, void* data_out, uint8_t data_len)
 {
     if (!at24c02.is_init || !data_out || data_len == 0)
         return false;
@@ -34,7 +34,7 @@ bool BSP_AT24C02_Read(uint16_t start_address, void *data_out, uint8_t data_len)
 }
 
 // 单页内写入
-static bool BSP_AT24C02_Write_Page(uint16_t start_address, void *data_in, uint8_t data_len)
+static bool BSP_AT24C02_Write_Page(uint16_t start_address, void* data_in, uint8_t data_len)
 {
     if (!at24c02.is_init || !data_in || data_len == 0)
         return false;
@@ -52,7 +52,7 @@ static bool BSP_AT24C02_Write_Page(uint16_t start_address, void *data_in, uint8_
 }
 
 // 任意页写入
-bool BSP_AT24C02_Write(uint16_t start_address, void *data_in, uint8_t data_len)
+bool BSP_AT24C02_Write(uint16_t start_address, void* data_in, uint8_t data_len)
 {
     if (!at24c02.is_init || !data_in || data_len == 0)
         return false;
@@ -80,13 +80,13 @@ bool BSP_AT24C02_Write(uint16_t start_address, void *data_in, uint8_t data_len)
         if (write_bytes > page_space)
         {
             write_bytes = page_space;
-        }    
+        }
 
         // 单页发送
         if (!BSP_AT24C02_Write_Page(new_start_address, (uint8_t*)data_in + bytes_written, write_bytes))
         {
             return false;
-        }    
+        }
         // 更新每次发送的数据
         bytes_written += write_bytes;
     }

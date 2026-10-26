@@ -34,7 +34,6 @@
 //	return 0;
 //}
 
-
 //int main()
 //{
 //	std::ios_base::sync_with_stdio(false);
@@ -42,7 +41,6 @@
 //	std::cout.tie(nullptr);
 //	return 0;
 //}
-
 
 //缺省参数、函数重载
 #include <iostream>
@@ -97,26 +95,24 @@ using namespace std;
 //	std::cout << Add(1) << std::endl;
 //}
 
-
 //引用
 using namespace std;
 void Swap(int& ra, int& rb)
 {
-	int tmp = ra;
-	ra = rb;
-	rb = tmp;
+    int tmp = ra;
+    ra = rb;
+    rb = tmp;
 }
 int main()
 {
-	int a = 10;
-	int b = 20;
-	int& d = a;
-	/*d = b;*/	//引用不可以改变指向
-	Swap(a, b);
-	cout << a << b << endl;
-	return 0;
+    int a = 10;
+    int b = 20;
+    int& d = a;
+    /*d = b;*/ //引用不可以改变指向
+    Swap(a, b);
+    cout << a << b << endl;
+    return 0;
 }
-
 
 //counst修饰
 //int main()
@@ -134,7 +130,6 @@ int main()
 //
 //	return 0;
 //}
-
 
 //内联
 //#define ADD(a, b) ((a) + (b))
@@ -154,7 +149,6 @@ int main()
 //	int ret = Add(1, 3);
 //	return 0;
 //}
-
 
 //nullptr指针
 //#include <iostream>

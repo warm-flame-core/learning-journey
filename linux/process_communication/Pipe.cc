@@ -1,7 +1,8 @@
-#include <cstring>
-#include <iostream>
 #include <sys/wait.h>
 #include <unistd.h>
+
+#include <cstring>
+#include <iostream>
 
 void ChildWrite(int wfd)
 {

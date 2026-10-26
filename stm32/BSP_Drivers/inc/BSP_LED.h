@@ -9,27 +9,27 @@ extern "C"
 #include <stdbool.h>
 #include "stm32f1xx_hal.h"
 
-  typedef enum
-  {
-    LED1 = 1,
-    LED2,
-    LED3,
-    LED4,
-    ALL
-  } LED_t;
+    typedef enum
+    {
+        LED1 = 1,
+        LED2,
+        LED3,
+        LED4,
+        ALL
+    } LED_t;
 
-  typedef enum
-  {
-    KEY1 = 1,
-    KEY2,
-    KEY3,
-    KEY4
-  } KEY_t;
+    typedef enum
+    {
+        KEY1 = 1,
+        KEY2,
+        KEY3,
+        KEY4
+    } KEY_t;
 
-  void BSP_LED_On(LED_t LED);
-  void BSP_LED_Off(LED_t LED);
-  void LED_Blink(LED_t LED);
-  void LED_Blink_Version2(uint8_t LED, uint8_t cnt, uint16_t delay);
+    void BSP_LED_On(LED_t LED);
+    void BSP_LED_Off(LED_t LED);
+    void LED_Blink(LED_t LED);
+    void LED_Blink_Version2(uint8_t LED, uint8_t cnt, uint16_t delay);
 
 #ifdef __cplusplus
 }

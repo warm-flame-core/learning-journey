@@ -14,7 +14,7 @@ static void Config_Daley()
     printf("start_ms:%d\n", gconfig.start_ms);
 }
 
-static int Request_Input(const char *message)
+static int Request_Input(const char* message)
 {
     int chioce = 0;
     printf("%s\n", message);

@@ -1,27 +1,26 @@
 #pragma once
-#include <stdio.h>
-#include <stdlib.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 //#include "BinaryTree.h"
 
-struct BinaryTree;	//前置声明
+struct BinaryTree; //前置声明
 
 typedef struct BinaryTree* QDateType;
 
 typedef struct QueueNode
 {
-	QDateType val;
-	struct QueueNode* next;
-}QNode, * pQNode;
+    QDateType val;
+    struct QueueNode* next;
+} QNode, *pQNode;
 
 typedef struct Queue
 {
-	pQNode ptail;
-	pQNode phead;
-	int size;
-}Queue, * pQueue;
-
+    pQNode ptail;
+    pQNode phead;
+    int size;
+} Queue, *pQueue;
 
 void QueueInit(pQueue pq);
 void QueueDestroy(pQueue pq);

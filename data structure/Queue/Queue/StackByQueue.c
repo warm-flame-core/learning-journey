@@ -1,22 +1,23 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include "Queue.h"
 
-
 //用队列模拟栈，对应leetcode第225题
-typedef struct {
+typedef struct
+{
     Queue q1;
     Queue q2;
 } MyStack;
 
-
-MyStack* myStackCreate() {
+MyStack* myStackCreate()
+{
     MyStack* pst = (MyStack*)malloc(sizeof(MyStack));
     QueueInit(&pst->q1);
     QueueInit(&pst->q2);
     return pst;
 }
 
-void myStackPush(MyStack* obj, int x) {
+void myStackPush(MyStack* obj, int x)
+{
     if (!QueneEmpty(&obj->q1))
     {
         QueuePush(&obj->q1, x);
@@ -27,7 +28,8 @@ void myStackPush(MyStack* obj, int x) {
     }
 }
 
-int myStackPop(MyStack* obj) {
+int myStackPop(MyStack* obj)
+{
     //假设法
     pQueue empty = &obj->q1;
     pQueue nonempty = &obj->q2;
@@ -46,7 +48,8 @@ int myStackPop(MyStack* obj) {
     return top;
 }
 
-int myStackTop(MyStack* obj) {
+int myStackTop(MyStack* obj)
+{
     if (!QueneEmpty(&obj->q1))
     {
         return QueneBack(&obj->q1);
@@ -57,11 +60,13 @@ int myStackTop(MyStack* obj) {
     }
 }
 
-bool myStackEmpty(MyStack* obj) {
+bool myStackEmpty(MyStack* obj)
+{
     return QueneEmpty(&obj->q1) && QueneEmpty(&obj->q2);
 }
 
-void myStackFree(MyStack* obj) {
+void myStackFree(MyStack* obj)
+{
     QueueDestroy(&obj->q1);
     QueueDestroy(&obj->q2);
     free(obj);

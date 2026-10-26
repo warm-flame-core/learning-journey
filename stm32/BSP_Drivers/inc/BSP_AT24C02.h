@@ -21,15 +21,15 @@ extern "C"
 
     typedef struct
     {
-        I2C_HandleTypeDef *pi2c; // I2C设备句柄指针
+        I2C_HandleTypeDef* pi2c; // I2C设备句柄指针
         uint16_t dev_address;    // EEPROM的设备地址
         uint8_t page_size;       // EEPROM的页大小
         bool is_init;
     } eeprom_t;
 
-    bool BSP_AT24C02_Init(I2C_HandleTypeDef *i2c);
-    bool BSP_AT24C02_Read(uint16_t start_address, void *data_out, uint8_t data_len);
-    bool BSP_AT24C02_Write(uint16_t start_address, void *data_in, uint8_t data_len);
+    bool BSP_AT24C02_Init(I2C_HandleTypeDef* i2c);
+    bool BSP_AT24C02_Read(uint16_t start_address, void* data_out, uint8_t data_len);
+    bool BSP_AT24C02_Write(uint16_t start_address, void* data_in, uint8_t data_len);
 
 #ifdef __cpluscplus
 }

@@ -1,7 +1,7 @@
+#include <deque>
 #include <iostream>
-#include<vector>
-#include<list>
-#include<deque>
+#include <list>
+#include <vector>
 using namespace std;
 
 // 继承
@@ -100,8 +100,6 @@ using namespace std;
 //	return 0;
 //}
 
-
-
 //class Person
 //{
 ////protected:
@@ -142,7 +140,6 @@ using namespace std;
 //
 //	return 0;
 //}
-
 
 // 派生类中的默认成员函数
 //class Person
@@ -209,13 +206,13 @@ using namespace std;
 //		return *this;
 //	}
 //
-//	// 析构函数都会被特殊处理成destructor() 
+//	// 析构函数都会被特殊处理成destructor()
 //	// 基类和派生类的析构函数也构成隐藏
 //	~Student()
 //	{
 //		//不需要显示调用，子类析构函数之后，会自动调用父类析构
 //		// 这样保证析构顺序，先子后父，显示调用取决于实现的人，不能保证先子后父
-//		// 
+//		//
 //		//Person::~Person();
 //		//delete _ptr;
 //	}
@@ -293,75 +290,76 @@ using namespace std;
 //	return 0;
 //}
 
-
 // 在C++中有单继承和多继承，其中多继承里还有菱形继承，尽量不写出
 class Person
 {
 public:
-	Person(const char* name)
-		:_name(name)
-	{}
+    Person(const char* name)
+        : _name(name)
+    {
+    }
 
-	string _name; // 姓名
-	/*int _tel;
+    string _name; // 姓名
+                  /*int _tel;
 	int _age;
 	string _gender;
 	string _address;*/
-	// ...
+                  // ...
 };
 
 class Student : virtual public Person
 {
 public:
-	Student(const char* name, int num = 0)
-		:Person(name)
-		,_num(num)
-	{}
+    Student(const char* name, int num = 0)
+        : Person(name), _num(num)
+    {
+    }
+
 protected:
-	int _num; //学号
+    int _num; //学号
 };
 
 class Teacher : virtual public Person
 {
 public:
-	Teacher(const char* name, int id = 1)
-		:Person(name)
-		, _id(id)
-	{}
+    Teacher(const char* name, int id = 1)
+        : Person(name), _id(id)
+    {
+    }
+
 protected:
-	int _id; // 职工编号
+    int _id; // 职工编号
 };
 
 // 菱形继承
 class Assistant : public Student, public Teacher
 {
 public:
-	Assistant(const char* name1, const char* name2, const char* name3)
-		:Student(name1)
-		,Teacher(name2)
-		,Person(name3)
-	{}
+    Assistant(const char* name1, const char* name2, const char* name3)
+        : Student(name1), Teacher(name2), Person(name3)
+    {
+    }
+
 protected:
-	string _majorCourse; // 主修课程
+    string _majorCourse; // 主修课程
 };
 
 int main()
 {
-	//  对“_name”的访问不明确
-	//Assistant a;
-	//a._name = "peter";
+    //  对“_name”的访问不明确
+    //Assistant a;
+    //a._name = "peter";
 
-	//// 需要显示指定访问哪个父类的成员可以解决二义性问题，但是数据冗余问题无法解决
-	//a.Student::_name = "小李";
-	//a.Teacher::_name = "老李";
+    //// 需要显示指定访问哪个父类的成员可以解决二义性问题，但是数据冗余问题无法解决
+    //a.Student::_name = "小李";
+    //a.Teacher::_name = "老李";
 
-	//cout << sizeof(a) << endl;
+    //cout << sizeof(a) << endl;
 
-	//Student s;
+    //Student s;
 
-	// 这里的初始化张三和李四都不起作用，子类的name全部被忽略了，只有王五初始化成功了
-	Assistant a("张三", "李四", "王五");
+    // 这里的初始化张三和李四都不起作用，子类的name全部被忽略了，只有王五初始化成功了
+    Assistant a("张三", "李四", "王五");
 
-
-	return 0;
+    return 0;
 }

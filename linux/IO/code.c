@@ -1,29 +1,26 @@
+#include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
-#include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
-
-
 
 int main()
 {
     umask(0);
     //int fp = open("log.txt", O_WRONLY|O_TRUNC|O_CREAT, 0666);
     int fp = open("log.txt", O_RDONLY);
-    if(fp < 0)
+    if (fp < 0)
     {
         perror("open error");
         return 1;
     }
-    
-    const char*msg = "hello world\n";
+
+    const char* msg = "hello world\n";
     char buf[1024];
-    while(1)
+    while (1)
     {
-        ssize_t s = read(fp, buf, strlen(msg));//类⽐write 
-        if(s > 0)
+        ssize_t s = read(fp, buf, strlen(msg)); //类⽐write
+        if (s > 0)
         {
             printf("%s", buf);
         }
@@ -33,14 +30,6 @@ int main()
         }
     }
 
-
-
-
-
-
-
-
-    
     //const char*msg = "hello world\n";
     //int cout = 5;
     //while(cout--)
@@ -53,14 +42,6 @@ int main()
     return 0;
 }
 
-
-
-
-
-
-
-
-
 //int main()
 //{
 //    //FILE* fp = fopen("log.txt", "w");
@@ -70,7 +51,7 @@ int main()
 //        printf("fopen error\n");
 //        return 1;
 //    }
-//    
+//
 //    char buf[1024];
 //    const char *msg = "hello bit!\n";
 //    while(1)

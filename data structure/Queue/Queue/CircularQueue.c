@@ -2,7 +2,8 @@
 #include "Queue.h"
 
 //循环队列实现，对应LeetCode第622题
-typedef struct {
+typedef struct
+{
     int* a;
     int head;
     int tail;
@@ -12,7 +13,8 @@ typedef struct {
 bool myCircularQueueIsEmpty(MyCircularQueue* obj);
 
 bool myCircularQueueIsFull(MyCircularQueue* obj);
-MyCircularQueue* myCircularQueueCreate(int k) {
+MyCircularQueue* myCircularQueueCreate(int k)
+{
     MyCircularQueue* Queue = (MyCircularQueue*)malloc(sizeof(MyCircularQueue));
     Queue->a = (int*)malloc(sizeof(int) * (k + 1));
     Queue->head = Queue->head = 0;
@@ -20,7 +22,8 @@ MyCircularQueue* myCircularQueueCreate(int k) {
     return Queue;
 }
 
-bool myCircularQueueEnQueue(MyCircularQueue* obj, int value) {
+bool myCircularQueueEnQueue(MyCircularQueue* obj, int value)
+{
     if (myCircularQueueIsFull(obj))
         return false;
     else
@@ -32,7 +35,8 @@ bool myCircularQueueEnQueue(MyCircularQueue* obj, int value) {
     return true;
 }
 
-bool myCircularQueueDeQueue(MyCircularQueue* obj) {
+bool myCircularQueueDeQueue(MyCircularQueue* obj)
+{
     if (myCircularQueueIsEmpty(obj))
     {
         return false;
@@ -45,7 +49,8 @@ bool myCircularQueueDeQueue(MyCircularQueue* obj) {
     return true;
 }
 
-int myCircularQueueFront(MyCircularQueue* obj) {
+int myCircularQueueFront(MyCircularQueue* obj)
+{
     if (myCircularQueueIsEmpty(obj))
     {
         return -1;
@@ -54,7 +59,8 @@ int myCircularQueueFront(MyCircularQueue* obj) {
         return obj->a[obj->head];
 }
 
-int myCircularQueueRear(MyCircularQueue* obj) {
+int myCircularQueueRear(MyCircularQueue* obj)
+{
     if (myCircularQueueIsEmpty(obj))
     {
         return -1;
@@ -66,15 +72,18 @@ int myCircularQueueRear(MyCircularQueue* obj) {
     }
 }
 
-bool myCircularQueueIsEmpty(MyCircularQueue* obj) {
+bool myCircularQueueIsEmpty(MyCircularQueue* obj)
+{
     return obj->tail == obj->head;
 }
 
-bool myCircularQueueIsFull(MyCircularQueue* obj) {
+bool myCircularQueueIsFull(MyCircularQueue* obj)
+{
     return (obj->tail + 1) % (obj->k + 1) == obj->head;
 }
 
-void myCircularQueueFree(MyCircularQueue* obj) {
+void myCircularQueueFree(MyCircularQueue* obj)
+{
     free(obj->a);
     free(obj);
 }

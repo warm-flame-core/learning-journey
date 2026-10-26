@@ -1,9 +1,9 @@
 #pragma once
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
-#include <limits.h>
+#include <time.h>
 
 void PrintfSort(int* a, int n);
 

@@ -1,16 +1,15 @@
 #pragma once
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 typedef int BTDateType;
 typedef struct BinaryTree
 {
-	BTDateType Date;
-	struct BinaryTree* left;
-	struct BinaryTree* right;
-}BTNode;
-
+    BTDateType Date;
+    struct BinaryTree* left;
+    struct BinaryTree* right;
+} BTNode;
 
 //Ç°Ðò±éÀú
 void PrevOrder(BTNode* root);

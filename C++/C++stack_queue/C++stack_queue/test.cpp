@@ -1,75 +1,73 @@
-#include <iostream>
-#include <stack>
-#include <queue>
 #include <functional>
+#include <iostream>
+#include <queue>
+#include <stack>
 using namespace std;
-#include"stack.h"
-#include "queue.h"
 #include "PriorityQueue.h"
+#include "queue.h"
+#include "stack.h"
 void stack_test1()
 {
-	xjw::stack<int> s1;
-	s1.push(1);
-	s1.push(2);
-	s1.push(3);
-	s1.push(4);
-	s1.push(5);
-
+    xjw::stack<int> s1;
+    s1.push(1);
+    s1.push(2);
+    s1.push(3);
+    s1.push(4);
+    s1.push(5);
 }
 
 void stack_test2()
 {
-	xjw::stack<int> st1;
-	xjw::stack<int> st2 = st1;
-	st1.push(1);
-	st1.push(2);
-	st1.push(3);
-	st1.push(4);
-	st1.push(5);
-	st1.push(6);
-	st2.push(7);
-	st2.push(8);
-	st2.push(9);
-	st2.push(10);
-	st2.push(11);
-	cout << st1.top() << endl;
-	st1.pop();
-	cout << st1.empty() << endl;
+    xjw::stack<int> st1;
+    xjw::stack<int> st2 = st1;
+    st1.push(1);
+    st1.push(2);
+    st1.push(3);
+    st1.push(4);
+    st1.push(5);
+    st1.push(6);
+    st2.push(7);
+    st2.push(8);
+    st2.push(9);
+    st2.push(10);
+    st2.push(11);
+    cout << st1.top() << endl;
+    st1.pop();
+    cout << st1.empty() << endl;
 }
-
 
 //PriorityQueue
 void testPriorityQueue1()
 {
-	vector<int> v{ 3,2,7,6,0,4,1,9,8,5 };
-	// 默认是less，大堆
-	xjw::priority_queue<int> q1;
-	for (auto e : v)
-	{
-		q1.push(e);
-	}
-	// 如果要小堆需要greater
+    vector<int> v{3, 2, 7, 6, 0, 4, 1, 9, 8, 5};
+    // 默认是less，大堆
+    xjw::priority_queue<int> q1;
+    for (auto e : v)
+    {
+        q1.push(e);
+    }
+    // 如果要小堆需要greater
 }
 
 int main()
 {
-	//stack_test2();
-	/*testPriorityQueue1();
+    //stack_test2();
+    /*testPriorityQueue1();
 	return 0;*/
 
-	xjw::priority_queue<int, vector<int>, xjw::Greater<int>> pq;
-	//bit::priority_queue<int> pq;
-	pq.push(4);
-	pq.push(1);
-	pq.push(5);
-	pq.push(7);
-	pq.push(9);
-	while (!pq.empty())
-	{
-		cout << pq.top() << " ";
-		pq.pop();
-	}
-	cout << endl;
+    xjw::priority_queue<int, vector<int>, xjw::Greater<int>> pq;
+    //bit::priority_queue<int> pq;
+    pq.push(4);
+    pq.push(1);
+    pq.push(5);
+    pq.push(7);
+    pq.push(9);
+    while (!pq.empty())
+    {
+        cout << pq.top() << " ";
+        pq.pop();
+    }
+    cout << endl;
 
-	return 0;
+    return 0;
 }

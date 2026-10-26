@@ -1,10 +1,10 @@
 #include <iostream>
 using namespace std;
-#include "my_unordered_set.h"
 #include "my_unordered_map.h"
+#include "my_unordered_set.h"
 int main()
 {
-	/*xjw::unordered_set<int> s1;
+    /*xjw::unordered_set<int> s1;
 	s1.insert(1);
 	s1.insert(3);
 	s1.insert(6);
@@ -23,7 +23,6 @@ int main()
 	ht1.insert({ 1,1 });
 	return 0;*/
 
-
-	xjw::test_map1();
-	xjw::test_set1;
+    xjw::test_map1();
+    xjw::test_set1;
 }

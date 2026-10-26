@@ -1,19 +1,18 @@
 #pragma once
-#include <stdio.h>
-#include <stdlib.h>
 #include <assert.h>
 #include <stdbool.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 
 //堆的实现，使用小堆
 typedef int HPDateType;
 
 typedef struct HeapNode
 {
-	HPDateType* a;
-	int size;
-	int capacity;
-}Hp,* pHp;
+    HPDateType* a;
+    int size;
+    int capacity;
+} Hp, *pHp;
 
 //初始化
 void HeapInit(pHp Heap);

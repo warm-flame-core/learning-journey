@@ -1,15 +1,15 @@
 #pragma once
+#include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <assert.h>
 typedef int STDateType;
 typedef struct Stack
 {
-	STDateType* a;
-	int top;	//表示栈顶元素的下一个
-	int capacity;
-}Stack,* pStack;
+    STDateType* a;
+    int top; //表示栈顶元素的下一个
+    int capacity;
+} Stack, *pStack;
 
 //初始化
 void StackInit(pStack pk);

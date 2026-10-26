@@ -2,24 +2,27 @@
 #include "Stack.h"
 //用栈实现队列，对应LeetCode第232题
 
-typedef struct {
+typedef struct
+{
     Stack s1;
     Stack s2;
 } MyQueue;
 
-
-MyQueue* myQueueCreate() {
+MyQueue* myQueueCreate()
+{
     MyQueue* q = (MyQueue*)malloc(sizeof(MyQueue));
     StackInit(&q->s1);
     StackInit(&q->s2);
     return q;
 }
 
-void myQueuePush(MyQueue* obj, int x) {
+void myQueuePush(MyQueue* obj, int x)
+{
     StackPush(&obj->s1, x);
 }
 
-int myQueuePop(MyQueue* obj) {
+int myQueuePop(MyQueue* obj)
+{
     if (StackEmpty(&obj->s2))
     {
         while (!StackEmpty(&obj->s1))
@@ -35,7 +38,8 @@ int myQueuePop(MyQueue* obj) {
     return val;
 }
 
-int myQueuePeek(MyQueue* obj) {
+int myQueuePeek(MyQueue* obj)
+{
     if (StackEmpty(&obj->s2))
     {
         while (!StackEmpty(&obj->s1))
@@ -48,11 +52,13 @@ int myQueuePeek(MyQueue* obj) {
     return StackTop(&obj->s2);
 }
 
-bool myQueueEmpty(MyQueue* obj) {
+bool myQueueEmpty(MyQueue* obj)
+{
     return StackEmpty(&obj->s1) && StackEmpty(&obj->s2);
 }
 
-void myQueueFree(MyQueue* obj) {
+void myQueueFree(MyQueue* obj)
+{
     StackDestroy(&obj->s1);
     StackDestroy(&obj->s2);
     free(obj);

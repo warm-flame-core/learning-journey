@@ -2,10 +2,10 @@
 int Sum(int s, int e)
 {
     int result = 0;
-    for(int i = s; i <= e; i++)
-{
-    result += i;
-}
+    for (int i = s; i <= e; i++)
+    {
+        result += i;
+    }
     return result;
 }
 int main()

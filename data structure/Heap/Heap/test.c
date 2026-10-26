@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
-#include "Heap.h"
 #include <time.h>
+
+#include "Heap.h"
 
 //void HeapTest01()
 //{
@@ -36,25 +37,24 @@
 //	}
 //}
 
-
 //随机弄一点数据
 void CreateDate()
 {
-	srand((unsigned int)time(NULL));
-	const char* file = "date.txt";
-	FILE* pf = fopen(file, "w");
-	if (pf == NULL)
-	{
-		perror("file open error");
-		return;
-	}
-	int x = 0;
-	for (int i = 0; i < 1000000; i++)
-	{
-		x = rand() % 1000001;
-		fprintf(pf, "%d\n", x);
-	}
-	fclose(pf);
+    srand((unsigned int)time(NULL));
+    const char* file = "date.txt";
+    FILE* pf = fopen(file, "w");
+    if (pf == NULL)
+    {
+        perror("file open error");
+        return;
+    }
+    int x = 0;
+    for (int i = 0; i < 1000000; i++)
+    {
+        x = rand() % 1000001;
+        fprintf(pf, "%d\n", x);
+    }
+    fclose(pf);
 }
 
 void HeapTest03()
@@ -92,14 +92,14 @@ void HeapTest03()
     {
         AdjustDown(a, k, i);
     }
-    // 此时数组 a 中有 k 个元素，将其调整为一个小根堆   
+    // 此时数组 a 中有 k 个元素，将其调整为一个小根堆
     while (fscanf(fout, "%d", &x) > 0)
     {
         // 拿新数据 x 和堆顶 a[0] 比较
         // 如果是求最大的 K 个数，且 x 比堆顶（当前 K 个里最小的）还大
         if (x > a[0])
         {
-            a[0] = x;       // 替换堆顶
+            a[0] = x;            // 替换堆顶
             AdjustDown(a, k, 0); // 向下调整，恢复小堆性质
         }
     }
@@ -107,7 +107,7 @@ void HeapTest03()
     int end = k - 1;
     while (end > 0)
     {
-        Swap(&a[0], &a[end]); // 把堆顶（最小值）换到最后
+        Swap(&a[0], &a[end]);  // 把堆顶（最小值）换到最后
         AdjustDown(a, end, 0); // 重新调整剩下的 end 个元素
         end--;
     }
@@ -122,11 +122,11 @@ void HeapTest03()
 
 int main()
 {
-	//HeapTest01();
-	//HeapTest02();
-	//HeapTest03();
-	//CreateDate();
-	
-	HeapTest03();
-	return 0;
+    //HeapTest01();
+    //HeapTest02();
+    //HeapTest03();
+    //CreateDate();
+
+    HeapTest03();
+    return 0;
 }

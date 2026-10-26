@@ -1,24 +1,23 @@
 #pragma once
-#include <stdio.h>
-#include <stdlib.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef int QDateType;
 
-typedef struct QueueNode	//结构体定义节点
+typedef struct QueueNode //结构体定义节点
 {
-	QDateType val;
-	struct QueueNode* next;
-}QNode, * pQNode;
+    QDateType val;
+    struct QueueNode* next;
+} QNode, *pQNode;
 
-typedef struct Queue	//结构体定义头尾指针和节点个数
+typedef struct Queue //结构体定义头尾指针和节点个数
 {
-	pQNode ptail;
-	pQNode phead;
-	int size;
-}Queue, * pQueue;
-
+    pQNode ptail;
+    pQNode phead;
+    int size;
+} Queue, *pQueue;
 
 void QueueInit(pQueue pq);
 void QueueDestroy(pQueue pq);

@@ -27,8 +27,6 @@ using namespace std;
 //	return 0;
 //}
 
-
-
 // 构成重写只重写虚函数的定义，所以重写应该保持缺省值不变
 //class A
 //{
@@ -53,7 +51,6 @@ using namespace std;
 //
 //	return 0;
 //}
-
 
 // 只要是基类对基类，子类对子类就可以
 //class A {};
@@ -92,33 +89,34 @@ using namespace std;
 //	return 0;
 //}
 
-
 class A
 {
 public:
-	virtual ~A()
-	{
-		cout << "~A()" << endl;
-	}
+    virtual ~A()
+    {
+        cout << "~A()" << endl;
+    }
 };
 
-class B : public A {
+class B : public A
+{
 public:
-	// 构成重写
-	~B()
-	{
-		cout << "~B()->delete:" << _p << endl;
-		delete _p;
-	}
+    // 构成重写
+    ~B()
+    {
+        cout << "~B()->delete:" << _p << endl;
+        delete _p;
+    }
+
 protected:
-	int* _p = new int[10];
+    int* _p = new int[10];
 };
 int main()
 {
-	// 多态需要用基类的指针或者引用，如果子类存在自定义类型且析构不用虚函数，析构的时候只会调用基类，子类造成内存泄漏
-	A* p1 = new A;
-	A* p2 = new B;
-	delete p1;
-	delete p2;
-	return 0;
+    // 多态需要用基类的指针或者引用，如果子类存在自定义类型且析构不用虚函数，析构的时候只会调用基类，子类造成内存泄漏
+    A* p1 = new A;
+    A* p2 = new B;
+    delete p1;
+    delete p2;
+    return 0;
 }

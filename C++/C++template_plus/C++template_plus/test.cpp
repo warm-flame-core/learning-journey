@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "PriorityQueue.h"
 using namespace std;
 
@@ -6,58 +7,60 @@ using namespace std;
 // array越界读写都可以检查，普通数组越界读不检查，越界写抽查
 namespace xjw
 {
-	template<class T, size_t N = 10>
-	class array
-	{
-	public:
-		T& operator[](size_t index) { return _array[index]; }
-		const T& operator[](size_t index)const { return _array[index]; }
-		size_t size()const { return _size; }
-		bool empty()const { return 0 == _size; }
-	private:
-		T _array[N];
-		size_t _size;
-	};
-}
+template <class T, size_t N = 10>
+class array
+{
+public:
+    T& operator[](size_t index) { return _array[index]; }
+    const T& operator[](size_t index) const { return _array[index]; }
+    size_t size() const { return _size; }
+    bool empty() const { return 0 == _size; }
+
+private:
+    T _array[N];
+    size_t _size;
+};
+} // namespace xjw
 
 // 日期类
 class Date
 {
-	friend ostream& operator<<(ostream& _cout, const Date& d);
+    friend ostream& operator<<(ostream& _cout, const Date& d);
+
 public:
-	Date(int year = 1900, int month = 1, int day = 1)
-		: _year(year)
-		, _month(month)
-		, _day(day)
-	{}
+    Date(int year = 1900, int month = 1, int day = 1)
+        : _year(year), _month(month), _day(day)
+    {
+    }
 
-	bool operator<(const Date& d)const
-	{
-		return (_year < d._year) ||
-			(_year == d._year && _month < d._month) ||
-			(_year == d._year && _month == d._month && _day < d._day);
-	}
+    bool operator<(const Date& d) const
+    {
+        return (_year < d._year) ||
+               (_year == d._year && _month < d._month) ||
+               (_year == d._year && _month == d._month && _day < d._day);
+    }
 
-	bool operator>(const Date& d)const
-	{
-		return (_year > d._year) ||
-			(_year == d._year && _month > d._month) ||
-			(_year == d._year && _month == d._month && _day > d._day);
-	}
+    bool operator>(const Date& d) const
+    {
+        return (_year > d._year) ||
+               (_year == d._year && _month > d._month) ||
+               (_year == d._year && _month == d._month && _day > d._day);
+    }
+
 private:
-	int _year;
-	int _month;
-	int _day;
+    int _year;
+    int _month;
+    int _day;
 };
 ostream& operator<<(ostream& _cout, const Date& d)
 {
-	_cout << d._year << "-" << d._month << "-" << d._day;
-	return _cout;
+    _cout << d._year << "-" << d._month << "-" << d._day;
+    return _cout;
 }
-template<class T>
+template <class T>
 bool LessFunc(const T& left, const T& right)
 {
-	return left < right;
+    return left < right;
 }
 // 如果是指针所希望的比较是解引用再比较
 // 函数模板特化
@@ -69,75 +72,76 @@ bool LessFunc(const T& left, const T& right)
 //	return *left < *right;
 //}
 
-template<>
+template <>
 bool LessFunc<Date*>(Date* const& left, Date* const& right)
 {
-	return *left < *right;
+    return *left < *right;
 }
-template<>
-bool LessFunc<const Date*>(const Date* const& left,const Date* const& right)
+template <>
+bool LessFunc<const Date*>(const Date* const& left, const Date* const& right)
 {
-	return *left < *right;
+    return *left < *right;
 }
-
 
 // 类模板的特化
-template<class T1, class T2>
+template <class T1, class T2>
 class Data
 {
 public:
-	Data() { cout << "Data<T1, T2>" << endl; }
+    Data() { cout << "Data<T1, T2>" << endl; }
+
 private:
-	T1 _d1;
-	T2 _d2;
+    T1 _d1;
+    T2 _d2;
 };
 // 全特化
-template<>
+template <>
 class Data<int, double>
 {
 public:
-	Data() { cout << "Data<int, double>" << endl; }
+    Data() { cout << "Data<int, double>" << endl; }
 };
 // 偏特化
-template<class T1>
+template <class T1>
 class Data<T1, double>
 {
 public:
-	Data() { cout << "Data<T1, double>" << endl; }
+    Data() { cout << "Data<T1, double>" << endl; }
 };
 // 模板参数是指针也属于偏特化
 // 且模板参数传指针，但是T1和T2是基类型，目的是为了分辨const
 template <typename T1, typename T2>
-class Data <T1*, T2*>
+class Data<T1*, T2*>
 {
 public:
-	Data()
-	{
-		cout << "Data<T1*, T2*>" << endl;
-	}
+    Data()
+    {
+        cout << "Data<T1*, T2*>" << endl;
+    }
 };
 // 引用也是偏特化
 template <typename T1, typename T2>
-class Data <T1&, T2&>
+class Data<T1&, T2&>
 {
 public:
-	Data()
-	{
-		cout << "Data<T1&, T2&>" << endl;
-	}
+    Data()
+    {
+        cout << "Data<T1&, T2&>" << endl;
+    }
 };
 
 template <typename T1, typename T2>
-class Data <T1&, T2*>
+class Data<T1&, T2*>
 {
 public:
-	Data()
-	{
-		cout << "Data<T1&, T2*>" << endl;
-	}
+    Data()
+    {
+        cout << "Data<T1&, T2*>" << endl;
+    }
 
-	void Push(const T1& x)
-	{}
+    void Push(const T1& x)
+    {
+    }
 };
 
 // const int * 不能解引用修改基类型的值，但是可以修改指向
@@ -164,19 +168,18 @@ public:
 //	return 0;
 //}
 
-
 int main()
 {
-	Data<int, int> d1;
-	Data<int, char> d2;
-	Data<int, double> d3;
-	Data<char, double> d4;
-	Data<char, char> d5;
-	Data<char*, char*> d6;
-	Data<int*, char*> d7;
-	Data<int&, char&> d8;
-	Data<int&, double&> d9;
-	Data<int&, int*> d10;
+    Data<int, int> d1;
+    Data<int, char> d2;
+    Data<int, double> d3;
+    Data<char, double> d4;
+    Data<char, char> d5;
+    Data<char*, char*> d6;
+    Data<int*, char*> d7;
+    Data<int&, char&> d8;
+    Data<int&, double&> d9;
+    Data<int&, int*> d10;
 
-	return 0;
+    return 0;
 }
