@@ -7,8 +7,8 @@
 // @lc code=start
 class Solution
 {
-  public:
-    vector<int> searchRange(vector<int> &nums, int target)
+public:
+    vector<int> searchRange(vector<int>& nums, int target)
     {
         // 寻找两个端点时的循环不能用等于，不然等于的时候两种端点都会死循环
         if (nums.empty())

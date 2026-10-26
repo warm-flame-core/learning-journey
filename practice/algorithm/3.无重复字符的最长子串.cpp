@@ -54,11 +54,11 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    int lengthOfLongestSubstring(string s) {
-        
+    int lengthOfLongestSubstring(string s)
+    {
     }
 };
 // @lc code=end
-

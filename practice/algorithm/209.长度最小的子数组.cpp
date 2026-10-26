@@ -7,8 +7,8 @@
 // @lc code=start
 class Solution
 {
-  public:
-    int minSubArrayLen(int target, vector<int> &nums)
+public:
+    int minSubArrayLen(int target, vector<int>& nums)
     {
         int n = nums.size();
         int left = 0;

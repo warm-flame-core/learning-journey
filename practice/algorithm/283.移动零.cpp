@@ -7,8 +7,8 @@
 // @lc code=start
 class Solution
 {
-  public:
-    void moveZeroes(vector<int> &nums)
+public:
+    void moveZeroes(vector<int>& nums)
     {
         int dst = -1;
         int cur = 0;
