@@ -29,10 +29,44 @@
     "files.encoding": "utf8",
     "files.autoGuessEncoding": true,
 
-    // ---- Git ----
+    // ============================================================
+    // Git：本机 + 远端同一个仓库，保持"一条直线"历史
+    // ============================================================
+
+    // 从子目录打开时也能识别到仓库根，方便提交
     "git.openRepositoryInParentFolders": "always",
+
+    // 后台自动 fetch（每 180 秒），随时能看到远端有没有新提交
     "git.autofetch": true,
-    "git.suggestSmartCommit": false,
+    "git.autofetchPeriod": 180,
+
+    // ★ 关键：同步时用 rebase，而不是 merge —— 保证一条分支线，不产生 merge commit
+    "git.rebaseWhenSync": true,
+
+    // pull 时把远端标签也带下来（不影响历史，只影响本地标签可见性）
+    "git.pruneOnFetch": true,
+
+    // 提交后不自动 push，由你手动点"同步更改"决定节奏
+    "git.postCommitCommand": "none",
+
+    // 允许"暂存全部 + 写消息 + Ctrl+Enter"一步提交
+    "git.enableSmartCommit": true,
+    "git.smartCommitChanges": "all",
+
+    // 同步前不弹二次确认（你自己的仓库，减少打扰）
+    "git.confirmSync": false,
+
+    // 未跟踪文件在源代码管理面板里单独分组，避免误提交
+    "git.untrackedChanges": "separate",
+
+    // 分支按最近提交时间排序
+    "git.branchSortOrder": "committerdate",
+
+    // 冲突时用三栏合并编辑器，比内联冲突标记清楚
+    "git.mergeEditor": true,
+
+    // 推送成功给个提示，便于确认两边同步完成
+    "git.showPushSuccessNotification": true,
 
     // ---- 搜索/资源管理器排除构建产物 ----
     "search.exclude": {
