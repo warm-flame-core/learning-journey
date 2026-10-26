@@ -1,0 +1,54 @@
+---
+# ============================================================
+# Visual Studio 2026 默认 C/C++ 风格（clang-format 表达）
+# 作用范围：仅 C/C++。其他语言请用 .editorconfig / 各自格式化器
+# ============================================================
+Language: Cpp
+BasedOnStyle: Microsoft
+
+# 缩进：4 空格，禁用 Tab
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+# 花括号：Allman（左括号独占一行）
+BreakBeforeBraces: Allman
+
+# 访问修饰符顶格（与 VS 一致）
+AccessModifierOffset: -4
+
+# 不强制折行
+ColumnLimit: 0
+
+# 指针/引用靠左：int* p / const T& r
+PointerAlignment: Left
+DerivePointerAlignment: false
+
+# 短函数允许单行内联（VS 默认行为）
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+
+# case 标签不缩进
+IndentCaseLabels: false
+
+# 重排 include（分组、按字母序）
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^<.*\.h>'
+    Priority: 1
+  - Regex: '^<.*>'
+    Priority: 2
+  - Regex: '^".*"'
+    Priority: 3
+
+# 注释排版交给 VS 风格（不强制重排）
+ReflowComments: false
+
+# 其它 VS 习惯
+SpaceBeforeParens: ControlStatements
+FixNamespaceComments: true
+NamespaceIndentation: None

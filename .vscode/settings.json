@@ -1,0 +1,49 @@
+{
+    // ============================================================
+    // 仓库级 C/C++ 基线配置（Visual Studio 2026 默认风格）
+    // 子目录若有自己的 .vscode/settings.json，会覆盖这里的同名项
+    // ============================================================
+
+    // ---- 保存行为：只按 Ctrl+S 时格式化，绝不自动保存 ----
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.formatOnType": false,
+    "files.autoSave": "off",
+
+    // ---- C/C++ 格式化引擎：交给 .clang-format 文件，保证分目录不同风格 ----
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "file",
+    "C_Cpp.clang_format_fallbackStyle": "{BasedOnStyle: Microsoft, BreakBeforeBraces: Allman, IndentWidth: 4}",
+
+    // ---- 缩进：4 空格，禁止 Tab，禁止被旧文件带偏 ----
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+
+    // ---- 保存时的清理动作 ----
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+
+    // ---- 编码：保持既有文件编码，新文件默认 UTF-8 ----
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": true,
+
+    // ---- Git ----
+    "git.openRepositoryInParentFolders": "always",
+    "git.autofetch": true,
+    "git.suggestSmartCommit": false,
+
+    // ---- 搜索/资源管理器排除构建产物 ----
+    "search.exclude": {
+        "**/build": true,
+        "**/Debug": true,
+        "**/Release": true,
+        "**/MDK-ARM": true
+    },
+    "files.watcherExclude": {
+        "**/build/**": true,
+        "**/Debug/**": true,
+        "**/Release/**": true
+    }
+}

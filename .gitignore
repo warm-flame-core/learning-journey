@@ -69,8 +69,19 @@
 .vs/
 **/.vs/
 
-# VS Code
-.vscode/
+
+# VS Code —— 放行共享配置，忽略本机私有状态
+**/.vscode/*
+!**/.vscode/settings.json
+!**/.vscode/extensions.json
+!**/.vscode/launch.json
+!**/.vscode/tasks.json
+
+# 以下为机器/本机生成，永不入库
+**/.vscode/c_cpp_properties.json
+**/.vscode/compile_commands.json
+**/.vscode/ipch/
+**/.vscode/.browse.*.json
 *.code-workspace
 
 # CLion / JetBrains

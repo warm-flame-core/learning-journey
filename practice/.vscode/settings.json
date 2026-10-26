@@ -1,0 +1,25 @@
+{
+    // ============================================================
+    // 刷题（LeetCode）专属配置
+    // 风格由 practice/algorithm/.clang-format 决定（LLVM 缩进 + Allman）
+    // 只影响 C/C++，不影响其他语言
+    // ============================================================
+
+    // 按 Ctrl+S 保存时格式化；绝不自动保存
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.formatOnType": false,
+    "files.autoSave": "off",
+
+    // C/C++ 用 clang-format，风格读目录里的 .clang-format 文件
+    "editor.defaultFormatter": "ms-vscode.cpptools",
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "file",
+
+    // 刷题文件统一 LF，方便和远端/平台保持一致
+    "files.eol": "\n",
+
+    // 保存清理
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true
+}

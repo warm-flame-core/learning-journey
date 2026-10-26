@@ -1,0 +1,47 @@
+{
+    // ============================================================
+    // 嵌入式（STM32 / Keil）专属配置
+    // ★ 只改代码排版，绝不改编译器与工程配置
+    //   编译器仍由 Keil Assistant / c_cpp_properties.json 决定
+    //   风格由 stm32/.clang-format 决定（不重排 include）
+    // ============================================================
+
+    // 按 Ctrl+S 保存时格式化；绝不自动保存
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.formatOnType": false,
+    "files.autoSave": "off",
+
+    // C/C++ 用 clang-format，风格读 stm32/.clang-format
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "file",
+
+    // 嵌入式保持 CRLF（Keil / Windows 工程习惯）
+    "files.eol": "\r\n",
+
+    // 保存清理
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+
+    // 只做语法提示，不接管编译；编译由 Keil 负责
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.default.cStandard": "c17",
+    "C_Cpp.default.cppStandard": "c++17",
+
+    // 汇编文件识别
+    "files.associations": {
+        "*.s": "asm",
+        "*.S": "asm"
+    },
+
+    // 隐藏编译中间产物
+    "files.exclude": {
+        "**/*.o": true,
+        "**/*.d": true,
+        "**/*.crf": true,
+        "**/*.lnp": true,
+        "**/*.lst": true,
+        "**/*.axf": true,
+        "**/MDK-ARM/**": true
+    }
+}

@@ -1,0 +1,34 @@
+{
+    // ============================================================
+    // 远端 Linux 开发（SSH）专属配置
+    // 注意：远程窗口的设置优先级是 工作区 > 远程(Machine) > 用户
+    // 这里写的是"文件夹级"，会覆盖远端 Machine/settings.json
+    // ============================================================
+
+    // 按 Ctrl+S 保存时格式化；绝不自动保存
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.formatOnType": false,
+    "files.autoSave": "off",
+
+    // C/C++ 用 clang-format，风格读目录里的 .clang-format 文件
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "file",
+
+    // Linux 源码统一 LF
+    "files.eol": "\n",
+
+    // 保存清理
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+
+    // C 语言标准（Linux 系统编程常用）
+    "C_Cpp.default.cStandard": "c17",
+    "C_Cpp.default.cppStandard": "c++17",
+
+    // 减少远端文件监听压力
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/build/**": true
+    }
+}

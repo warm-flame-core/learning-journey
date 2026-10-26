@@ -1,0 +1,37 @@
+---
+# ============================================================
+# 嵌入式（STM32 / Keil）专用：继承 VS2026 风格，但
+#   1) 不重排 include —— CubeMX 生成的 include 顺序有语义
+#   2) 不动宏/条件编译块内的对齐
+# 仅作用于 stm32/ 目录下的 C/C++ 文件
+# ============================================================
+Language: Cpp
+BasedOnStyle: Microsoft
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+BreakBeforeBraces: Allman
+AccessModifierOffset: -4
+ColumnLimit: 0
+
+PointerAlignment: Left
+DerivePointerAlignment: false
+
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+
+IndentCaseLabels: false
+
+# ★ 关键：嵌入式不重排 include
+SortIncludes: Never
+IncludeBlocks: Preserve
+
+ReflowComments: false
+SpaceBeforeParens: ControlStatements
+FixNamespaceComments: true
+NamespaceIndentation: None
