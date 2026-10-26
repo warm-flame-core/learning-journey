@@ -6,13 +6,15 @@
 void ChildWrite(int wfd)
 {
     char buffer[1024];
+    char c = 0;
     int cnt = 0;
     while (true)
     {
-        snprintf(buffer, sizeof(buffer), "我是子进程，我的pid：%d，cnt：%d",
-                 getpid(), cnt++);
-        write(wfd, buffer, strlen(buffer));
-        sleep(1);
+        // snprintf(buffer, sizeof(buffer), "我是子进程，我的pid：%d，cnt：%d", getpid(), cnt++);
+        // write(wfd, buffer, strlen(buffer));
+        // sleep(1);
+        write(wfd, &c, 1);
+        printf("child cnt : %d\n", cnt++);
     }
 }
 
@@ -58,7 +60,7 @@ int main()
     // 关闭读写通道
     // 父进程读，子进程写
     close(fds[1]);
-    FatherRead(fds[0]);
+    // FatherRead(fds[0]);
     waitpid(id, nullptr, 0);
 
     return 0;
