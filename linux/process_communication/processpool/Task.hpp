@@ -41,6 +41,7 @@ public:
     {
         if (code >= 0 && code < _tasks.size())
         {
+            // 方括号只是取出来，要加括号才是执行，不然不会执行
             _tasks[code]();
         }
     }

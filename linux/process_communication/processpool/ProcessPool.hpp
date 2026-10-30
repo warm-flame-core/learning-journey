@@ -1,6 +1,7 @@
 #ifndef __PROCESSPOOL_HPP__
 #define __PROCESSPOOL_HPP__
 
+#include <sys/wait.h>
 #include <unistd.h>
 
 #include <iostream>
@@ -19,6 +20,15 @@ public:
     }
     ~Channel()
     {
+    }
+    void Close()
+    {
+        close(_wfd);
+    }
+    void Wait()
+    {
+        pid_t rid = waitpid(_subid, nullptr, 0);
+        (void)rid;
     }
     void Send(int code)
     {
@@ -47,6 +57,24 @@ public:
     {
     }
 
+    // 关闭父进程wfd
+    void CloseSubProcess()
+    {
+        for (auto& channel : _channels)
+        {
+            channel.Close();
+            std::cout << "关闭的子进程是：" << channel.Name() << std::endl;
+        }
+    }
+    // 回收所有子进程
+    void WaitSubProcess()
+    {
+        for (auto& channel : _channels)
+        {
+            channel.Wait();
+            std::cout << "回收的子进程是：" << channel.Name() << std::endl;
+        }
+    }
     void PrintChannel()
     {
         for (auto& channel : _channels)
@@ -83,6 +111,14 @@ public:
     ~ProcessPool()
     {
     }
+    void Stop()
+    {
+        // 关闭父进程wfd
+        _cm.CloseSubProcess();
+        // 回收所有子进程
+        _cm.WaitSubProcess();
+    }
+
     void Run()
     {
         // 选择任务
@@ -115,6 +151,8 @@ public:
             else if (n == 0)
             {
                 std::cout << "子进程退出" << std::endl;
+                break;
+                // 要记得退出之后结束循环，不然一直是0会死循环
             }
             else
             {
