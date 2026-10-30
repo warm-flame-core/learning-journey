@@ -8,8 +8,7 @@ int main()
     int task_code = 0;
     while (1)
     {
-        pp.PushTask(task_code);
-        task_code++;
+        pp.Run();
         sleep(1);
     }
     sleep(1000);

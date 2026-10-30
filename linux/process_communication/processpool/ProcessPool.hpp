@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "Task.hpp"
 // 先描述
 class Channel
 {
@@ -75,15 +76,21 @@ public:
     ProcessPool(int num)
         : _process_num(num)
     {
+        _tasks.Register(Printlog);
+        _tasks.Register(Downdload);
+        _tasks.Register(Upload);
     }
     ~ProcessPool()
     {
     }
-    void PushTask(int taskcode)
+    void Run()
     {
+        // 选择任务
+        int taskcode = _tasks.Code();
         // 选择信道
         auto& c = _cm.Select();
         std::cout << "选择了一个子进程：" << c.Name() << std::endl;
+        // 发送任务
         c.Send(taskcode);
         std::cout << "任务码是：" << taskcode << std::endl;
     }
@@ -101,6 +108,9 @@ public:
                     continue;
                 }
                 std::cout << "子进程[" << getpid() << "]收到任务码：" << code << std::endl;
+                _tasks.Execute(code);
+                std::cout << std::endl;
+                std::cout << std::endl;
             }
             else if (n == 0)
             {
@@ -157,6 +167,7 @@ public:
 private:
     ChannelManager _cm;
     int _process_num;
+    TaskManager _tasks;
 };
 
 #endif
