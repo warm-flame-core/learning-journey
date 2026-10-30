@@ -19,6 +19,11 @@ public:
     ~Channel()
     {
     }
+    void Send(int code)
+    {
+        int n = write(_wfd, &code, sizeof(code));
+        (void)n;
+    }
     int Fd() { return _wfd; }
     pid_t Subid() { return _subid; }
     std::string Name() { return _name; }
@@ -34,11 +39,13 @@ class ChannelManager
 {
 public:
     ChannelManager()
+        : _next(0)
     {
     }
     ~ChannelManager()
     {
     }
+
     void PrintChannel()
     {
         for (auto& channel : _channels)
@@ -50,9 +57,17 @@ public:
     {
         _channels.emplace_back(wfd, subid);
     }
+    Channel& Select()
+    {
+        auto& c = _channels[_next];
+        _next++;
+        _next %= _channels.size();
+        return c;
+    }
 
 private:
     std::vector<Channel> _channels;
+    int _next;
 };
 class ProcessPool
 {
@@ -64,12 +79,37 @@ public:
     ~ProcessPool()
     {
     }
+    void PushTask(int taskcode)
+    {
+        // 选择信道
+        auto& c = _cm.Select();
+        std::cout << "选择了一个子进程：" << c.Name() << std::endl;
+        c.Send(taskcode);
+        std::cout << "任务码是：" << taskcode << std::endl;
+    }
     void Work(int rfd)
     {
         while (1)
         {
-            std::cout << "我是子进程：" << rfd << std::endl;
-            sleep(5);
+            // 如果父进程写得慢，子进程读得快，那么子进程就会阻塞等待
+            int code = 0;
+            ssize_t n = read(rfd, &code, sizeof(code));
+            if (n > 0)
+            {
+                if (n != sizeof(code))
+                {
+                    continue;
+                }
+                std::cout << "子进程[" << getpid() << "]收到任务码：" << code << std::endl;
+            }
+            else if (n == 0)
+            {
+                std::cout << "子进程退出" << std::endl;
+            }
+            else
+            {
+                std::cout << "读取失败" << std::endl;
+            }
         }
     }
     void Debug()
