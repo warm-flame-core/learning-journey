@@ -57,6 +57,18 @@ public:
     {
     }
 
+    // 可以把关闭和回收都放到一起
+    void CloseAndWait()
+    {
+        for (auto& channel : _channels)
+        {
+            channel.Close();
+            std::cout << "关闭的子进程是：" << channel.Name() << std::endl;
+            channel.Wait();
+            std::cout << "回收的子进程是：" << channel.Name() << std::endl;
+        }
+    }
+
     // 关闭父进程wfd
     void CloseSubProcess()
     {
@@ -113,10 +125,11 @@ public:
     }
     void Stop()
     {
-        // 关闭父进程wfd
-        _cm.CloseSubProcess();
-        // 回收所有子进程
-        _cm.WaitSubProcess();
+        // // 关闭父进程wfd
+        // _cm.CloseSubProcess();
+        // // 回收所有子进程
+        // _cm.WaitSubProcess();
+        _cm.CloseAndWait();
     }
 
     void Run()
