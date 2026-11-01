@@ -60,12 +60,21 @@ public:
     // 可以把关闭和回收都放到一起
     void CloseAndWait()
     {
-        for (auto& channel : _channels)
+        // for (auto& channel : _channels)
+        // {
+        //     channel.Close();
+        //     std::cout << "关闭的子进程是：" << channel.Name() << std::endl;
+        //     channel.Wait();
+        //     std::cout << "回收的子进程是：" << channel.Name() << std::endl;
+        // }
+
+        // 可以倒着关闭子进程，因为后面的子进程一定还有之前的管道的写端，一次关闭保证每次管道文件正式关闭的时候没有写端
+        for (int i = _channels.size() - 1; i >= 0; i--)
         {
-            channel.Close();
-            std::cout << "关闭的子进程是：" << channel.Name() << std::endl;
-            channel.Wait();
-            std::cout << "回收的子进程是：" << channel.Name() << std::endl;
+            _channels[i].Close();
+            std::cout << "关闭的子进程是：" << _channels[i].Name() << std::endl;
+            _channels[i].Wait();
+            std::cout << "回收的子进程是：" << _channels[i].Name() << std::endl;
         }
     }
 
