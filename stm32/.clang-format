@@ -1,37 +1,53 @@
----
 # ============================================================
-# 嵌入式（STM32 / Keil）专用：继承 VS2026 风格，但
-#   1) 不重排 include —— CubeMX 生成的 include 顺序有语义
-#   2) 不动宏/条件编译块内的对齐
-# 仅作用于 stm32/ 目录下的 C/C++ 文件
+# 嵌入式（STM32 / Keil）专用 clang-format 配置
+# 放在 stm32/ 根目录，子项目打开时会自动向上查找生效
 # ============================================================
+
+# 语言类型：Cpp 同时覆盖 C 和 C++
 Language: Cpp
+
+# 基础风格：继承 Microsoft 风格（接近 Keil/VS 默认排版）
 BasedOnStyle: Microsoft
 
-IndentWidth: 4
-TabWidth: 4
-UseTab: Never
+# ============ 缩进与空白 ============
+IndentWidth: 2                              # 缩进宽度：2 格，与 VS Code editor.tabSize 保持一致
+TabWidth: 2                                 # Tab 宽度：同上，保持统一
+UseTab: Never                               # 禁止使用 Tab，强制用空格缩进
+MaxEmptyLinesToKeep: 2                      # 最多保留 2 个连续空行，不压缩你手动留的分段空行
 
-BreakBeforeBraces: Allman
-AccessModifierOffset: -4
-ColumnLimit: 0
+# ============ 花括号与块结构 ============
+BreakBeforeBraces: Allman                   # 花括号独占一行（Allman 风格），符合嵌入式常见写法
+AccessModifierOffset: -4                    # 访问修饰符（public/private/protected）相对类体缩进 -4 格
+KeepEmptyLinesAtTheStartOfBlocks: false     # 块起始处不保留空行，保持紧凑
 
-PointerAlignment: Left
-DerivePointerAlignment: false
+# ============ 行宽与折行 ============
+ColumnLimit: 0                              # 不限制行宽，避免长宏 / 长路径被强制折行
+AllowAllParametersOfDeclarationOnNextLine: false # 函数参数过长时不允许折到下一行（配合 ColumnLimit: 0）
 
-AllowShortFunctionsOnASingleLine: Inline
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: false
-AllowShortBlocksOnASingleLine: Never
-AllowShortCaseLabelsOnASingleLine: false
+# ============ 指针与引用 ============
+PointerAlignment: Left                      # 指针星号靠左：uint32_t *ptr
+DerivePointerAlignment: false               # 禁止自动推导指针对齐方式，固定使用上面的设置
 
-IndentCaseLabels: false
+# ============ 短语句压缩控制 ============
+AllowShortFunctionsOnASingleLine: Inline    # 允许短函数写在同一行（仅限函数体内只有一条语句的情况）
+AllowShortIfStatementsOnASingleLine: Never  # 禁止短 if 语句压缩到一行，保持可读性
+AllowShortLoopsOnASingleLine: false         # 禁止短循环压缩到一行
+AllowShortBlocksOnASingleLine: Never        # 禁止短代码块压缩到一行
+AllowShortCaseLabelsOnASingleLine: false    # 禁止短 case 标签压缩到一行
+IndentCaseLabels: false                     # switch 的 case 标签不额外缩进，与 switch 同级
 
-# ★ 关键：嵌入式不重排 include
-SortIncludes: Never
-IncludeBlocks: Preserve
+# ============ #include 控制（嵌入式核心） ============
+SortIncludes: Never                         # ★ 关键：禁止重排 #include，保留 CubeMX 生成的顺序
+IncludeBlocks: Preserve                     # 保留 #include 的分块结构（系统头 / 项目头之间的空行不动）
 
-ReflowComments: false
-SpaceBeforeParens: ControlStatements
-FixNamespaceComments: true
-NamespaceIndentation: None
+# ============ 预处理指令缩进 ============
+IndentPPDirectives: AfterHash               # ★ 关键：让 #if / #ifdef 内的 #include 按层级缩进
+
+# ============ 字符串与注释 ============
+MergeAdjacentStringLiterals: false          # 不合并相邻字符串字面量，避免调试打印时误合并
+ReflowComments: false                       # 禁止自动重排注释换行，保留手动对齐
+
+# ============ 命名空间与其他 ============
+SpaceBeforeParens: ControlStatements        # 控制语句（if/for/while）的括号前加空格
+FixNamespaceComments: true                  # 自动修复 namespace 末尾的注释，保持规范
+NamespaceIndentation: None                  # namespace 内部不额外缩进，避免嵌套过深

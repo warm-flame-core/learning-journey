@@ -258,7 +258,7 @@ void W25Qxx_CS_Disable()
 {
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_6, GPIO_PIN_SET);
 }
-uint32_t W25Qxx_ReadID()
+uint32_t W25Qxx_ReadID_version1()
 {
   uint8_t cmd = 0x9F;
   uint8_t tx_buffer[4] = {cmd, 0x00, 0x00, 0x00};
@@ -274,6 +274,31 @@ uint32_t W25Qxx_ReadID()
     goto EXIT;
   }
   id = ((rx_buffer[1] << 16) | (rx_buffer[2] << 8) | (rx_buffer[3] << 0));
+EXIT:
+  W25Qxx_CS_Disable();
+  return id;
+}
+uint32_t W25Qxx_ReadID()
+{
+  uint8_t cmd = 0x9F;
+  uint8_t rx_buffer[3] = {0x00, 0x00, 0x00};
+  HAL_StatusTypeDef state;
+  uint32_t id = 0;
+  W25Qxx_CS_Enable();
+  state = HAL_SPI_Transmit(&hspi1, &cmd, 1, HAL_MAX_DELAY);
+  if (state != HAL_OK)
+  {
+    printf("HAL_SPI_Transmit error\n");
+    goto EXIT;
+  }
+  state = HAL_ERROR;
+  state = HAL_SPI_Receive(&hspi1, rx_buffer, 3, HAL_MAX_DELAY);
+  if (state != HAL_OK)
+  {
+    printf("HAL_SPI_Receive error\n");
+    goto EXIT;
+  }
+  id = ((rx_buffer[0] << 16) | (rx_buffer[1] << 8) | (rx_buffer[2] << 0));
 EXIT:
   W25Qxx_CS_Disable();
   return id;

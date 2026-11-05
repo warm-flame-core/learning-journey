@@ -330,3 +330,5 @@ stm32/**/.settings/
 # 2. 放行目标 App 目录及其内部的所有内容
 !learning-journey/stm32/I2C_EEPROM_TEST/App/
 !learning-journey/stm32/I2C_EEPROM_TEST/App/**
+!learning-journey/stm32/SPI_Flash_Test/APP_Test/
+!learning-journey/stm32/SPI_Flash_Test/APP_Test/**
