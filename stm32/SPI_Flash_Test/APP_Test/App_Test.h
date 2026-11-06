@@ -13,6 +13,9 @@ extern "C"
   // 测试读取第一个寄存器
   void Test_W25Q64_Driver_Reg1();
 
+  // 测试读写使能
+  void Test_W25Q64_Driver_Write_Enable_Disable();
+
 #ifdef __cplusplus
 }
 #endif

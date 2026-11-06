@@ -9,9 +9,15 @@ extern "C"
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#define CMD_WQ25Qxx_JEDEC_ID 0x9F
-#define CMD_WQ25Qxx_READ_STATUS_REG1 0x05
-#define CMD_WQ25Qxx_WRITE_ENABLE 0x06
+
+#define CMD_W25QXX_JEDEC_ID 0x9F
+#define CMD_W25QXX_READ_STATUS_REG1 0x05
+#define CMD_W25QXX_WRITE_ENABLE 0x06
+#define CMD_W25QXX_WRITE_DISABLE 0x04
+#define CMD_W25QXX_SECTOR_EARSE 0X20
+
+#define W25Q64XX_STATUS_BUSY 0x01
+#define SECTOR_ADDRESS_MSK 0xFFF
 
   typedef struct
   {
@@ -36,6 +42,18 @@ extern "C"
 
   // 打开W25Qxx写使能
   void BSP_W25Qxx_Write_Enable();
+
+  // 关闭W25Qxx写使能
+  void BSP_W25Qxx_Write_Disable();
+
+  // 等待写入完成
+  void BSP_W25Qxx_Wait_For_Write_Complete_Inefficient();
+  void BSP_W25Qxx_Wait_For_Write_Complete_Efficient();
+
+  // 扇区擦除
+  void BSP_W25Qxx_Sector_Earse(uint32_t sector_address);
+
+
 #ifdef __cplusplus
 }
 #endif

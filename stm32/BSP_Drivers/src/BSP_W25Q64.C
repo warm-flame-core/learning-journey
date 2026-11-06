@@ -1,7 +1,7 @@
 #include "BSP_W25Q64.h"
 spi_flash_t g_wq25xx;
-static int g_is_init = false;
-
+static bool g_is_init = false;
+const int8_t dummy = 0x00;
 
 // 使能与取消使能
 static void BSP_W25Qxx_CS_Enable()
@@ -47,7 +47,7 @@ uint32_t BSP_W25Qxx_ID()
   if (!g_is_init)
     return 0x0;
   BSP_W25Qxx_CS_Enable();
-  uint8_t cmd = CMD_WQ25Qxx_JEDEC_ID;
+  uint8_t cmd = CMD_W25QXX_JEDEC_ID;
   HAL_StatusTypeDef state = HAL_SPI_Transmit(g_wq25xx.hspi, &cmd, sizeof(cmd), HAL_MAX_DELAY);
   if (state != HAL_OK)
   {
@@ -71,18 +71,18 @@ uint8_t BSP_W25Qxx_Statue1_Reg()
   if (!g_is_init)
     return 0x0;
   BSP_W25Qxx_CS_Enable();
-  uint8_t cmd = CMD_WQ25Qxx_READ_STATUS_REG1;
+  uint8_t cmd = CMD_W25QXX_READ_STATUS_REG1;
   uint8_t status_reg = 0xFF;
   HAL_StatusTypeDef state = HAL_SPI_Transmit(g_wq25xx.hspi, &cmd, sizeof(cmd), HAL_MAX_DELAY);
   if (state != HAL_OK)
   {
-    printf("BSP_W25Qxx_Statue1_Reg HAL_SPI_Transmit ID error , cmd is :0x%x, state :0x%x\n", cmd, state);
+    printf("BSP_W25Qxx_Statue1_Reg HAL_SPI_Transmit  error , cmd is :0x%x, state :0x%x\n", cmd, state);
     goto EXIT;
   }
   state = HAL_SPI_Receive(g_wq25xx.hspi, &status_reg, sizeof(status_reg), HAL_MAX_DELAY);
   if (state != HAL_OK)
   {
-    printf("BSP_W25Qxx_Statue1_Reg HAL_SPI_Receive ID error , cmd is :0x%x, state :0x%x\n", cmd, state);
+    printf("BSP_W25Qxx_Statue1_Reg HAL_SPI_Receive error , cmd is :0x%x, state :0x%x\n", cmd, state);
     goto EXIT;
   }
 EXIT:
@@ -95,11 +95,87 @@ void BSP_W25Qxx_Write_Enable()
   if (!g_is_init)
     return;
   BSP_W25Qxx_CS_Enable();
-  uint8_t cmd = CMD_WQ25Qxx_WRITE_ENABLE;
+  uint8_t cmd = CMD_W25QXX_WRITE_ENABLE;
   HAL_StatusTypeDef state = HAL_SPI_Transmit(g_wq25xx.hspi, &cmd, sizeof(cmd), HAL_MAX_DELAY);
   if (state != HAL_OK)
   {
-    printf("BSP_W25Qxx_Statue1_Reg HAL_SPI_Transmit ID error , cmd is :0x%x, state :0x%x\n", cmd, state);
+    printf("BSP_W25Qxx_Write_Enable HAL_SPI_Transmit Enable error , cmd is :0x%x, state :0x%x\n", cmd, state);
   }
   BSP_W25Qxx_CS_Disable();
+}
+
+void BSP_W25Qxx_Write_Disable()
+{
+  if (!g_is_init)
+    return;
+  BSP_W25Qxx_CS_Enable();
+  uint8_t cmd = CMD_W25QXX_WRITE_DISABLE;
+  HAL_StatusTypeDef state = HAL_SPI_Transmit(g_wq25xx.hspi, &cmd, sizeof(cmd), HAL_MAX_DELAY);
+  if (state != HAL_OK)
+  {
+    printf("BSP_W25Qxx_Write_Disable HAL_SPI_Transmit Disable error , cmd is :0x%x, state :0x%x\n", cmd, state);
+  }
+  BSP_W25Qxx_CS_Disable();
+}
+
+void BSP_W25Qxx_Wait_For_Write_Complete_Inefficient()
+{
+  if (!g_is_init)
+    return;
+  // BSP_W25Qxx_Statue1_Reg内部不断拉低再拉高很浪费时间
+  while (BSP_W25Qxx_Statue1_Reg() & W25Q64XX_STATUS_BUSY)
+  {
+  };
+}
+
+void BSP_W25Qxx_Wait_For_Write_Complete_Efficient()
+{
+  if (!g_is_init)
+    return;
+  BSP_W25Qxx_CS_Enable();
+  uint8_t cmd = CMD_W25QXX_READ_STATUS_REG1;
+  HAL_StatusTypeDef state = HAL_SPI_Transmit(g_wq25xx.hspi, &cmd, sizeof(cmd), HAL_MAX_DELAY);
+  if (state != HAL_OK)
+  {
+    printf("BSP_W25Qxx_Wait_For_Write_Complete_Efficient HAL_SPI_Transmit Read error , cmd is :0x%x, state :0x%x\n", cmd, state);
+    goto EXIT;
+  }
+  uint8_t reg1 = 0xFF;
+  do
+  {
+    HAL_SPI_TransmitReceive(g_wq25xx.hspi, &dummy, &reg1, sizeof(dummy), HAL_MAX_DELAY);
+  } while (reg1 & W25Q64XX_STATUS_BUSY);
+
+EXIT:
+  BSP_W25Qxx_CS_Disable();
+}
+
+void BSP_W25Qxx_Sector_Earse(uint32_t sector_address)
+{
+  if (!g_is_init)
+    return;
+  if (sector_address & SECTOR_ADDRESS_MSK)
+  {
+    printf("BSP_W25Qxx_Sector_Earse error, address 0x%x not sector aligned\n", sector_address);
+    return;
+  }
+  if (sector_address >= g_wq25xx.mem_total_size)
+  {
+    printf("BSP_W25Qxx_Sector_Earse error, address 0x%x out of range flash size\n", sector_address);
+    return;
+  }
+  uint8_t cmd[4] = {CMD_W25QXX_SECTOR_EARSE, (uint8_t)(sector_address >> 16), (uint8_t)(sector_address >> 8), (uint8_t)(sector_address >> 0)};
+  BSP_W25Qxx_CS_Enable();
+  HAL_StatusTypeDef state = HAL_SPI_Transmit(g_wq25xx.hspi, cmd, sizeof(cmd) / sizeof(cmd[0]), HAL_MAX_DELAY);
+  if (state != HAL_OK)
+  {
+    printf("BSP_W25Qxx_Sector_Earse HAL_SPI_Transmit ID error , cmd is :0x%x, state :0x%x\n", cmd[0], state);
+    goto EXIT;
+  }
+EXIT:
+  BSP_W25Qxx_CS_Disable();
+  if (state == HAL_OK)
+  {
+    BSP_W25Qxx_Wait_For_Write_Complete_Efficient();
+  }
 }

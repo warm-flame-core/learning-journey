@@ -99,6 +99,7 @@ int main(void)
   // For test
   Test_W25Q64_Driver_Init(&hspi1, GPIOE, GPIO_PIN_6);
   Test_W25Q64_Driver_Reg1();
+  Test_W25Q64_Driver_Write_Enable_Disable();
 
   /* USER CODE END 2 */
 
