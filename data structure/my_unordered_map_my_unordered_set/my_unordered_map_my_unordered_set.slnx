@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="my_unordered_map_my_unordered_set/my_unordered_map_my_unordered_set.vcxproj" Id="46ff35b8-6a21-49a7-badf-e20e86919ea6" />
+</Solution>

@@ -1,280 +1,58 @@
-# ==========================================
-# 白名单规则：只保留自己写的源代码
-# ==========================================
-
-*                         # 忽略所有文件
-!*/                       # 允许所有目录（让 Git 能进入子文件夹）
-
-# 允许自己写的所有源代码
-!*.c
-!*.cpp
-!*.cc
-!*.cxx
-!*.h
-!*.hpp
-!*.hxx
-!*.s
-!*.S
-!*.py
-!*.js
-!*.ts
-!*.vue
-!*.sql
-!*.sh
-!*.bat
-!*.ps1
-!*.yml
-!*.yaml
-!*.json
-!*.xml
-!*.toml
-!*.ini
-!*.cfg
-!*.conf
-!*.md
-!*.txt
-
-# 允许必要的项目配置文件
-!CMakeLists.txt
-!*.cmake
-!Dockerfile
-!*.dockerfile
-!docker-compose.yml
-!*.proto
-!.env.example
-!package.json
-!package-lock.json
-!yarn.lock
-!requirements.txt
-!pyproject.toml
-!.gitignore
-!.gitattributes
-!.gitmodules
-
-# 允许 STM32CubeMX 的 .ioc 文件（在后面会被更精确的规则限制）
-!*.ioc
-
-# ==========================================
-# 忽略 IDE 和编辑器
-# ==========================================
-
-# Visual Studio 工程文件（保留 .sln 和 .vcxproj 以便打开项目，但忽略用户配置）
-*.sln
-*.slnx
-*.vcxproj
-*.vcxproj.filters
-*.vcxproj.user
-*.suo
-*.user
-.vs/
-**/.vs/
+# ============================================================================
+# 根 .gitignore —— 全仓库「保底」层（跨语言 / 跨 IDE 通用）
+# ----------------------------------------------------------------------------
+# 设计模型：**默认放行**（黑名单式），不再是原来的白名单式。
+#
+#   · 源码 / 配置 / 文档 / 笔记 / 你新建的任何文件与目录，git add 都会
+#     自动纳入，不需要回来改规则，也不需要用 git add -f 强推。
+#   · 下面只拦截四类：生成物、本机私有状态、第三方依赖、二进制产物。
+#   · 以后新建分类目录（比如 rust/、java/）即使还没写自己的 .gitignore，
+#     这一层也照样生效 —— 这就是「保底」的含义。
+#   · 子目录的 .gitignore 优先级高于本文件，可在局部用 ! 反选解封。
+#
+# ★ 一个 Git 硬限制请记住：
+#   一旦某一级把「整个目录」忽略掉（例如 Drivers/），Git 就不会再进去读该
+#   目录里的 .gitignore，里面的文件也无法用 ! 救回来。
+#   所以本文件只忽略「确定可以重新生成」的目录。
+#
+# ★ 想临时解封某个被忽略的目录：在它的「父目录」的 .gitignore 里写一行
+#   !目录名/   —— 注意必须写在父级，写在被忽略目录内部是无效的。
+# ============================================================================
 
 
-# VS Code —— 放行共享配置，忽略本机私有状态
-**/.vscode/*
-!**/.vscode/settings.json
-!**/.vscode/extensions.json
-!**/.vscode/launch.json
-!**/.vscode/tasks.json
-
-# 以下为机器/本机生成，永不入库
-**/.vscode/c_cpp_properties.json
-**/.vscode/compile_commands.json
-**/.vscode/ipch/
-**/.vscode/.browse.*.json
-*.code-workspace
-
-# CLion / JetBrains
-.idea/
-*.iml
-*.iws
-*.ipr
-cmake-build-*/
-**/cmake-build-*/
-
-# Eclipse / STM32CubeIDE
-.project
-.classpath
-.cproject
-.settings/
-.metadata/
-*.launch
-
-# Qt Creator
-*.pro.user
-*.creator.user
-**/.qtc_clangd/
-
-# Vim / Emacs
-*.swp
-*.swo
-*~
-\#*#
-
-# ==========================================
-# 忽略编译输出
-# ==========================================
-
-*.o
-*.obj
-*.exe
-*.out
-*.app
-*.lib
-*.a
-*.so
-*.dll
-*.dylib
-*.pdb
-*.ilk
-*.idb
-*.map
-*.sym
-*.gcno
-*.gcda
-*.gcov
-
-*.pyc
-*.pyo
-*.pyd
-__pycache__/
-
-*.class
-
-# ==========================================
-# 忽略构建目录（所有 IDE 的 Debug/Release）
-# ==========================================
-
-**/build/
-**/build-*/
-**/cmake-build-*/
-**/out/build/
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-Makefile
-*.cmake
-!*.cmake
-!CMakeLists.txt
-
-**/obj/
-**/bin/
-**/lib/
-**/dist/
-
-# ==========================================
-# 忽略 Visual Studio 的 Debug/Release 输出目录
-# ==========================================
-
-**/Debug/
-**/Release/
-**/x64/
-**/x86/
-**/Win32/
-**/AnyCPU/
-**/out/
-**/build/
-**/Build/
-
-# 忽略 .tlog 和 .recipe 等 VS 临时文件
-**/*.tlog/
-**/*.tlog
-**/*.recipe
-**/*.FileListAbsolute.txt
-**/*.lastbuildstate
-**/*.Build.CppClean.log
-
-# ==========================================
-# 忽略前端 (Vue/Node.js)
-# ==========================================
-
-**/node_modules/
-**/npm-debug.log*
-**/yarn-debug.log*
-**/yarn-error.log*
-**/pnpm-debug.log*
-
-**/dist/
-**/dist-ssr/
-**/*.local
-
-**/coverage/
-**/.nyc_output/
-
-# ==========================================
-# 忽略 Python
-# ==========================================
-
-.venv/
-venv/
-env/
-**/.venv/
-**/venv/
-
-*.egg-info/
-*.egg
-dist/
-build/
-.pytest_cache/
-.tox/
-.coverage
-htmlcov/
-.mypy_cache/
-.ipynb_checkpoints/
-
-# ==========================================
-# 忽略数据库
-# ==========================================
-
-*.db
-*.sqlite
-*.ibd
-*.frm
-*.rdb
-*.aof
-dump.rdb
-*.sql.bak
-*.sql.gz
-
-# ==========================================
-# 忽略 Qt
-# ==========================================
-
-*.moc
-moc_*.cpp
-ui_*.h
-qrc_*.cpp
-*.rcc
-**/moc/
-**/ui/
-**/rcc/
-
-# ==========================================
-# 忽略 Protobuf 生成代码
-# ==========================================
-
-*.pb.cc
-*.pb.h
-*_pb2.py
-*_pb2_grpc.py
-
-# ==========================================
-# 忽略操作系统和临时文件
-# ==========================================
-
+# ---------------------------------------------------------------------------
+# 1. 操作系统 / 编辑器临时文件
+# ---------------------------------------------------------------------------
 .DS_Store
 Thumbs.db
 desktop.ini
+*.swp
+*.swo
 *~
+\#*\#
+.#*
 *.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+
+
+# ---------------------------------------------------------------------------
+# 2. 日志 / 数据库 / 缓存
+# ---------------------------------------------------------------------------
 *.log
-tree.txt
-*.tree
+*.db
+*.sqlite
+*.sqlite3
+*.rdb
+*.aof
+.cache/
 
-# ==========================================
-# 忽略环境变量和密钥
-# ==========================================
 
+# ---------------------------------------------------------------------------
+# 3. 密钥与本机环境变量（.env.example 例外，用于给别人看需要哪些变量）
+# ---------------------------------------------------------------------------
 .env
 .env.*
 !.env.example
@@ -286,49 +64,214 @@ tree.txt
 secrets/
 credentials/
 
-# ==========================================
-# ★★★ STM32 精确规则（必须放在最后！）★★★
-# ==========================================
 
-# 1. 先忽略 stm32 目录下所有 .c 和 .h 文件
-stm32/**/*.c
-stm32/**/*.h
+# ---------------------------------------------------------------------------
+# 4. IDE 的「本机私有状态」
+#    只忽略本机缓存与用户配置；工程/项目文件故意保留
+# ---------------------------------------------------------------------------
+.vs/
+.idea/
+.metadata/
+.settings/
+.qtcreator/
+.qtc_clangd/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.code-workspace
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.cproject
+*.launch
+*.pro.user
+*.creator.user
+*.qbs.user
 
-# 2. 但允许 main.c 和 main.h
-!stm32/**/Core/Src/main.c
-!stm32/**/Core/Inc/main.h
 
-# 3. 忽略 Drivers 和 MDK-ARM 目录
-stm32/**/Drivers/
-stm32/**/MDK-ARM/
+# ---------------------------------------------------------------------------
+# 5. VS Code：只保留可共享的配置，其余本机缓存 / 插件日志忽略
+#    （含斜杠的模式必须加 **/ 才能覆盖任意层级）
+# ---------------------------------------------------------------------------
+**/.vscode/*
+!**/.vscode/settings.json
+!**/.vscode/extensions.json
+!**/.vscode/launch.json
+!**/.vscode/tasks.json
 
-# 4. 忽略 CubeMX 临时文件
-stm32/**/.mxproject
-stm32/**/.project
-stm32/**/.cproject
-stm32/**/.launch
-stm32/**/.settings/
 
-# 5. 允许 .ioc 文件
-!stm32/**/*.ioc
+# ---------------------------------------------------------------------------
+# 6. 第三方依赖 / 包管理器（体积大头，全部可再生）
+# ---------------------------------------------------------------------------
+node_modules/
+bower_components/
+.venv/
+venv/
+env/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+htmlcov/
+*.egg-info/
+*.egg
+.pnp.*
+.gradle/
+.m2/
+Pods/
+Carthage/
+vendor/
+packages/
 
-# ==========================================
-# ★★★ 新增：强制放行 BSP_Drivers 目录 ★★★
-# ==========================================
-# 允许 BSP_Drivers 目录及其下所有文件（覆盖前面的忽略规则）
-!stm32/BSP_Drivers/
-!stm32/BSP_Drivers/**
 
-# ==========================================
-# ★★★ 新增：强制放行 I2C_EEPROM_TEST 的 App 目录 ★★★
-# ==========================================
-# 1. 逐级放行父级目录（让 Git 能够进入这些文件夹）
-!learning-journey/
-!learning-journey/stm32/
-!learning-journey/stm32/I2C_EEPROM_TEST/
+# ---------------------------------------------------------------------------
+# 7. 编译 / 链接产物（按扩展名，跨语言通用）
+# ---------------------------------------------------------------------------
+*.o
+*.obj
+*.ko
+*.elf
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+*.pdb
+*.ilk
+*.idb
+*.exp
+*.tlog
+*.recipe
+*.lastbuildstate
+*.Build.CppClean.log
+*.FileListAbsolute.txt
+*.ipch
+*.sdf
+*.opensdf
+*.ncb
+*.gcno
+*.gcda
+*.gcov
+*.pyc
+*.pyo
+*.pyd
+*.class
+*.jar
+*.war
+*.ear
+*.test
+*.bin
+*.hex
+*.axf
+*.moc
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+*.rcc
+*.qmlc
 
-# 2. 放行目标 App 目录及其内部的所有内容
-!learning-journey/stm32/I2C_EEPROM_TEST/App/
-!learning-journey/stm32/I2C_EEPROM_TEST/App/**
-!learning-journey/stm32/SPI_Flash_Test/APP_Test/
-!learning-journey/stm32/SPI_Flash_Test/APP_Test/**
+
+# ---------------------------------------------------------------------------
+# 8. 构建输出目录（工具链约定名）
+#    大小写各写一份：本机 Windows 的 core.ignorecase=true 会忽略大小写，
+#    但别人在 Linux / macOS 上 clone 时区分大小写，只写一种会漏。
+# ---------------------------------------------------------------------------
+**/build/
+**/Build/
+**/build-*/
+**/Build-*/
+**/cmake-build-*/
+**/CMakeFiles/
+**/obj/
+**/Obj/
+**/bin/
+**/Bin/
+**/out/
+**/Out/
+**/dist/
+**/Dist/
+**/target/
+**/Debug/
+**/debug/
+**/Release/
+**/release/
+**/x64/
+**/x86/
+**/Win32/
+**/AnyCPU/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+
+
+# ---------------------------------------------------------------------------
+# 9. Node / 前端
+# ---------------------------------------------------------------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.nyc_output/
+coverage/
+.vite/
+.next/
+.nuxt/
+.svelte-kit/
+*.local
+
+
+# ---------------------------------------------------------------------------
+# 10. Qt / 嵌入式工具链保底（跨 IDE：Keil、IAR、Qt Creator）
+#     具体到某个工程的目录结构特例，写在各分类层的 .gitignore 里
+# ---------------------------------------------------------------------------
+.mxproject
+*.uvguix.*
+*.uvoptx
+*.uvprojx
+*.dbgconf
+*.ewp
+*.eww
+*.ewd
+*.ewt
+*.opt
+
+
+# ---------------------------------------------------------------------------
+# 11. 其他语言 / 工具链保底（以后引入新方向时不用再改本文件）
+# ---------------------------------------------------------------------------
+# Xcode / Swift
+DerivedData/
+xcuserdata/
+*.xcuserstate
+.build/
+# Haskell / Erlang / Elixir
+dist-newstyle/
+_build/
+deps/
+*.beam
+*.hi
+# R / Julia
+.Rhistory
+.RData
+.Rproj.user
+# .NET
+*.nupkg
+# Lua
+*.luac
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+# 覆盖率 / 性能剖析
+*.prof
+*.lprof

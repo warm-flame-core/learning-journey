@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="myset_mymap/myset_mymap.vcxproj" Id="b681e56d-4c86-4a31-be4d-f9bb9da72c9d" />
+</Solution>

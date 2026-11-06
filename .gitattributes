@@ -1,44 +1,176 @@
-# ============================================================
-# 换行符策略：index 内统一 LF，工作区按平台自动转换
-# 不强制改写已有文件，只保证今后提交/检出行为一致
-# ============================================================
+# ============================================================================
+# 行尾 / 文本属性
+# ----------------------------------------------------------------------------
+# 规则：索引里统一 LF；工作区按平台 / 工具需要检出。
+# 只声明「文本 vs 二进制」和少数必须固定行尾的工具文件，其余靠
+# * text=auto 兜底 —— 以后新增语言不需要回来改本文件。
+#
+# 说明：本文件不控制「哪些文件进仓库」，那是 .gitignore 的职责。
+#       .gitattributes 只管「进了仓库之后怎么存、怎么检出」。
+# ============================================================================
+
 * text=auto
 
-*.c      text
-*.h      text
-*.cpp    text
-*.cc     text
-*.cxx    text
-*.hpp    text
-*.hxx    text
-*.py     text
-*.sh     text
-*.md     text
-*.json   text
-*.yml    text
-*.yaml   text
-*.txt    text
 
-# Windows / Visual Studio 工程文件保持 CRLF
-*.sln      text eol=crlf
-*.vcxproj  text eol=crlf
-*.filters  text eol=crlf
-*.bat      text eol=crlf
-*.cmd      text eol=crlf
-*.ps1      text eol=crlf
+# ---------------------------------------------------------------------------
+# 1. 源码 / 配置：索引统一 LF
+# ---------------------------------------------------------------------------
+# C / C++
+*.c        text
+*.h        text
+*.cpp      text
+*.cc       text
+*.cxx      text
+*.hpp      text
+*.hxx      text
+*.inl      text
+*.ipp      text
+*.s        text
+*.S        text
+*.ld       text
+# 脚本
+*.sh       text eol=lf
+*.bash     text eol=lf
+*.zsh      text eol=lf
+*.fish     text eol=lf
+*.py       text
+*.rb       text
+*.pl       text
+*.lua      text
+# 前端
+*.js       text
+*.mjs      text
+*.cjs      text
+*.jsx      text
+*.ts       text
+*.tsx      text
+*.vue      text
+*.svelte   text
+*.css      text
+*.scss     text
+*.less     text
+*.html     text
+*.svg      text
+# 其他语言
+*.rs       text
+*.go       text
+*.java     text
+*.kt       text
+*.swift    text
+*.cs       text
+*.php      text
+*.dart     text
+# 构建 / 配置 / 数据描述
+*.cmake    text
+CMakeLists.txt  text
+Makefile        text
+Makefile.*      text
+*.mk       text
+*.gradle   text
+*.props    text
+*.targets  text
+Dockerfile      text
+*.dockerfile    text
+*.yml      text
+*.yaml     text
+*.toml     text
+*.ini      text
+*.cfg      text
+*.conf     text
+*.json     text
+*.jsonc    text
+*.xml      text
+*.sql      text
+*.proto    text
+*.md       text
+*.txt      text
+*.rst      text
+*.tex      text
+.gitignore      text
+.gitattributes  text
+.clang-format   text
+.clang-tidy     text
+.editorconfig   text
 
-# 二进制文件：不做任何换行处理
-*.png   binary
-*.jpg   binary
-*.jpeg  binary
-*.gif   binary
-*.ico   binary
-*.pdf   binary
-*.zip   binary
-*.axf   binary
-*.bin   binary
-*.hex   binary
-*.elf   binary
-*.o     binary
-*.a     binary
-*.lib   binary
+
+# ---------------------------------------------------------------------------
+# 2. Windows 工具生成的工程 / 配置：工作区固定 CRLF
+#    这些文件由 Windows 下的 IDE 或 CubeMX 生成、改写，
+#    固定 CRLF 可避免工具认为「文件被外部修改」而反复重写。
+# ---------------------------------------------------------------------------
+*.ioc              text eol=crlf
+*.sln              text eol=crlf
+*.slnx             text eol=crlf
+*.vcxproj          text eol=crlf
+*.vcxproj.filters  text eol=crlf
+*.filters          text eol=crlf
+*.vcproj           text eol=crlf
+*.uvprojx          text eol=crlf
+*.uvoptx           text eol=crlf
+*.uvguix.*         text eol=crlf
+*.rc               text eol=crlf
+*.res              text eol=crlf
+*.bat              text eol=crlf
+*.cmd              text eol=crlf
+*.ps1              text eol=crlf
+
+
+# ---------------------------------------------------------------------------
+# 3. 二进制：不做换行转换，也不生成文本 diff
+# ---------------------------------------------------------------------------
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.bmp    binary
+*.ico    binary
+*.webp   binary
+*.tif    binary
+*.tiff   binary
+*.psd    binary
+*.pdf    binary
+*.zip    binary
+*.7z     binary
+*.rar    binary
+*.gz     binary
+*.bz2    binary
+*.xz     binary
+*.tar    binary
+*.ttf    binary
+*.otf    binary
+*.woff   binary
+*.woff2  binary
+*.eot    binary
+*.mp3    binary
+*.wav    binary
+*.flac   binary
+*.mp4    binary
+*.avi    binary
+*.mkv    binary
+*.mov    binary
+*.o      binary
+*.obj    binary
+*.a      binary
+*.lib    binary
+*.so     binary
+*.dylib  binary
+*.dll    binary
+*.exe    binary
+*.pdb    binary
+*.ilk    binary
+*.idb    binary
+*.exp    binary
+*.class  binary
+*.jar    binary
+*.war    binary
+*.pyc    binary
+*.pyo    binary
+*.bin    binary
+*.hex    binary
+*.axf    binary
+*.elf    binary
+*.db     binary
+*.sqlite binary
+*.ipch   binary
+*.sdf    binary
+*.ncb    binary

@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Red-Black Tree/Red-Black Tree.vcxproj" Id="af83dbca-8e9b-42e5-8dd0-9c00d640c42b" />
+</Solution>
