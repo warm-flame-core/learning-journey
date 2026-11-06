@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "BSP_Usart_Redir.h"
 #include "App_Test.h"
 /* USER CODE END Includes */
 
@@ -93,6 +94,11 @@ int main(void)
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  BSP_Usart_Init(&huart1);
+
+  // For test
+  Test_W25Q64_Driver_Init(&hspi1, GPIOE, GPIO_PIN_6);
+  Test_W25Q64_Driver_Reg1();
 
   /* USER CODE END 2 */
 
@@ -100,7 +106,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    Test_W25Q64_Driver(&hspi1, GPIOE, GPIO_PIN_6);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

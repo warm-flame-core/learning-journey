@@ -9,9 +9,9 @@ extern "C"
 #include <stdio.h>
 #include "stm32f1xx_hal.h"
 
-    extern UART_HandleTypeDef* ghuart;
+  extern UART_HandleTypeDef* ghuart;
 
-    void BSP_Usart_Init(UART_HandleTypeDef* huart);
+  void BSP_Usart_Init(UART_HandleTypeDef* huart);
 
 #ifdef __cplusplus
 }

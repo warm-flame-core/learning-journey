@@ -9,6 +9,10 @@ extern "C"
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#define CMD_WQ25Qxx_JEDEC_ID 0x9F
+#define CMD_WQ25Qxx_READ_STATUS_REG1 0x05
+#define CMD_WQ25Qxx_WRITE_ENABLE 0x06
+
   typedef struct
   {
     uint32_t page_size;      // 页大小
@@ -21,7 +25,17 @@ extern "C"
     uint16_t nss_pin;        // 片选针脚
   } spi_flash_t;
 
+  // 初始化工作
   bool BSP_W25Qxx_Init(spi_flash_t* init);
+
+  // 获取W25Qxx的JEDEC_ID
+  uint32_t BSP_W25Qxx_ID();
+
+  // 获取W25Qxx的第一个寄存器所有值
+  uint8_t BSP_W25Qxx_Statue1_Reg();
+
+  // 打开W25Qxx写使能
+  void BSP_W25Qxx_Write_Enable();
 #ifdef __cplusplus
 }
 #endif
