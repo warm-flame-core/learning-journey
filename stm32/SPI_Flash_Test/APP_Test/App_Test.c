@@ -30,3 +30,23 @@ void Test_W25Q64_Driver_Write_Enable_Disable()
   BSP_W25Qxx_Write_Disable();
   printf("register1 value id: 0x%x\n", reg1);
 }
+
+void Test_W25Q64_Driver_Earse_Read()
+{
+  printf("--------------------------Test_W25Q64_Driver_Earse_Read--------------------------------\n");
+  uint32_t start_adderss = 0;
+  uint32_t end_adderss = 4096 - 4;
+  uint32_t rx_buffer_first = 0;
+  uint32_t rx_buffer_last = 0;
+  BSP_W25Qxx_Read_Data(start_adderss, (uint8_t*)rx_buffer_first, sizeof(rx_buffer_first));
+  BSP_W25Qxx_Read_Data(end_adderss, (uint8_t*)rx_buffer_last, sizeof(rx_buffer_last));
+  printf("擦除前: rx_buffer_first: 0x%x, rx_buffer_last: 0x%x", rx_buffer_first, rx_buffer_last);
+
+  BSP_W25Qxx_Sector_Earse(start_adderss);
+
+  rx_buffer_first = 0;
+  rx_buffer_last = 0;
+  BSP_W25Qxx_Read_Data(start_adderss, (uint8_t*)rx_buffer_first, sizeof(rx_buffer_first));
+  BSP_W25Qxx_Read_Data(end_adderss, (uint8_t*)rx_buffer_last, sizeof(rx_buffer_last));
+  printf("擦除后: rx_buffer_first: 0x%x, rx_buffer_last: 0x%x", rx_buffer_first, rx_buffer_last);
+}

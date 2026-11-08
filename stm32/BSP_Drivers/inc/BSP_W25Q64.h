@@ -15,6 +15,8 @@ extern "C"
 #define CMD_W25QXX_WRITE_ENABLE 0x06
 #define CMD_W25QXX_WRITE_DISABLE 0x04
 #define CMD_W25QXX_SECTOR_EARSE 0X20
+#define CMD_W25QXX_READ_DATA 0X03
+#define CMD_W25QXX_WRITE_PROGRAM 0X02
 
 #define W25Q64XX_STATUS_BUSY 0x01
 #define SECTOR_ADDRESS_MSK 0xFFF
@@ -52,6 +54,9 @@ extern "C"
 
   // 扇区擦除
   void BSP_W25Qxx_Sector_Earse(uint32_t sector_address);
+
+  // 按地址读取
+  bool BSP_W25Qxx_Read_Data(uint32_t read_address, uint8_t* rbuffer, uint32_t rsize);
 
 
 #ifdef __cplusplus

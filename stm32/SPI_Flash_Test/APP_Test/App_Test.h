@@ -16,6 +16,9 @@ extern "C"
   // 测试读写使能
   void Test_W25Q64_Driver_Write_Enable_Disable();
 
+  // 测试擦除写入
+  void Test_W25Q64_Driver_Earse_Read();
+
 #ifdef __cplusplus
 }
 #endif

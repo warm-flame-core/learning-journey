@@ -17,6 +17,11 @@ static void BSP_W25Qxx_CS_Disable()
   HAL_GPIO_WritePin(g_wq25xx.gpio_port, g_wq25xx.nss_pin, GPIO_PIN_SET);
 }
 
+static bool BSP_W25Qxx_Is_Busy()
+{
+  return BSP_W25Qxx_Statue1_Reg() & W25Q64XX_STATUS_BUSY;
+}
+
 bool BSP_W25Qxx_Init(spi_flash_t* init)
 {
   if (init == NULL)
@@ -141,6 +146,7 @@ void BSP_W25Qxx_Wait_For_Write_Complete_Efficient()
     goto EXIT;
   }
   uint8_t reg1 = 0xFF;
+  // 在发起读取寄存器之后会自动一直返回，所以只需要给dummy数据过去就可以了，然后一直换回来做检验，直到校验里按位与是0时结束循环
   do
   {
     HAL_SPI_TransmitReceive(g_wq25xx.hspi, &dummy, &reg1, sizeof(dummy), HAL_MAX_DELAY);
@@ -154,11 +160,13 @@ void BSP_W25Qxx_Sector_Earse(uint32_t sector_address)
 {
   if (!g_is_init)
     return;
+  // 擦除必须扇区对齐
   if (sector_address & SECTOR_ADDRESS_MSK)
   {
     printf("BSP_W25Qxx_Sector_Earse error, address 0x%x not sector aligned\n", sector_address);
     return;
   }
+  // 擦除地址不能超过总大小地址
   if (sector_address >= g_wq25xx.mem_total_size)
   {
     printf("BSP_W25Qxx_Sector_Earse error, address 0x%x out of range flash size\n", sector_address);
@@ -178,4 +186,40 @@ EXIT:
   {
     BSP_W25Qxx_Wait_For_Write_Complete_Efficient();
   }
+}
+
+bool BSP_W25Qxx_Read_Data(uint32_t read_address, uint8_t* rbuffer, uint32_t rsize)
+{
+  if (!g_is_init)
+    return false;
+  // 地址不能空，不能读取0个字节
+  if (read_address == NULL || rsize == 0)
+    return false;
+  // 读取的地址不能超过总大小
+  if (read_address + rsize > g_wq25xx.mem_total_size)
+    return false;
+  if (BSP_W25Qxx_Is_Busy())
+  {
+    BSP_W25Qxx_Wait_For_Write_Complete_Efficient();
+  }
+  bool ret = true;
+  uint8_t cmd[4] = {CMD_W25QXX_READ_DATA, (uint8_t)(read_address >> 16), (uint8_t)(read_address >> 8), (uint8_t)(read_address >> 0)};
+  HAL_StatusTypeDef state = HAL_SPI_Transmit(g_wq25xx.hspi, &cmd, sizeof(cmd) / sizeof(cmd[0]), HAL_MAX_DELAY);
+  if (state != HAL_OK)
+  {
+    printf("BSP_W25Qxx_Read_Data HAL_SPI_Transmit  error , cmd is :0x%x, state :0x%x\n", cmd[0], state);
+    ret = false;
+    goto EXIT;
+  }
+  state = HAL_SPI_Receive(g_wq25xx.hspi, &rbuffer, rsize, HAL_MAX_DELAY);
+  if (state != HAL_OK)
+  {
+    printf("BSP_W25Qxx_Read_Data HAL_SPI_Receive error , cmd is :0x%x, state :0x%x\n", cmd, state);
+    ret = false;
+    goto EXIT;
+  }
+  printf("BSP_W25Qxx_Read_Data success , cmd is :0x%x, state :0x%x\n", cmd[0], state);
+EXIT:
+  BSP_W25Qxx_CS_Disable();
+  return ret;
 }
