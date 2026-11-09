@@ -14,11 +14,14 @@ extern "C"
 #define CMD_W25QXX_READ_STATUS_REG1 0x05
 #define CMD_W25QXX_WRITE_ENABLE 0x06
 #define CMD_W25QXX_WRITE_DISABLE 0x04
-#define CMD_W25QXX_SECTOR_EARSE 0X20
+#define CMD_W25QXX_SECTOR_ERASE 0X20
 #define CMD_W25QXX_READ_DATA 0X03
-#define CMD_W25QXX_WRITE_PROGRAM 0X02
+#define CMD_W25QXX_PAGE_PROGRAM 0X02
+#define CMD_W25QXX_CHIP_ERASE 0XC7
+
 
 #define W25Q64XX_STATUS_BUSY 0x01
+#define W25Q64XX_STATUS_WEL 0x02
 #define SECTOR_ADDRESS_MSK 0xFFF
 
   typedef struct
@@ -52,12 +55,20 @@ extern "C"
   void BSP_W25Qxx_Wait_For_Write_Complete_Inefficient();
   void BSP_W25Qxx_Wait_For_Write_Complete_Efficient();
 
+  // 整片擦除
+  void BSP_W25Qxx_Chip_Erase();
+
   // 扇区擦除
-  void BSP_W25Qxx_Sector_Earse(uint32_t sector_address);
+  void BSP_W25Qxx_Sector_Erase(uint32_t sector_address);
 
   // 按地址读取
   bool BSP_W25Qxx_Read_Data(uint32_t read_address, uint8_t* rbuffer, uint32_t rsize);
 
+  // 按地址进行页编程
+  bool BSP_W25Qxx_Page_Program(uint32_t page_address, uint16_t page_inner_offset, uint8_t* wbuffer, uint32_t wsize);
+
+  // 按地址写入
+  bool BSP_W25Qxx_Write_Data(uint32_t write_address, uint8_t* wbuffer, uint16_t wsize);
 
 #ifdef __cplusplus
 }

@@ -7,6 +7,7 @@ extern "C"
 #endif
 
 #include "BSP_W25Q64.h"
+#include <string.h>
   // 测试初始化
   void Test_W25Q64_Driver_Init(SPI_HandleTypeDef* hspi, GPIO_TypeDef* port, uint16_t pin);
 
@@ -17,7 +18,10 @@ extern "C"
   void Test_W25Q64_Driver_Write_Enable_Disable();
 
   // 测试擦除写入
-  void Test_W25Q64_Driver_Earse_Read();
+  void Test_W25Q64_Driver_Erase_Read();
+
+  // 测试整片擦除
+  void Test_W25Q64_Driver_ChipErase_Any_Read_Write();
 
 #ifdef __cplusplus
 }

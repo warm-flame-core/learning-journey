@@ -100,8 +100,8 @@ int main(void)
   Test_W25Q64_Driver_Init(&hspi1, GPIOE, GPIO_PIN_6);
   Test_W25Q64_Driver_Reg1();
   Test_W25Q64_Driver_Write_Enable_Disable();
-  Test_W25Q64_Driver_Earse_Read();
-
+  Test_W25Q64_Driver_Erase_Read();
+  Test_W25Q64_Driver_ChipErase_Any_Read_Write();
   /* USER CODE END 2 */
 
   /* Infinite loop */
