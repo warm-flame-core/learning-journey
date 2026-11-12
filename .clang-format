@@ -3,22 +3,32 @@
 # 说明：本地开发通过 VS Code Profile 内联配置，此文件供
 #       命令行 clang-format、CI、其他编辑器兜底使用
 # ============================================================
-BasedOnStyle: Microsoft
-IndentWidth: 4
-UseTab: Never
-BreakBeforeBraces: Allman
-PointerAlignment: Left
-ColumnLimit: 0
-MaxEmptyLinesToKeep: 2
-AccessModifierOffset: -4
-AllowShortFunctionsOnASingleLine: Inline
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: false
-IndentCaseLabels: false
-SortIncludes: Never
-IncludeBlocks: Preserve
-ReflowComments: false
-SpaceBeforeParens: ControlStatements
-NamespaceIndentation: None
-DerivePointerAlignment: false
-TabWidth: 4
+# ============================================================
+# .clang-format
+# 4 空格缩进，LF 换行，VS 2026 风格 (Allman大括号)
+# ============================================================
+
+BasedOnStyle: LLVM                # 基于 LLVM 官方风格作为基础
+IndentWidth: 4                    # 缩进宽度为 4 个空格
+TabWidth: 4                       # Tab 键宽度视为 4 个空格
+UseTab: Never                     # 从不使用 Tab 字符，始终用空格缩进
+BreakBeforeBraces: Allman         # 大括号总是另起一行（Allman 风格，符合 VS 习惯）
+AllowShortBlocksOnASingleLine: Never        # 禁止将短代码块放在同一行
+AllowShortIfStatementsOnASingleLine: Never  # 禁止将短 if 语句放在同一行
+AllowShortLoopsOnASingleLine: false         # 禁止将短循环放在同一行
+AllowShortFunctionsOnASingleLine: None      # 禁止将短函数体放在同一行
+PointerAlignment: Left            # 指针符号 * 靠左（如 int* ptr）
+ReferenceAlignment: Left          # 引用符号 & 靠左（如 int& ref）
+DerivePointerAlignment: false     # 不根据代码自动推导指针对齐方式，强制使用上面的 Left
+AccessModifierOffset: -4          # 访问修饰符（public/private）的缩进偏移为 -4（向左缩进 4 格）
+IndentAccessModifiers: false      # 不缩进访问修饰符本身
+NamespaceIndentation: All         # 对命名空间内的所有内容进行缩进
+SortIncludes: CaseSensitive       # 包含头文件排序时区分大小写
+IncludeBlocks: Preserve           # 保持 include 块的分组，不自动合并
+IndentPPDirectives: AfterHash     # 预处理指令的缩进放在 # 之后
+ColumnLimit: 0                    # 不限制行宽（0 表示无限制）
+MaxEmptyLinesToKeep: 2            # 最多保留 2 个连续空行
+KeepEmptyLinesAtTheStartOfBlocks: false     # 不保留代码块开头的空行
+MergeAdjacentStringLiterals: false          # 不自动合并相邻的字符串字面量
+ReflowComments: false             # 不自动重排注释的格式
+SpaceBeforeParens: ControlStatements        # 仅在控制语句（if/for/while）的左括号前加空格
