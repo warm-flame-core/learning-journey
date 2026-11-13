@@ -13,8 +13,7 @@
 class Channel
 {
 public:
-    Channel(int wfd, pid_t subid)
-        : _wfd(wfd), _subid(subid)
+    Channel(int wfd, pid_t subid) : _wfd(wfd), _subid(subid)
     {
         _name = "Channel-" + std::to_string(wfd) + "-" + std::to_string(subid);
     }
@@ -35,9 +34,18 @@ public:
         int n = write(_wfd, &code, sizeof(code));
         (void)n;
     }
-    int Fd() { return _wfd; }
-    pid_t Subid() { return _subid; }
-    std::string Name() { return _name; }
+    int Fd()
+    {
+        return _wfd;
+    }
+    pid_t Subid()
+    {
+        return _subid;
+    }
+    std::string Name()
+    {
+        return _name;
+    }
 
 private:
     int _wfd;
@@ -49,8 +57,7 @@ private:
 class ChannelManager
 {
 public:
-    ChannelManager()
-        : _next(0)
+    ChannelManager() : _next(0)
     {
     }
     ~ChannelManager()
@@ -131,8 +138,7 @@ private:
 class ProcessPool
 {
 public:
-    ProcessPool(int num)
-        : _process_num(num)
+    ProcessPool(int num) : _process_num(num)
     {
         _tasks.Register(Printlog);
         _tasks.Register(Downdload);
@@ -174,7 +180,8 @@ public:
                 {
                     continue;
                 }
-                std::cout << "子进程[" << getpid() << "]收到任务码：" << code << std::endl;
+                std::cout << "子进程[" << getpid() << "]收到任务码：" << code
+                          << std::endl;
                 _tasks.Execute(code);
                 std::cout << std::endl;
                 std::cout << std::endl;
